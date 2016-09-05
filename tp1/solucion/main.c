@@ -5,13 +5,8 @@
 
 int main (void){
 
-	char* name = "cambiameporotronombre.txt";
-    FILE *pFile = fopen( name, "a" );
-
-    fprintf(pFile,"-\n");
-
-    fclose( pFile );
-
+	// Esto me sirvió mucho al principio:
+	/*
 	printf("ctTree: %d bytes\n", sizeof(ctTree));
 	printf("ctTree_t: %d bytes\n", sizeof(struct ctTree_t));
 	printf("\n");
@@ -29,31 +24,45 @@ int main (void){
 	printf("Direccion: %d bytes\n", sizeof(ctTree*));
 	printf("Direccion: %d bytes\n", sizeof(int*));
 	printf("\n");
+	*/
 
+		// Ejercicio 2.1:
+		ctTree* miArbol;
+		ct_new(&miArbol);
 
-		int jorge = 123;
-		ctTree* miPuntero;
+		// Ejercicio 2.2:
+		ct_add(miArbol, 10);
+		ct_add(miArbol, 50);
+		ct_add(miArbol, 30);
+		ct_add(miArbol, 5);
+		ct_add(miArbol, 20);
+		ct_add(miArbol, 40);
+		ct_add(miArbol, 60);
+		ct_add(miArbol, 19);
+		ct_add(miArbol, 39);
+		ct_add(miArbol, 4);
 
-		printf("jorge = %d\n", jorge);
-		printf("&jorge = %p\n", (void *)&jorge);
+		// Ejercicio 2.3:
+		ctIter* miIterador;
+		miIterador = ctIter_new(miArbol);
 
-		printf("miPuntero = %ld\n", miPuntero);
-		printf("&miPuntero = %p\n", (void *)&miPuntero);
-		printf("*miPuntero = %d\n", *miPuntero);
+		// Ejercicio 2.4:
+		char* name = "ejercicio2.txt";
+		FILE *pFile = fopen( name, "a" );
 
+		
+		ctIter_first(miIterador);
 
-		printf("root = %p\n", (miPuntero)->root);
-		printf("size = %d\n", (*miPuntero).size);
+		while(ctIter_valid(miIterador)){
+			fprintf(pFile, "%i\n", ctIter_get(miIterador));
+			ctIter_next(miIterador);
+		}
+		fclose( pFile );
 
-		ct_new(&miPuntero);
+		// Ejercicio 2.5:
+		ctIter_delete(miIterador);
 
-		printf("root = %p\n", (miPuntero)->root);
-		printf("size = %ld\n", (*miPuntero).size);
-
-
-		ct_delete(&miPuntero);
-		printf("Termine de eliminar\n");
-		printf("root = %p\n", (miPuntero)->root);
-		printf("size = %ld\n", (*miPuntero).size);
+		// Ejercicio 2.6:
+		ct_delete(&miArbol);
     return 0;
 }
