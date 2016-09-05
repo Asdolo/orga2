@@ -66,7 +66,6 @@ ct_new:
   ; La dirección tiene 8 bytes.
   mov RBX, RDI ; RBX <- RDI
 
-  mov RDI, 0xffffffffeeeeeeee
   ; Voy a llamar a malloc, así que le seteo en RDI
   ; (primer parámetro) el tamaño de mi struct
   mov RDI, size_cttree ; RDI <- size_cttree
