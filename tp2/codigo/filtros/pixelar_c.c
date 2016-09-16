@@ -18,10 +18,10 @@ for (int f = 0; f < filas; f+=2) {
 		//Agarramos punteros a pixeles del bloque
 			bgra_t *p_d1 = (bgra_t*) &dst_matrix[f][c * 4];  
 			bgra_t *p_d2 = (bgra_t*) &dst_matrix[f][(c * 4)+4];
-bgra_t *p_d3 = (bgra_t*) &dst_matrix[f+1][c * 4];
-bgra_t *p_d4 = (bgra_t*) &dst_matrix[f+1][(c * 4)+4];
+			bgra_t *p_d3 = (bgra_t*) &dst_matrix[f+1][c * 4];
+			bgra_t *p_d4 = (bgra_t*) &dst_matrix[f+1][(c * 4)+4];
 
-            	bgra_t *p_s1 = (bgra_t*) &src_matrix[f][c * 4];
+            bgra_t *p_s1 = (bgra_t*) &src_matrix[f][c * 4];
 			bgra_t *p_s2 = (bgra_t*) &src_matrix[f][(c * 4)+4];
 			bgra_t *p_s3 = (bgra_t*) &src_matrix[f+1][(c * 4)];
 			bgra_t *p_s4 = (bgra_t*) &src_matrix[f+1][(c * 4)+4];			
