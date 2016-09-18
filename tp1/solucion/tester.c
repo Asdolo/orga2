@@ -3,8 +3,8 @@
 #include <stdint.h>
 #include "cuatrotree.h"
 
-char *archivoCasoChico  =  "salida.caso.chico 3.txt";
-char *archivoCasoGrande =  "salida.caso.grande 3.txt";
+char *archivoCasoChico  =  "salida.caso.chico.txt";
+char *archivoCasoGrande =  "salida.caso.grande.txt";
 void casoC();
 void casoG();
 
