@@ -6,8 +6,8 @@ global smalltiles_asm
 
 
 section .rodata
-mascaraOrdenadora : db 0x00,0x01,0x02,0x03,0x08,0x09,0x0A,0x0B,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF
-mascaraOrdenadora2 : db 0xFF, 0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF, 0x00,0x01,0x02,0x03,0x08,0x09,0x0A,0x0B
+mascaraOrdenadora :  db 0x00, 0x01, 0x02, 0x03, 0x08, 0x09, 0x0A, 0x0B, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+mascaraOrdenadora2 : db 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x01, 0x02, 0x03, 0x08, 0x09, 0x0A, 0x0B
 
 
 
@@ -64,16 +64,16 @@ smalltiles_asm:
   add r14, r15                            ; r14 = puntero hacia arriba a la izquierda + (ancho*4)/2 = puntero hacia arriba a la derecha
 
   ; xmm8 va a ser la máscara ordenadora
-  movups xmm8, [mascaraOrdenadora]        ; xmm = | F | F | F | F | F | F | F | F | B | A | 9 | 8 | 3 | 2 | 1 | 0 |
+  movups xmm8, [mascaraOrdenadora]        ; xmm8 = | F | F | F | F | F | F | F | F | B | A | 9 | 8 | 3 | 2 | 1 | 0 |
 
   ; xmm9 va a ser una máscara auxiliar
-  movups xmm9, [mascaraOrdenadora2]        ; xmm = | F | F | F | F | F | F | F | F | B | A | 9 | 8 | 3 | 2 | 1 | 0 |
+  movups xmm9, [mascaraOrdenadora2]       ; xmm9 = | B | A | 9 | 8 | 3 | 2 | 1 | 0 | F | F | F | F | F | F | F | F |
 
   ; rcx va a ser el contador del ciclo
   xor rcx, rcx                            ; limpio el contador
   mov rcx, r15				                    ; rcx = (ancho*4)/2
   shr rcx, 3				                      ; rcx = ancho/4
-  sub rcx, 1
+  sub rcx, 1                              ; DEJO EL ULTIMO PA'L FINAL
 
 .ciclo:
    movups xmm0, [rdi]                     ; xmm0 = | -- | p2 | -- | p0 |
@@ -89,7 +89,7 @@ smalltiles_asm:
    add r13, 8		                          ; LE SUMO 8 BYTES PORQUE SOLO ESCRIBI 2 PIXEL
    add r14, 8		                          ; LE SUMO 8 BYTES PORQUE SOLO ESCRIBI 2 PIXEL
 
-   loop .ciclo		                        ; ITERO HASTA QUE EL PUNTERO RDI LLEGUE AL ULTIMO PIXEL DE LA FILA
+   loop .ciclo		                        ; ITERO HASTA QUE EL PUNTERO RDI LLEGUE AL ULTIMO PIXEL DE LA FILA - 1
 
    ; lo hago manual
    sub rsi, 8
@@ -101,7 +101,7 @@ smalltiles_asm:
    movups xmm0, [rdi]                     ; xmm0 = | -- | p6 | -- | p4 |
    pshufb xmm0, xmm9                      ; xmm0 = | p6 | p4 | 00 | 00 |
 
-   paddb xmm0, xmm1                         ; xmm0 = | p6 | p4 | p2 | p0 |
+   paddb xmm0, xmm1                       ; xmm0 = | p6 | p4 | p2 | p0 |
    movups [rsi], xmm0                     ; PONGO DESTINO PUNTERO ABAJO IZQUIERDA
    movups [r12], xmm0                     ; PONGO DESTINO PUNTERO ABAJO DERECHA
    movups [r13], xmm0                     ; PONGO DESTINO PUNTERO ARRIBA IZQUIERDA
