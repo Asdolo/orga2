@@ -6,7 +6,7 @@
 ;   int src_row_size,
 ;   int dst_row_size
 ; );
- 
+
 ; Parámetros:
 ;   rdi = src
 ;   rsi = dst
@@ -14,75 +14,195 @@
 ;   rcx = filas
 ;   r8 = src_row_size
 ;   r9 = dst_row_size
- 
- 
- 
- 
+
+
+
+
 global pixelar_asm
 section .rodata
-    mascaraExtend: db 0x00,0xFF,0x01,0xFF,0x02,0xFF,0x03,0xFF,0x04,0xFF,0x05,0xFF,0x06,0xFF,0x07,0xFF,0x08,0xFF
-    mascaraOrdenadora: db 0x00, 0x02, 0x04, 0x06, 0x00, 0x02, 0x04, 0x06, 0x00, 0x02, 0x04, 0x06, 0x00, 0x02, 0x04, 0x06
-    mascaraLOCA:       db 0x00, 0x00, 0x08, 0x09, 0x02, 0x03, 0x0a, 0x0b, 0x04, 0x05, 0x0c, 0x0d, 0x06, 0x07, 0x0e, 0x0f
+    ;mascaraExtend: db 0x00,0xFF,0x01,0xFF,0x02,0xFF,0x03,0xFF,0x04,0xFF,0x05,0xFF,0x06,0xFF,0x07,0xFF,0x08,0xFF
+    ;mascaraOrdenadora: db 0x00, 0x02, 0x04, 0x06, 0x00, 0x02, 0x04, 0x06, 0x00, 0x02, 0x04, 0x06, 0x00, 0x02, 0x04, 0x06
+    ;mascaraLOCA:       db 0x00, 0x00, 0x08, 0x09, 0x02, 0x03, 0x0a, 0x0b, 0x04, 0x05, 0x0c, 0x0d, 0x06, 0x07, 0x0e, 0x0f
+    mascaraExtensoraYHADDIzq:   db 0x00, 0xFF, 0x04, 0xFF, 0x01, 0xFF, 0x05, 0xFF, 0x02, 0xFF, 0x06, 0xFF, 0x03, 0xFF, 0x07, 0xFF
+    mascaraExtensoraYHADDDer:   db 0x08, 0xFF, 0x0C, 0xFF, 0x09, 0xFF, 0x0D, 0xFF, 0x0A, 0xFF, 0x0E, 0xFF, 0x0B, 0xFF, 0x0F, 0xFF
+    mascaraLimpiadoraAND:       db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 section .text
- 
+
 pixelar_asm:
-   
-    xor r8,r8
-    mov r8d,ecx                 ; r8 <- #filas
-    xor r9,r9
-    mov r9d,edx                 ; r9<- cols
-    xor rcx,rcx
-    mov ecx,edx                 ;ecx=cols
-    shr ecx,1                   ;ecx=cols/2
-    mov eax,r8d                 ;eax=filas
-    sub eax,1                   ;eax=filas-1
-    mul ecx                     ;eax=(cols/2)*(filas-1)
-    mov rcx,rax                 ;ecx=(cols/2)*(filas-1)
- 
-movdqu xmm3,[mascaraExtend]
-movdqu xmm4,[mascaraOrdenadora]
-movdqu xmm5,[mascaraLOCA]
- 
+    ; r10 va a ser una constante = ancho*4
+    ; r11 va a ser una constante = ancho/4
+
+    xor r10, r10                 ; r10 =  0
+    mov r10d, edx                ; r10 = ancho
+    shl r10, 2                   ; r10 = ancho*4
+
+    xor r11, r11                 ; r10 =  0
+    mov r11d, edx                ; r10 = ancho
+    shr r11, 2                   ; r10 = ancho/4
+
+    ;mov eax, r8d                ; eax = alto
+    ;shr eax, 1                  ; eax = alto/2
+    ;mul ecx                     ; eax = (ancho/4)*(alto/2)
+    ;mov rcx, rax                ; rcx = (ancho/4)*(alto/2)
+
+    ; r9 va a ser un iterador = alto
+    xor r9, r9                              ; r9 = 0
+    mov r9d, 2                            ; r9 = alto
+
+    ; seteo el contador
+    mov rbx, r10                            ; rbx = ancho*4
+
+    movdqu xmm10, [mascaraExtensoraYHADDIzq]
+    movdqu xmm11, [mascaraExtensoraYHADDDer]
+    movdqu xmm12, [mascaraLimpiadoraAND]
+
  .ciclo:
-   
+
         movdqu xmm0, [rdi]
-        ; xmm0 = |a[0]3 r[0]3 g[0]3 b[0]3 | a[0]2 r[0]2 g[0]2 b[0]2 | a[0]1 r[0]1 g[0]1 b[0]1 | a [0]0 r[0]0 g[0]0 b[0]0|
- 
-        movdqu xmm1, [rdi+4*r9] ;
-        ;xmm1 = |a[1]3 r[1]3 g[1]3 b[1]3 | a[1]2 r[1]2 g[1]2 b[1]2 | a[1]1 r[1]1 g[1]1 b[1]1 | a[1]0 r[1]0 g[1]0 b[1]0|
-        pshufb xmm0,xmm3
-        ; xmm0=  | 0000 a[0]1 0000 r[0]1| 0000 g[0]1 0 b[0]1 | 0000 a[0]0 0 r[0]0| 0000 g[0]0 0000 b[0]0|
-        pshufb xmm1,xmm3
-        ; xmm1=   | 0000 a[1]1 0000 r[1]1| 0000 g[1]1 0 b[0]1 | 0000 a[1]0 0 r[1]0| 0000 g[1]0 0000 b[1]0|
-        psrlw xmm0,2; REVISAR INSTRUCCION, QUIERO DIVIDIR POR CUATRO XMM0 DE A WORD
-        psrlw xmm1,2; REVISAR INSTRUCCION, QUIERO DIVIDIR POR CUATRO XMM0 DE A WORD
- 
-        paddw xmm0,xmm1
-        ;xmm0= | (a[0]1+a[1]1)  (r[0]1+r[1]1)|(g[0]1+g[1]1)  (b[0]1+b[1]1)|| (a[0]0+a[1]0)  (r[0]0+r[1]0)|(g[0]0+g[1]0)  (b[0]0+b[1]0)|
- 
-       
-        pshufb xmm0 ,xmm5
- 
-        ; xmm0= |0000 (a[0]1+a[1]1)  0000 (a[0]0+a[1]0)|0000 (r[0]1+r[1]1)  0000 (r[0]0+r[1]0)|0000 (g[0]1+g[1]1) 0000 (g[0]0+g[1]0)|0000 (b[0]1+b[1]1) 0000 (b[0]0+b[1]0) |
-       
-        phaddw xmm0,xmm9
-        ;xmm9=basur
-        ;xmm0= |basura basura| basura basura|(a[0]1+a[1]1)+(a[0]0+a[1]0)(r[0]1+r[1]1)+(r[0]0+r[1]0)|(g[0]1+g[1]1)+(g[0]0+g[1]0) (b[0]1+b[1]1)+(b[0]0+b[1]0|
-       
-       
- 
-        ;xmm0[15..0]=promedioB =0000000 00000001
-        ;xmm0[31..16]=promedioG
-        ;xmm0[47..32]=promedioR
-        ;xmm0[63..48]=promedioA
- 
-        pshufb xmm0,xmm4 ; |PIXELPROMEDIO|PIXELPROMEDIO|PIXELPROMEDIO|PIXELPROMEDIO|
-        movq [rsi],xmm0
-        movq [rdx*4+rsi],xmm0
-       
-        add rsi,8
-        add rdi,8
-       
-        loop .ciclo
- 
-        ret
+        ; xmm0 = | A[0][3] | R[0][3] | G[0][3] | B[0][3] | A[0][2] | R[0][2] | G[0][2] | B[0][2] | A[0][1] | R[0][1] | G[0][1] | B[0][1] | A[0][0] | R[0][0] | G[0][0] | B[0][0] |
+        ;         127       119       111       103       95        87        79        71        63        55        47        39        31        23        15        7       0                                                                                                                                                        0
+
+        movdqu xmm1, xmm0;[rdi+r10]
+        ; xmm0 = | A[1][3] | R[1][3] | G[1][3] | B[1][3] | A[1][2] | R[1][2] | G[1][2] | B[1][2] | A[1][1] | R[1][1] | G[1][1] | B[1][1] | A[1][0] | R[1][0] | G[1][0] | B[1][0] |
+        ;         127       119       111       103       95        87        79        71        63        55        47        39        31        23        15        7       0
+
+        ; Tengo que sacar el promedio de estos 4 pixeles: [0][0], [0][1], [1][0], [1][1]
+        ; Tengo que sacar el promedio de estos 4 pixeles: [0][2], [0][3], [1][2], [1][3]
+
+
+
+
+
+
+        ; Calculo el promedio de [0][0], [0][1], [1][0], [1][1]
+
+        movdqu xmm2, xmm0
+        ; xmm2 = | A[0][3] | R[0][3] | G[0][3] | B[0][3] | A[0][2] | R[0][2] | G[0][2] | B[0][2] | A[0][1] | R[0][1] | G[0][1] | B[0][1] | A[0][0] | R[0][0] | G[0][0] | B[0][0] |
+        ;         127       119       111       103       95        87        79        71        63        55        47        39        31        23        15        7       0
+
+        pshufb xmm2, xmm10
+        ; xmm2 = |    0    | A[0][1] |    0    | A[0][0] |    0    | R[0][1] |    0    | R[0][0] |    0    | G[0][1] |    0    | G[0][0] |    0    | B[0][1] |    0    | B[0][0] |
+        ;         127       119       111       103       95        87        79        71        63        55        47        39        31        23        15        7       0                                                                                                                                                        0
+
+        movdqu xmm3, xmm1
+        ; xmm3 = | A[1][3] | R[1][3] | G[1][3] | B[1][3] | A[1][2] | R[1][2] | G[1][2] | B[1][2] | A[1][1] | R[1][1] | G[1][1] | B[1][1] | A[1][0] | R[1][0] | G[1][0] | B[1][0] |
+        ;         127       119       111       103       95        87        79        71        63        55        47        39        31        23        15        7       0
+
+        pshufb xmm3, xmm10
+        ; xmm3 = |    0    | A[1][1] |    0    | A[1][0] |    0    | R[1][1] |    0    | R[1][0] |    0    | G[1][1] |    0    | G[1][0] |    0    | B[1][1] |    0    | B[1][0] |
+        ;         127       119       111       103       95        87        79        71        63        55        47        39        31        23        15        7       0                                                                                                                                                        0
+
+        phaddw xmm2, xmm3
+        ; xmm2 = | A[1][1] + A[1][0] | R[1][1] + R[1][0] | G[1][1] + G[1][0] | B[1][1] + B[1][0] | A[0][1] + A[0][0] | R[0][1] + R[0][0] | G[0][1] + G[0][0] | B[0][1] + B[0][0] |
+        ;         127                 111                 95                  79                  63                  47                  31                  15                0
+
+        movdqu xmm3, xmm2
+        ; xmm3 = | A[1][1] + A[1][0] | R[1][1] + R[1][0] | G[1][1] + G[1][0] | B[1][1] + B[1][0] | A[0][1] + A[0][0] | R[0][1] + R[0][0] | G[0][1] + G[0][0] | B[0][1] + B[0][0] |
+        ;         127                 111                 95                  79                  63                  47                  31                  15                0
+
+        psrldq xmm3, 8 ; shifteo xmm3 8 bytes a la derecha (a la izquierda pone ceros)
+        ; xmm3 = |         0         |         0         |         0         |         0         | A[1][1] + A[1][0] | R[1][1] + R[1][0] | G[1][1] + G[1][0] | B[1][1] + B[1][0] |
+        ;         127                 111                 95                  79                  63                  47                  31                  15                0
+
+        paddw xmm2, xmm3
+        ; xmm2 = | fruta | fruta | fruta | fruta | A[1][1] + A[1][0] + A[0][1] + A[0][0] | R[1][1] + R[1][0] + R[0][1] + R[0][0] | G[1][1] + G[1][0] + G[0][1] + G[0][0] | B[1][1] + B[1][0] + B[0][1] + B[0][0] |
+        ;         127                             63                                      47                                      31                                      15                                    0
+
+        psrlw xmm2, 2 ; shifteo xmm2 word a word 2 bits (divido por 2² = 4)
+        ; xmm2 = | fruta | fruta | fruta | fruta | (A[1][1] + A[1][0] + A[0][1] + A[0][0]) / 4 | (R[1][1] + R[1][0] + R[0][1] + R[0][0]) / 4 | (G[1][1] + G[1][0] + G[0][1] + G[0][0]) / 4 | (B[1][1] + B[1][0] + B[0][1] + B[0][0]) / 4 |
+        ;         127                             63                                            47                                            31                                            15                                          0
+
+        movdqu xmm4, xmm2
+        ; xmm4 = | fruta | fruta | fruta | fruta | (A[1][1] + A[1][0] + A[0][1] + A[0][0]) / 4 | (R[1][1] + R[1][0] + R[0][1] + R[0][0]) / 4 | (G[1][1] + G[1][0] + G[0][1] + G[0][0]) / 4 | (B[1][1] + B[1][0] + B[0][1] + B[0][0]) / 4 |
+        ;         127                             63                                            47                                            31                                            15                                          0
+
+
+        ; Limpio la fruta con 0
+        pand xmm4, xmm12
+        ; xmm4 = |   0   |   0   |   0   |   0   | (A[1][1] + A[1][0] + A[0][1] + A[0][0]) / 4 | (R[1][1] + R[1][0] + R[0][1] + R[0][0]) / 4 | (G[1][1] + G[1][0] + G[0][1] + G[0][0]) / 4 | (B[1][1] + B[1][0] + B[0][1] + B[0][0]) / 4 |
+        ;         127                             63                                            47                                            31                                            15                                          0
+
+
+
+
+        ; Calculo el promedio de [0][2], [0][3], [1][2], [1][3]
+
+        movdqu xmm2, xmm0
+        ; xmm2 = | A[0][3] | R[0][3] | G[0][3] | B[0][3] | A[0][2] | R[0][2] | G[0][2] | B[0][2] | A[0][1] | R[0][1] | G[0][1] | B[0][1] | A[0][0] | R[0][0] | G[0][0] | B[0][0] |
+        ;         127       119       111       103       95        87        79        71        63        55        47        39        31        23        15        7       0
+
+        pshufb xmm2, xmm11
+        ; xmm2 = |    0    | A[0][3] |    0    | A[0][2] |    0    | R[0][3] |    0    | R[0][2] |    0    | G[0][3] |    0    | G[0][2] |    0    | B[0][3] |    0    | B[0][2] |
+        ;         127       119       111       103       95        87        79        71        63        55        47        39        31        23        15        7       0                                                                                                                                                        0
+
+        movdqu xmm3, xmm1
+        ; xmm3 = | A[1][3] | R[1][3] | G[1][3] | B[1][3] | A[1][2] | R[1][2] | G[1][2] | B[1][2] | A[1][1] | R[1][1] | G[1][1] | B[1][1] | A[1][0] | R[1][0] | G[1][0] | B[1][0] |
+        ;         127       119       111       103       95        87        79        71        63        55        47        39        31        23        15        7       0
+
+        pshufb xmm3, xmm11
+        ; xmm3 = |    0    | A[1][3] |    0    | A[1][2] |    0    | R[1][3] |    0    | R[1][2] |    0    | G[1][3] |    0    | G[1][2] |    0    | B[1][3] |    0    | B[1][2] |
+        ;         127       119       111       103       95        87        79        71        63        55        47        39        31        23        15        7       0                                                                                                                                                        0
+
+        phaddw xmm2, xmm3
+        ; xmm2 = | A[1][3] + A[1][2] | R[1][3] + R[1][2] | G[1][3] + G[1][2] | B[1][3] + B[1][2] | A[0][3] + A[0][2] | R[0][3] + R[0][2] | G[0][3] + G[0][2] | B[0][3] + B[0][2] |
+        ;         127                 111                 95                  79                  63                  47                  31                  15                0
+
+        movdqu xmm3, xmm2
+        ; xmm3 = | A[1][3] + A[1][2] | R[1][3] + R[1][2] | G[1][3] + G[1][2] | B[1][3] + B[1][2] | A[0][3] + A[0][2] | R[0][3] + R[0][2] | G[0][3] + G[0][2] | B[0][3] + B[0][2] |
+        ;         127                 111                 95                  79                  63                  47                  31                  15                0
+
+        psrldq xmm3, 8 ; shifteo xmm3 8 bytes a la derecha (a la izquierda pone ceros)
+        ; xmm3 = |         0         |         0         |         0         |         0         | A[1][3] + A[1][2] | R[1][3] + R[1][2] | G[1][3] + G[1][2] | B[1][3] + B[1][2] |
+        ;         127                 111                 95                  79                  63                  47                  31                  15                0
+
+        paddw xmm2, xmm3
+        ; xmm2 = | fruta | fruta | fruta | fruta | A[1][3] + A[1][2] + A[0][3] + A[0][2] | R[1][3] + R[1][2] + R[0][3] + R[0][2] | G[1][3] + G[1][2] + G[0][3] + G[0][2] | B[1][3] + B[1][2] + B[0][3] + B[0][2] |
+        ;         127                             63                                      47                                      31                                      15                                    0
+
+        psrlw xmm2, 2 ; shifteo xmm2 word a word 2 bits (divido por 2² = 4)
+        ; xmm2 = | fruta | fruta | fruta | fruta | (A[1][3] + A[1][2] + A[0][3] + A[0][2]) / 4 | (R[1][3] + R[1][2] + R[0][3] + R[0][2]) / 4 | (G[1][3] + G[1][2] + G[0][3] + G[0][2]) / 4 | (B[1][3] + B[1][2] + B[0][3] + B[0][2]) / 4 |
+        ;         127                             63                                            47                                            31                                            15                                          0
+
+        pslldq xmm2, 8 ; shifteo xmm3 8 bytes a la izquierda (a la derecha pone ceros)
+        ; xmm2 = | (A[1][3] + A[1][2] + A[0][3] + A[0][2]) / 4 | (R[1][3] + R[1][2] + R[0][3] + R[0][2]) / 4 | (G[1][3] + G[1][2] + G[0][3] + G[0][2]) / 4 | (B[1][3] + B[1][2] + B[0][3] + B[0][2]) / 4 |   0   |   0   |   0   |   0   |
+        ;         127                                           111                                           95                                            79                                            63                            0
+
+
+        ; Combino los dos promedios en un solo registro, así escribo los dos de una (para eso hice todo esto de calcular el segundo promedio...)
+        paddw xmm2, xmm4
+        ; xmm2 = | (A[1][3] + A[1][2] + A[0][3] + A[0][2]) / 4 | (R[1][3] + R[1][2] + R[0][3] + R[0][2]) / 4 | (G[1][3] + G[1][2] + G[0][3] + G[0][2]) / 4 | (B[1][3] + B[1][2] + B[0][3] + B[0][2]) / 4 |
+        ;         127                                           111                                           95                                            79                                         64
+        ;        | (A[1][1] + A[1][0] + A[0][1] + A[0][0]) / 4 | (R[1][1] + R[1][0] + R[0][1] + R[0][0]) / 4 | (G[1][1] + G[1][0] + G[0][1] + G[0][0]) / 4 | (B[1][1] + B[1][0] + B[0][1] + B[0][0]) / 4 |
+        ;         63                                            47                                            31                                            15                                          0
+
+        ; xmm2[15..0] = promedio B pixel izquierdo
+        ; xmm2[31..16] = promedio G pixel izquierdo
+        ; xmm2[47..32] = promedio R pixel izquierdo
+        ; xmm2[63..48] = promedio A pixel izquierdo
+        ; xmm2[79..64] = promedio B pixel derecho
+        ; xmm2[95..80] = promedio G pixel derecho
+        ; xmm2[111..96] = promedio R pixel derecho
+        ; xmm2[127..112] = promedio A pixel derecho
+
+        movdqu [rsi], xmm2
+        movdqu [rsi + r10],xmm2
+
+        add rsi, 16
+        add rdi, 16
+
+        sub rcx, 1
+        cmp rcx, 0
+        jnz .ciclo
+
+
+    ; reseteo el contador
+    mov rbx, r10                            ; rbx = ancho*4
+
+    add rdi, r10                            ; rdi = rdi + ancho*4       LE SUMO ESTO PARA QUE SE SALTEE UNA FILA (YA LA PROCESAMOS)
+    add rsi, r10                            ; rsi = rsi + (ancho*4)     LE SUMO ESTO PARA QUE SE SALTEE UNA FILA (YA LA PROCESAMOS)
+
+    sub r9, 2		                          ; LE RESTO AL CONTADOR DE FILAS 2 PORQUE VOY HACIENDO UNA FILA SI UNA NO..
+    cmp r9, 0		                          ; SI ES 0 EL CONTADOR TERMINE
+    jne .ciclo		                          ; SALTO AL CICLO DE NUEVO
+
+    ret        ; A
