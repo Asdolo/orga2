@@ -25,7 +25,9 @@ section .rodata
     ;mascaraLOCA:       db 0x00, 0x00, 0x08, 0x09, 0x02, 0x03, 0x0a, 0x0b, 0x04, 0x05, 0x0c, 0x0d, 0x06, 0x07, 0x0e, 0x0f
     mascaraExtensoraYHADDIzq:   db 0x00, 0xFF, 0x04, 0xFF, 0x01, 0xFF, 0x05, 0xFF, 0x02, 0xFF, 0x06, 0xFF, 0x03, 0xFF, 0x07, 0xFF
     mascaraExtensoraYHADDDer:   db 0x08, 0xFF, 0x0C, 0xFF, 0x09, 0xFF, 0x0D, 0xFF, 0x0A, 0xFF, 0x0E, 0xFF, 0x0B, 0xFF, 0x0F, 0xFF
-    mascaraLimpiadoraAND:       db 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+    mascaraLimpiadoraAND:       db 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+    mascaraWordAByte:       db 0x00, 0x02, 0x04, 0x06, 0x00, 0x02, 0x04, 0x06, 0x08, 0x0A, 0x0C, 0x0E, 0x08, 0x0A, 0x0C, 0x0E
+    
 section .text
 
 pixelar_asm:
@@ -47,14 +49,15 @@ pixelar_asm:
 
     ; r9 va a ser un iterador = alto
     xor r9, r9                              ; r9 = 0
-    mov r9d, 2                            ; r9 = alto
+    mov r9d, ecx                            ; r9 = alto
 
     ; seteo el contador
-    mov rbx, r10                            ; rbx = ancho*4
+    mov rcx, r11                            ; rbx = ancho/4
 
     movdqu xmm10, [mascaraExtensoraYHADDIzq]
     movdqu xmm11, [mascaraExtensoraYHADDDer]
     movdqu xmm12, [mascaraLimpiadoraAND]
+    movdqu xmm13, [mascaraWordAByte]
 
  .ciclo:
 
@@ -62,7 +65,7 @@ pixelar_asm:
         ; xmm0 = | A[0][3] | R[0][3] | G[0][3] | B[0][3] | A[0][2] | R[0][2] | G[0][2] | B[0][2] | A[0][1] | R[0][1] | G[0][1] | B[0][1] | A[0][0] | R[0][0] | G[0][0] | B[0][0] |
         ;         127       119       111       103       95        87        79        71        63        55        47        39        31        23        15        7       0                                                                                                                                                        0
 
-        movdqu xmm1, xmm0;[rdi+r10]
+        movdqu xmm1, [rdi+r10]
         ; xmm0 = | A[1][3] | R[1][3] | G[1][3] | B[1][3] | A[1][2] | R[1][2] | G[1][2] | B[1][2] | A[1][1] | R[1][1] | G[1][1] | B[1][1] | A[1][0] | R[1][0] | G[1][0] | B[1][0] |
         ;         127       119       111       103       95        87        79        71        63        55        47        39        31        23        15        7       0
 
@@ -175,14 +178,28 @@ pixelar_asm:
         ;        | (A[1][1] + A[1][0] + A[0][1] + A[0][0]) / 4 | (R[1][1] + R[1][0] + R[0][1] + R[0][0]) / 4 | (G[1][1] + G[1][0] + G[0][1] + G[0][0]) / 4 | (B[1][1] + B[1][0] + B[0][1] + B[0][0]) / 4 |
         ;         63                                            47                                            31                                            15                                          0
 
-        ; xmm2[15..0] = promedio B pixel izquierdo
-        ; xmm2[31..16] = promedio G pixel izquierdo
-        ; xmm2[47..32] = promedio R pixel izquierdo
-        ; xmm2[63..48] = promedio A pixel izquierdo
-        ; xmm2[79..64] = promedio B pixel derecho
-        ; xmm2[95..80] = promedio G pixel derecho
-        ; xmm2[111..96] = promedio R pixel derecho
-        ; xmm2[127..112] = promedio A pixel derecho
+		; empaqueto de word a byte de nuevo
+		pshufb xmm2, xmm13
+		
+        ; xmm2[7..0] = promedio B pixel izquierdo
+        ; xmm2[15..8] = promedio G pixel izquierdo
+        ; xmm2[23..16] = promedio R pixel izquierdo
+        ; xmm2[31..24] = promedio A pixel izquierdo
+        
+        ; xmm2[39..32] = promedio B pixel izquierdo
+        ; xmm2[47..40] = promedio G pixel izquierdo
+        ; xmm2[55..48] = promedio R pixel izquierdo
+        ; xmm2[63..56] = promedio A pixel izquierdo
+        
+        ; xmm2[71..64] = promedio B pixel derecho
+        ; xmm2[79..72] = promedio G pixel derecho
+        ; xmm2[87..80] = promedio R pixel derecho
+        ; xmm2[95..88] = promedio A pixel derecho
+        
+        ; xmm2[103..96] = promedio B pixel derecho
+        ; xmm2[111..104] = promedio G pixel derecho
+        ; xmm2[119..112] = promedio R pixel derecho
+        ; xmm2[127..120] = promedio A pixel derecho
 
         movdqu [rsi], xmm2
         movdqu [rsi + r10],xmm2
@@ -196,7 +213,7 @@ pixelar_asm:
 
 
     ; reseteo el contador
-    mov rbx, r10                            ; rbx = ancho*4
+    mov rcx, r11                            ; rbx = ancho/4
 
     add rdi, r10                            ; rdi = rdi + ancho*4       LE SUMO ESTO PARA QUE SE SALTEE UNA FILA (YA LA PROCESAMOS)
     add rsi, r10                            ; rsi = rsi + (ancho*4)     LE SUMO ESTO PARA QUE SE SALTEE UNA FILA (YA LA PROCESAMOS)
