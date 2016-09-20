@@ -107,13 +107,17 @@ smalltiles_asm:
    movups [r13], xmm0                     ; PONGO DESTINO PUNTERO ARRIBA IZQUIERDA
    movups [r14], xmm0                     ; PONGO DESTINO PUNTERO ARRIBA DERECHA
 
-   add rsi, 8		                          ; LE SUMO 8 BYTES PORQUE SOLO ESCRIBI 2 PIXEL
-   add r12, 8		                          ; LE SUMO 8 BYTES PORQUE SOLO ESCRIBI 2 PIXEL
-   add r13, 8		                          ; LE SUMO 8 BYTES PORQUE SOLO ESCRIBI 2 PIXEL
-   add r14, 8		                          ; LE SUMO 8 BYTES PORQUE SOLO ESCRIBI 2 PIXEL
+   add rdi, 16                            ; LE SUMO 16 BYTES PARA QUE APUNTE AL FINAL
+   add rsi, 16	                          ; LE SUMO 16 BYTES PARA QUE APUNTE AL FINAL
+   add r12, 16	                          ; LE SUMO 16 BYTES PARA QUE APUNTE AL FINAL
+   add r13, 16	                          ; LE SUMO 16 BYTES PARA QUE APUNTE AL FINAL
+   add r14, 16	                          ; LE SUMO 16 BYTES PARA QUE APUNTE AL FINAL
 
+   ; reseteo el contador
    mov rcx, r15                           ; rcx = (ancho*4)/2
    shr rcx, 3                             ; rcx = ancho/4
+   sub rcx, 1                              ; DEJO EL ULTIMO PA'L FINAL
+
    add rdi, rbx                           ; rdi = rdi + ancho*4       LE SUMO ESTO PARA QUE SALTE UNA FILA
    add rsi, r15                           ; rsi = rsi + (ancho*4)/2   LE SUMO ESTO PARA QUE SALTE MEDIA FILA
    add r12, r15                           ; r12 = r12 + (ancho*4)/2   LE SUMO ESTO PARA QUE SALTE MEDIA FILA
