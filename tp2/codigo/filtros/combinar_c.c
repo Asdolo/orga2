@@ -11,10 +11,10 @@ float clamp(float pixel)
 
 unsigned char formula (float alpha, unsigned char colorOrig, unsigned char colorEspej )
 {
-float a = alpha/255.0;
-float b = (colorOrig - colorEspej) * a + colorEspej;
+	float a = alpha/255.0;
+	float b = (colorOrig - colorEspej) * a + colorEspej;
 
-return (unsigned char) b;
+	return (unsigned char) b;
 }
 
 
@@ -54,7 +54,7 @@ for (int f = 0; f < filas; f++) {
 			bgra_t *p_d = (bgra_t*) &dst_matrix[f][c * 4];
 
             		
-p_d->g = formula(alpha, p_s->g, p_d->g);
+			p_d->g = formula(alpha, p_s->g, p_d->g);
 			p_d->r = formula(alpha, p_s->r, p_d->r);
 			p_d->b = formula(alpha, p_s->b, p_d->b);
 			p_d->a = formula(alpha, p_s->a, p_d->a);

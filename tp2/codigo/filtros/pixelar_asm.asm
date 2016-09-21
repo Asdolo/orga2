@@ -63,7 +63,7 @@ pixelar_asm:
 
         movdqu xmm0, [rdi]
         ; xmm0 = | A[0][3] | R[0][3] | G[0][3] | B[0][3] | A[0][2] | R[0][2] | G[0][2] | B[0][2] | A[0][1] | R[0][1] | G[0][1] | B[0][1] | A[0][0] | R[0][0] | G[0][0] | B[0][0] |
-        ;         127       119       111       103       95        87        79        71        63        55        47        39        31        23        15        7       0                                                                                                                                                        0
+        ;         127       119       111       103       95        87        79        71        63        55        47        39        31        23        15        7       0
 
         movdqu xmm1, [rdi+r10]
         ; xmm0 = | A[1][3] | R[1][3] | G[1][3] | B[1][3] | A[1][2] | R[1][2] | G[1][2] | B[1][2] | A[1][1] | R[1][1] | G[1][1] | B[1][1] | A[1][0] | R[1][0] | G[1][0] | B[1][0] |
@@ -218,8 +218,8 @@ pixelar_asm:
     add rdi, r10                            ; rdi = rdi + ancho*4       LE SUMO ESTO PARA QUE SE SALTEE UNA FILA (YA LA PROCESAMOS)
     add rsi, r10                            ; rsi = rsi + (ancho*4)     LE SUMO ESTO PARA QUE SE SALTEE UNA FILA (YA LA PROCESAMOS)
 
-    sub r9, 2		                          ; LE RESTO AL CONTADOR DE FILAS 2 PORQUE VOY HACIENDO UNA FILA SI UNA NO..
-    cmp r9, 0		                          ; SI ES 0 EL CONTADOR TERMINE
-    jne .ciclo		                          ; SALTO AL CICLO DE NUEVO
+    sub r9, 2		                        ; LE RESTO AL CONTADOR DE FILAS 2 PORQUE VOY HACIENDO UNA FILA SI UNA NO..
+    cmp r9, 0		                        ; SI ES 0 EL CONTADOR TERMINE
+    jne .ciclo		                        ; SALTO AL CICLO DE NUEVO
 
     ret        ; A
