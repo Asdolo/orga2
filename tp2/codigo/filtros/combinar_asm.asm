@@ -182,7 +182,7 @@ mulps xmm4,xmm0
 CVTPS2DQ xmm1,xmm1
 CVTPS2DQ xmm2,xmm2
 CVTPS2DQ xmm3,xmm3
-CVTPS2DQ xmm3,xmm4
+CVTPS2DQ xmm4,xmm4
  
  
 ;Le sumo la espejada

@@ -44,10 +44,12 @@ int main( int argc, char** argv ) {
 	// Imprimo info
 	if (!config.nombre)
 	{
+		/*
 		printf ( "Procesando...\n");
 		printf ( "  Filtro             : %s\n", config.nombre_filtro);
 		printf ( "  Implementación     : %s\n", C_ASM( (&config) ) );
 		printf ( "  Archivo de entrada : %s\n", config.archivo_entrada);
+		* */
 	}
 
 	filtro_t *filtro = detectar_filtro(&config);
@@ -98,13 +100,50 @@ void correr_filtro_imagen(configuracion_t *config, aplicador_fn_t aplicador)
 	{
 		imagenes_abrir(config);
 		unsigned long long start, end;
-		MEDIR_TIEMPO_START(start)
+		
+		
+		
+		
+		unsigned long long minimo = 0;
+		unsigned long long maximo = 0;		
+		unsigned long long promedio = 0;
+		
+		
 		for (int i = 0; i < config->cant_iteraciones; i++) {
-				aplicador(config);
+			MEDIR_TIEMPO_START(start)
+			aplicador(config);
+			MEDIR_TIEMPO_STOP(end)
+			
+			promedio = promedio + (end - start)/config->cant_iteraciones;
+			
+			if (minimo == 0){
+				minimo = end - start;
+				maximo = end - start;
+			}
+			
+			if (end - start < minimo) minimo = end - start;
+			if (end - start > maximo) maximo = end - start;
+			
+			/*	
+			if (i % 1000 == 0){
+				printf("i = %d\r\n", i);
+			}
+			*/
+				
 		}
-		MEDIR_TIEMPO_STOP(end)
+		
+		
+		
 		imagenes_guardar(config);
 		imagenes_liberar(config);
-		imprimir_tiempos_ejecucion(start, end, config->cant_iteraciones);
+		//imprimir_tiempos_ejecucion(start, end, config->cant_iteraciones);
+		printf("Valor minimo = %llu\r\n", minimo);
+		printf("Valor promedio = %llu\r\n", promedio);
+		printf("Valor maximo = %llu\r\n", maximo);
+		
+		printf("Distancia entre minimo y maximo = %llu\r\n", maximo - minimo);
+		printf("Distancia entre promedio y minimo = %llu\r\n", promedio - minimo);
+		printf("Distancia entre promedio y maximo = %llu\r\n", maximo - promedio);
+		
 	}
 }
