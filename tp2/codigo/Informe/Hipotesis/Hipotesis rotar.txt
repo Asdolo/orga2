@@ -1,0 +1,305 @@
+HIPOTESIS ROTAR:
+Queremos ver que hay un punto maximo en el que vale la pena desenrollar ciclos y luego de ese maximo ya no vale la pena, o es contrario. 
+Justificacion villera: Los saltos afectan al pipeline y pueden arruinar varias instrucciones pre-procesadas
+
+C
+rotar_canales_C_Original:
+ANTES:
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+Pixeles procesados: 1
+Cant ciclos(while): original
+Cantidad de iteraciones = 100000
+Valor minimo = 3743323
+Valor promedio = 3769513.544560
+Valor maximo = 4980991
+Distancia entre minimo y maximo = 1237668
+Distancia entre promedio y minimo = 26190
+Distancia entre promedio y maximo = 1211478
+Varianza = 4739236690527.463867
+Desvio estándar: 2176978.798824
+
+DESPUES:
+CPU MHz:               3492.625
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+rotar_canales_C_2pixeles:
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+Pixeles procesados: 2
+Cant ciclos(while): original/2
+Cantidad de iteraciones = 100000
+Valor minimo = 3502111
+Valor promedio = 3528656.837240
+Valor maximo = 4688983
+Distancia entre minimo y maximo = 1186872
+Distancia entre promedio y minimo = 26545
+Distancia entre promedio y maximo = 1160327
+Varianza = 4153836446220.198242
+Desvio estándar: 2038096.279919
+
+DESPUES
+CPU MHz:               3442.625
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+rotar_canales_C_4pixeles:
+
+
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+Pixeles procesados: 4
+Cant ciclos(while): original/4
+Cantidad de iteraciones = 100000
+Valor minimo = 3276729
+Valor promedio = 3301689.319010
+Valor maximo = 4374456
+Distancia entre minimo y maximo = 1097727
+Distancia entre promedio y minimo = 24960
+Distancia entre promedio y maximo = 1072767
+Varianza = 3636570523479.243652
+Desvio estándar: 1906979.423979
+DESPUES
+CPU MHz:               3446.625
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+rotar_canales_C_8pixeles:
+
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+Pixeles procesados: 8
+Cant ciclos(while): original/8
+Cantidad de iteraciones = 100000
+Valor minimo = 3183055
+Valor promedio = 3217602.514650
+Valor maximo = 8579812
+Distancia entre minimo y maximo = 5396757
+Distancia entre promedio y minimo = 34547
+Distancia entre promedio y maximo = 5362210
+Varianza = 3455389325533.155273
+Desvio estándar: 1858867.753643
+
+DESPUES
+CPU MHz:               3424.875
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+rotar_canales_C_16pixeles:
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+Pixeles procesados: 16
+Cant ciclos(while): original/16
+Cantidad de iteraciones = 100000
+Valor minimo = 3100551
+Valor promedio = 3123143.714080
+Valor maximo = 4412031
+Distancia entre minimo y maximo = 1311480
+Distancia entre promedio y minimo = 22592
+Distancia entre promedio y maximo = 1288888
+Varianza = 3254211409603.473145
+Desvio estándar: 1803943.294453
+DESPUES
+CPU MHz:               3411.875
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+rotar_canales_C_32pixeles:
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+Pixeles procesados: 32
+Cant ciclos(while): original/32
+Cantidad de iteraciones = 100000
+Valor minimo = 3142730
+Valor promedio = 3169875.038210
+Valor maximo = 4889737
+Distancia entre minimo y maximo = 1747007
+Distancia entre promedio y minimo = 27145
+Distancia entre promedio y maximo = 1719862
+Varianza = 3353332284826.669434
+Desvio estándar: 1831210.606355
+DESPUES
+CPU MHz:               3500.500
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+
+
+
+
+rotar_canales_C_64pixeles:
+
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+Pixeles procesados: 64
+Cant ciclos(while): original/64
+Cantidad de iteraciones = 100000
+Valor minimo = 3270349
+Valor promedio = 3307281.734500
+Valor maximo = 4405192
+Distancia entre minimo y maximo = 1134843
+Distancia entre promedio y minimo = 36932
+Distancia entre promedio y maximo = 1097911
+Varianza = 3649201422632.044922
+Desvio estándar: 1910288.308772
+DESPUES
+CPU MHz:               3454.125
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+
+
+ASM
+
+rotar_canales_asm_original:
+
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+Pixeles procesados: 4
+Cant ciclos(while): original
+Cantidad de iteraciones = 100000
+Valor minimo = 406849
+Valor promedio = 411634.091640
+Valor maximo = 851782
+Distancia entre minimo y maximo = 444933
+Distancia entre promedio y minimo = 4785
+Distancia entre promedio y maximo = 440148
+Varianza = 56834955504.922546
+Desvio estándar: 238400.829497
+
+DESPUES
+CPU MHz:               3443.500
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+rotar_canales_asm_8pixeles:
+
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+Pixeles procesados: 8
+Cant ciclos(while): original/2
+Cantidad de iteraciones = 100000
+Valor minimo = 232502
+Valor promedio = 234141.456840
+Valor maximo = 547275
+Distancia entre minimo y maximo = 314773
+Distancia entre promedio y minimo = 1639
+Distancia entre promedio y maximo = 313134
+Varianza = 18388460543.476257
+Desvio estándar: 135604.057990
+DESPUES
+CPU MHz:               3469.875
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+rotar_canales_asm_16pixeles:
+
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 100000
+
+Pixeles procesados: 16
+Cant ciclos(while): original/4
+Valor minimo = 151723
+Valor promedio = 156298.735130
+Valor maximo = 5209685
+Distancia entre minimo y maximo = 5057962
+Distancia entre promedio y minimo = 4575
+Distancia entre promedio y maximo = 5053387
+Varianza = 8500504793.082860
+Desvio estándar: 92198.182157
+
+DESPUES
+CPU MHz:               3599.375
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+
+
+
+rotar_canales_asm_32pixeles:
+
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+Pixeles procesados: 32
+Cant ciclos(while): original/8
+Cantidad de iteraciones = 100000
+Valor minimo = 148470
+Valor promedio = 151956.713720
+Valor maximo = 387936
+Distancia entre minimo y maximo = 239466
+Distancia entre promedio y minimo = 3486
+Distancia entre promedio y maximo = 235980
+Varianza = 7764499460.026691
+Desvio estándar: 88116.397226
+
+DESPUES
+CPU MHz:               3446.750
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+rotar_canales_asm_64pixeles:
+
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+Pixeles procesados: 64
+Cant ciclos(while): original/16
+Cantidad de iteraciones = 100000
+Valor minimo = 143332
+Valor promedio = 146260.840980
+Valor maximo = 424913
+Distancia entre minimo y maximo = 281581
+Distancia entre promedio y minimo = 2928
+Distancia entre promedio y maximo = 278653
+Varianza = 7197636861.421794
+Desvio estándar: 84838.887672
+DESPUES
+CPU MHz:               3459.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000

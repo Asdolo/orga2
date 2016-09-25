@@ -1,0 +1,46 @@
+hipotesis 1:C Reemplazar matriz por puntero en c (Es decir no usar corchetes para acceder a memoria)
+hipotesis 2:ASM Si la foto es multiplo de 8 --> Anda 100000 ciclos mas rapido porque no tenemos que retroceder 2 pixeles y reescribir de nuevo
+
+
+C
+Smalltiles_c_original:
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 100000
+Valor minimo = 2998223
+Valor promedio = 3029005.750310
+Valor maximo = 4215179
+Distancia entre minimo y maximo = 1216956
+Distancia entre promedio y minimo = 30782
+Distancia entre promedio y maximo = 1186174
+Varianza = 3061051545886.209473
+Desvio estándar: 1749586.107023
+DESPUES
+CPU MHz:               3492.500
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+Smalltiles_C_modificado: 
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 100000
+Valor minimo = 2410806
+Valor promedio = 2439538.442910
+Valor maximo = 3517333
+Distancia entre minimo y maximo = 1106527
+Distancia entre promedio y minimo = 28732
+Distancia entre promedio y maximo = 1077795
+Varianza = 1986342237402.395508
+Desvio estándar: 1409376.542093
+DESPUES
+CPU MHz:               3460.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+

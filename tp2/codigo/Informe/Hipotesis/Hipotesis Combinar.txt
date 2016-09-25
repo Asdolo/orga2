@@ -1,0 +1,97 @@
+HIPOTESIS: 
+CONVERTIR ALPHA A INT Y EN VEZ DE DIVIDIR POR 255 SHIFTEO POR 256, NO UTILIZO OPERACION DE CONVERSION A FLOATS NI OPERACIONES CON FLOATS
+
+combinar_C_Original:
+
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Pixeles procesados: 1
+Cant ciclos(while): original
+Cantidad de iteraciones = 100000
+Valor minimo = 38102533
+Valor promedio = 38248662.970360
+Valor maximo = 46740196
+Distancia entre minimo y maximo = 8637663
+Distancia entre promedio y minimo = 146129
+Distancia entre promedio y maximo = 8491534
+Varianza = 487557777676328.937500
+Desvio estándar: 22080710.533774
+DESPUES
+CPU MHz:               3407.375
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+combinar_C_Modificado:
+
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+Pixeles procesados: 1
+Cant ciclos(while): original
+Cantidad de iteraciones = 100000
+Valor minimo = 15780494
+Valor promedio = 15955372.396660
+Valor maximo = 20488128
+Distancia entre minimo y maximo = 4707634
+Distancia entre promedio y minimo = 174878
+Distancia entre promedio y maximo = 4532756
+Varianza = 84885874406111.843750
+Desvio estándar: 9213353.049032
+DESPUES
+CPU MHz:               3598.250
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+
+combinar_ASM_Original:
+FOTO:LENA32.BMP
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+Pixeles procesados: 4
+Cant ciclos(while): original
+Cantidad de iteraciones = 100000
+Valor minimo = 1909880
+Valor promedio = 1923008.024660
+Valor maximo = 2916198
+Distancia entre minimo y maximo = 1006318
+Distancia entre promedio y minimo = 13128
+Distancia entre promedio y maximo = 993190
+Varianza = 1234411737176.454834
+Desvio estándar: 1111040.835063
+DESPUES
+CPU MHz:               3476.750
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+
+MODIFICADA
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+Pixeles procesados: 4
+Cant ciclos(while): original
+Cantidad de iteraciones = 100000
+Valor minimo = 1825411
+Valor promedio = 1838710.093170
+Valor maximo = 2867500
+Distancia entre minimo y maximo = 1042089
+Distancia entre promedio y minimo = 13299
+Distancia entre promedio y maximo = 1028790
+Varianza = 1129415990839.652832
+Desvio estándar: 1062739.850970
+DESPUES
+CPU MHz:               3482.875
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
