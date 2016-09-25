@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <math.h>
 #include "tp2.h"
 #include "helper/tiempo.h"
 #include "helper/libbmp.h"
@@ -106,15 +106,20 @@ void correr_filtro_imagen(configuracion_t *config, aplicador_fn_t aplicador)
 		
 		unsigned long long minimo = 0;
 		unsigned long long maximo = 0;		
-		unsigned long long promedio = 0;
+		 double promedio = 0;
+
+		unsigned long long res;
+		unsigned long long resultados[config->cant_iteraciones];
 		
+		double varianza, sd, sumatoria;
 		
+
 		for (int i = 0; i < config->cant_iteraciones; i++) {
 			MEDIR_TIEMPO_START(start)
 			aplicador(config);
 			MEDIR_TIEMPO_STOP(end)
 			
-			promedio = promedio + (end - start)/config->cant_iteraciones;
+			promedio += (double)((double)(end - start)/(double)config->cant_iteraciones);
 			
 			if (minimo == 0){
 				minimo = end - start;
@@ -124,26 +129,39 @@ void correr_filtro_imagen(configuracion_t *config, aplicador_fn_t aplicador)
 			if (end - start < minimo) minimo = end - start;
 			if (end - start > maximo) maximo = end - start;
 			
-			/*	
-			if (i % 1000 == 0){
-				printf("i = %d\r\n", i);
-			}
-			*/
-				
+			resultados[i] = end - start;
+				res += end - start;
+
+		
+
+			sumatoria += (resultados[i] - promedio) * (resultados[i] - promedio);
+
 		}
+
+		varianza = sumatoria / (double) config->cant_iteraciones;
+		sd = sqrt(varianza);
+
 		
 		
 		
 		imagenes_guardar(config);
 		imagenes_liberar(config);
 		//imprimir_tiempos_ejecucion(start, end, config->cant_iteraciones);
+		printf("Cantidad de iteraciones = %d\r\n", config->cant_iteraciones);
 		printf("Valor minimo = %llu\r\n", minimo);
-		printf("Valor promedio = %llu\r\n", promedio);
+		printf("Valor promedio = %f\r\n", promedio);
 		printf("Valor maximo = %llu\r\n", maximo);
 		
 		printf("Distancia entre minimo y maximo = %llu\r\n", maximo - minimo);
-		printf("Distancia entre promedio y minimo = %llu\r\n", promedio - minimo);
-		printf("Distancia entre promedio y maximo = %llu\r\n", maximo - promedio);
+		printf("Distancia entre promedio y minimo = %llu\r\n", (unsigned long long)(promedio) - minimo);
+		printf("Distancia entre promedio y maximo = %llu\r\n", maximo - (unsigned long long)(promedio));
+
+
+		printf("Varianza = %f\r\n", varianza);
+		printf("Desvio estándar: %f\n", sd);
+
 		
+
+
 	}
 }
