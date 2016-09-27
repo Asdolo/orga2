@@ -1,0 +1,43 @@
+HIPOTESIS PIXELAR C: Declarar las variables fuera del ciclo y no usar ni multiplicaciones ni divisiones, si no todo con shifteos.
+
+Resultado: Bajo 10mil el promedio nada mas ... :S
+
+C
+Pixelar_C_Original:
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 100000
+Valor minimo = 3814297
+Valor promedio = 3840987.425990
+Valor maximo = 5165070
+Distancia entre minimo y maximo = 1350773
+Distancia entre promedio y minimo = 26690
+Distancia entre promedio y maximo = 1324083
+Varianza = 4921599007599.745117
+Desvio estándar: 2218467.716150
+DESPUES
+CPU MHz:               3500.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+Pixelar_C_Modificado:
+
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 100000
+Valor minimo = 3713235
+Valor promedio = 3739692.644690
+Valor maximo = 4949974
+Distancia entre minimo y maximo = 1236739
+Distancia entre promedio y minimo = 26457
+Distancia entre promedio y maximo = 1210282
+Varianza = 4664873945534.808594
+Desvio estándar: 2159831.925298
+DESPUES
+CPU MHz:               3494.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000

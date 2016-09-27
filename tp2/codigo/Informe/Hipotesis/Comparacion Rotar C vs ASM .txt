@@ -1,0 +1,275 @@
+C 64x64 pixeles
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 58677
+Valor promedio = 61241.616200
+Valor maximo = 334781
+Distancia entre minimo y maximo = 276104
+Distancia entre promedio y minimo = 2564
+Distancia entre promedio y maximo = 273540
+Varianza = 1508657815.201682
+Desvio estándar: 38841.444556
+DESPUES
+CPU MHz:               3491.250
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+ASM 64x64 pixeles
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 6422
+Valor promedio = 8513.286400
+Valor maximo = 67763
+Distancia entre minimo y maximo = 61341
+Distancia entre promedio y minimo = 2091
+Distancia entre promedio y maximo = 59250
+Varianza = 58780675.186466
+Desvio estándar: 7666.855626
+DESPUES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+
+C 128X128 pixeles
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 228557
+Valor promedio = 232524.007900
+Valor maximo = 1045545
+Distancia entre minimo y maximo = 816988
+Distancia entre promedio y minimo = 3967
+Distancia entre promedio y maximo = 813021
+Varianza = 18872785632.479847
+Desvio estándar: 137378.257495
+DESPUES
+CPU MHz:               3599.500
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+ASM 128X128 pixeles
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 25464
+Valor promedio = 30493.156300
+Valor maximo = 239452
+Distancia entre minimo y maximo = 213988
+Distancia entre promedio y minimo = 5029
+Distancia entre promedio y maximo = 208959
+Varianza = 408944034.214348
+Desvio estándar: 20222.364704
+DESPUES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+C 256X256 pixeles
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 937615
+Valor promedio = 946229.454700
+Valor maximo = 1527914
+Distancia entre minimo y maximo = 590299
+Distancia entre promedio y minimo = 8614
+Distancia entre promedio y maximo = 581685
+Varianza = 299553329367.903809
+Desvio estándar: 547314.652981
+DESPUES
+CPU MHz:               3501.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+ASM 256X256 pixeles
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 101801
+Valor promedio = 105579.978100
+Valor maximo = 305497
+Distancia entre minimo y maximo = 203696
+Distancia entre promedio y minimo = 3778
+Distancia entre promedio y maximo = 199918
+Varianza = 3802437357.740545
+Desvio estándar: 61663.906442
+DESPUES
+CPU MHz:               3494.750
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+C 512x512 pixeles
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 3726050
+Valor promedio = 3757561.941300
+Valor maximo = 4968882
+Distancia entre minimo y maximo = 1242832
+Distancia entre promedio y minimo = 31511
+Distancia entre promedio y maximo = 1211321
+Varianza = 4714821646183.472656
+Desvio estándar: 2171364.005915
+DESPUES
+CPU MHz:               3479.125
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+ASM 512x512 pixeles
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 406863
+Valor promedio = 410869.121500
+Valor maximo = 938916
+Distancia entre minimo y maximo = 532053
+Distancia entre promedio y minimo = 4006
+Distancia entre promedio y maximo = 528047
+Varianza = 56663928928.434578
+Desvio estándar: 238041.863815
+DESPUES
+CPU MHz:               3427.250
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+
+C 1024x1024 pixeles
+
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 14895814
+Valor promedio = 14986731.553600
+Valor maximo = 16573878
+Distancia entre minimo y maximo = 1678064
+Distancia entre promedio y minimo = 90917
+Distancia entre promedio y maximo = 1587147
+Varianza = 74888043239676.421875
+Desvio estándar: 8653787.797241
+DESPUES
+CPU MHz:               3480.750
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+ASM 1024x1024 pixeles
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 1670855
+Valor promedio = 1698797.625200
+Valor maximo = 2543394
+Distancia entre minimo y maximo = 872539
+Distancia entre promedio y minimo = 27942
+Distancia entre promedio y maximo = 844597
+Varianza = 963727254089.685181
+Desvio estándar: 981696.110866
+DESPUES
+CPU MHz:               3475.375
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+C 2048x2048 pixeles
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 59608162
+Valor promedio = 59855113.780000
+Valor maximo = 62648155
+Distancia entre minimo y maximo = 3039993
+Distancia entre promedio y minimo = 246951
+Distancia entre promedio y maximo = 2793042
+Varianza = 1194053231954209.750000
+Desvio estándar: 34555075.342910
+DESPUES
+CPU MHz:               3461.875
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+ASM 2048x2048 pixeles
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 6979681
+Valor promedio = 7061885.492200
+Valor maximo = 8543594
+Distancia entre minimo y maximo = 1563913
+Distancia entre promedio y minimo = 82204
+Distancia entre promedio y maximo = 1481709
+Varianza = 16646120058082.322266
+Desvio estándar: 4079965.693248
+DESPUES
+CPU MHz:               3599.125
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+C 4096x4096 pixeles
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 238399151
+Valor promedio = 239083738.600198
+Valor maximo = 247568876
+Distancia entre minimo y maximo = 9169725
+Distancia entre promedio y minimo = 684587
+Distancia entre promedio y maximo = 8485138
+Varianza = 19050417235878688.000000
+Desvio estándar: 138023248.896259
+DESPUES
+CPU MHz:               3406.875
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+ASM 4096x4096 pixeles
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 28711452
+Valor promedio = 28917076.762900
+Valor maximo = 30919167
+Distancia entre minimo y maximo = 2207715
+Distancia entre promedio y minimo = 205624
+Distancia entre promedio y maximo = 2002091
+Varianza = 278801833678819.125000
+Desvio estándar: 16697360.081127
+DESPUES
+CPU MHz:               3422.500
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+

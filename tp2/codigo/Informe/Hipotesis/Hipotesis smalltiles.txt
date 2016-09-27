@@ -44,3 +44,26 @@ CPU min MHz:           800,0000
 
 
 
+ASM
+Smalltiles_asm_original
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 100000
+Valor minimo = 265095
+Valor promedio = 270078.157330
+Valor maximo = 610214
+Distancia entre minimo y maximo = 345119
+Distancia entre promedio y minimo = 4983
+Distancia entre promedio y maximo = 340136
+Varianza = 24460319082.192219
+Desvio estándar: 156397.951017
+DESPUES
+CPU MHz:               3500.875
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+Smalltiles_asm_modificado:
+
+HACER!!

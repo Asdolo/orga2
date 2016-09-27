@@ -1,0 +1,194 @@
+CLEARc64
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 594970
+Valor promedio = 600684.346800
+Valor maximo = 2759420
+Distancia entre minimo y maximo = 2164450
+Distancia entre promedio y minimo = 5714
+Distancia entre promedio y maximo = 2158736
+Varianza = 122695024920.263229
+Desvio estándar: 350278.496229
+DESPUES
+CPU MHz:               3599.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+asm64
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 29895
+Valor promedio = 31270.122200
+Valor maximo = 177749
+Distancia entre minimo y maximo = 147854
+Distancia entre promedio y minimo = 1375
+Distancia entre promedio y maximo = 146479
+Varianza = 454332615.295629
+Desvio estándar: 21315.079528
+DESPUES
+CPU MHz:               3297.250
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+c128
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 2379382
+Valor promedio = 2396596.549100
+Valor maximo = 9742359
+Distancia entre minimo y maximo = 7362977
+Distancia entre promedio y minimo = 17214
+Distancia entre promedio y maximo = 7345763
+Varianza = 1923827867876.812012
+Desvio estándar: 1387021.221134
+DESPUES
+CPU MHz:               3429.125
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+asm128
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 119112
+Valor promedio = 121521.098600
+Valor maximo = 594441
+Distancia entre minimo y maximo = 475329
+Distancia entre promedio y minimo = 2409
+Distancia entre promedio y maximo = 472920
+Varianza = 5352213660.205588
+Desvio estándar: 73158.824896
+DESPUES
+CPU MHz:               3599.750
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+c256
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 9498461
+Valor promedio = 9558447.593300
+Valor maximo = 11329240
+Distancia entre minimo y maximo = 1830779
+Distancia entre promedio y minimo = 59986
+Distancia entre promedio y maximo = 1770793
+Varianza = 30473794238914.187500
+Desvio estándar: 5520307.440615
+DESPUES
+CPU MHz:               3501.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+asm256
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 475840
+Valor promedio = 482194.600000
+Valor maximo = 1008242
+Distancia entre minimo y maximo = 532402
+Distancia entre promedio y minimo = 6354
+Distancia entre promedio y maximo = 526048
+Varianza = 78138406239.235443
+Desvio estándar: 279532.477969
+DESPUES
+CPU MHz:               3483.750
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+c512
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 38088749
+Valor promedio = 38229065.131000
+Valor maximo = 45665449
+Distancia entre minimo y maximo = 7576700
+Distancia entre promedio y minimo = 140316
+Distancia entre promedio y maximo = 7436384
+Varianza = 487231969285652.500000
+Desvio estándar: 22073331.630854
+DESPUES
+CPU MHz:               3500.625
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
+asm512
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 1910021
+Valor promedio = 1928061.083700
+Valor maximo = 2803171
+Distancia entre minimo y maximo = 893150
+Distancia entre promedio y minimo = 18040
+Distancia entre promedio y maximo = 875110
+Varianza = 1243067682718.351318
+Desvio estándar: 1114929.451902
+DESPUES
+CPU MHz:               3596.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+c1024
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 152407963
+Valor promedio = 152861618.074699
+Valor maximo = 159058950
+Distancia entre minimo y maximo = 6650987
+Distancia entre promedio y minimo = 453655
+Distancia entre promedio y maximo = 6197332
+Varianza = 7787861900344007.000000
+Desvio estándar: 88248863.450721
+DESPUES
+CPU MHz:               3434.500
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+ASM1024
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 7662029
+Valor promedio = 7752290.751300
+Valor maximo = 9189990
+Distancia entre minimo y maximo = 1527961
+Distancia entre promedio y minimo = 90261
+Distancia entre promedio y maximo = 1437700
+Varianza = 20033424057339.703125
+Desvio estándar: 4475871.318228
+DESPUES
+CPU MHz:               3475.375
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+

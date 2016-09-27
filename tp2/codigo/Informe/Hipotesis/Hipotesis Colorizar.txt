@@ -1,0 +1,41 @@
+HIPOTESIS: C: En vez de agarrar 9 pixeles agarro 18, ya que con 9 pixeles puedo procesar 1 pixel y con 18 pixeles puedo procesar 4.
+
+colorizar_C_Original:
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 118156996
+Valor promedio = 118805128.560000
+Valor maximo = 127522846
+Distancia entre minimo y maximo = 9365850
+Distancia entre promedio y minimo = 648132
+Distancia entre promedio y maximo = 8717718
+Varianza = 4704911806178333.000000
+Desvio estándar: 68592359.677870
+DESPUES
+CPU MHz:               3497.750
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+colorizar_C_Modificado:
+ANTES
+CPU MHz:               800.000
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+Cantidad de iteraciones = 10000
+Valor minimo = 127113583
+Valor promedio = 127762531.139500
+Valor maximo = 131597223
+Distancia entre minimo y maximo = 4483640
+Distancia entre promedio y minimo = 648948
+Distancia entre promedio y maximo = 3834692
+Varianza = 5440823799743805.000000
+Desvio estándar: 73761940.048671
+DESPUES
+CPU MHz:               3353.250
+CPU max MHz:           3600,0000
+CPU min MHz:           800,0000
+
+
