@@ -28,6 +28,12 @@
 /* -------------------------------------------------------------------------- */
 #define GDT_IDX_NULL_DESC           0
 
+#define GDT_IDX_C0_DESC				18 // segmento de código nivel 0
+#define GDT_IDX_C3_DESC				19 // segmento de código nivel 3
+#define GDT_IDX_D0_DESC				20 // segmento de datos nivel 0
+#define GDT_IDX_D3_DESC				21 // segmento de datos nivel 3
+#define GDT_IDX_V_DESC				22 // segmento de memoria de video
+
 /* Direcciones de memoria */
 /* -------------------------------------------------------------------------- */
 #define BOOTSECTOR              0x00001000 /* direccion fisica de comienzo del bootsector (copiado) */

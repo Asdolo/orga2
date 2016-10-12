@@ -3,10 +3,17 @@
 ; TRABAJO PRACTICO 3 - System Programming - ORGANIZACION DE COMPUTADOR II - FCEN
 ; ==============================================================================
 
+%define GDT_IDX_C0_DESC 18
+%define GDT_IDX_D0_DESC 20
+%define KERNEL_STACK_START_POS 0x27000
+
+
 %include "imprimir.mac"
 
 global start
 
+;; Screen
+extern screen_limpiar
 
 ;; GDT
 extern GDT_DESC
@@ -42,11 +49,11 @@ start:
     ; Deshabilitar interrupciones
     cli
 
-    ; xchg bx, bx
-
     ; Imprimir mensaje de bienvenida
-    imprimir_texto_mr iniciando_mr_msg, iniciando_mr_len, 0x07, 0, 0
 
+	
+	; macro
+    imprimir_texto_mr iniciando_mr_msg, iniciando_mr_len, 0x07, 0, 0
 
     ; habilitar A20
 
@@ -60,11 +67,26 @@ start:
 
     ; pasar a modo protegido
 
+    jmp GDT_IDX_C0_DESC << 3:pm
+
+ BITS 32
+ pm:
+
     ; acomodar los segmentos
+    xor eax, eax
+    mov ax, GDT_IDX_D0_DESC << 3
+    mov ds, ax
+    mov ss, ax
+    mov es, ax
+    mov gs, ax
+    mov fs, ax
 
     ; setear la pila
+    mov esp, KERNEL_STACK_START_POS
 
     ; pintar pantalla, todos los colores, que bonito!
+
+    call screen_limpiar    
 
     ; inicializar el manejador de memoria
 
@@ -82,7 +104,21 @@ start:
 
     ; inicializar el scheduler
 
-    ; inicializar la IDT
+    ; inicializar la tabla IDT
+
+    call idt_inicializar
+
+    ; cargar la IDT
+    lidt [IDT_DESC]
+    
+    xchg bx, bx
+
+    ; divido por cero par probar
+    mov ax, 56
+    mov bl, 0
+    div bl
+
+    xchg bx, bx
 
     ; configurar controlador de interrupciones
 
