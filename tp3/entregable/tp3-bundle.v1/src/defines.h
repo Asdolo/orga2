@@ -40,6 +40,28 @@
 #define KERNEL                  0x00001200 /* direccion fisica de comienzo del kernel */
 #define VIDEO                   0x000B8000 /* direccion fisica del buffer de video */
 
+/* Excepciones e interrupciones en Modo Protegido */
+/* -------------------------------------------------------------------------- */
+#define INT_DIVIDE_ERROR 					0
+#define INT_NMI_INTERRUPT 					2
+#define INT_BREAKPOINT 						3
+#define INT_OVERFLOW 						4
+#define INT_BOUND_RANGE_EXCEEDED			5
+#define INT_INVALID_OPCODE					6
+#define INT_DEVICE_NOT_AVAILABLE			7
+#define INT_DOUBLE_FAULT					8
+#define INT_COMPRESSOR_SEGMENT_OVERRUN		9
+#define INT_INVALID_TSS						10
+#define INT_SEGMENT_NOT_PRESSENT			11
+#define INT_STACK_SEGMENT_FAULT				12
+#define INT_GENERAL_PROTECTION				13
+#define INT_PAGE_FAULT						14
+#define INT_X87_FPU_FLOATING_POINT_ERROR	16
+#define INT_ALIGNMENT_CHECK					17
+#define INT_MACHINE_CHECK					18
+#define INT_SIMD_FLOATING_POINT_EXCEPTION	19
+
+
 /* Direcciones virtuales de código, pila y datos */
 /* -------------------------------------------------------------------------- */
 #define TASK_CODE               0x40000000 /* direccion virtual del codigo */

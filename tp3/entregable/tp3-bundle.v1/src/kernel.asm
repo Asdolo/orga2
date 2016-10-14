@@ -3,9 +3,36 @@
 ; TRABAJO PRACTICO 3 - System Programming - ORGANIZACION DE COMPUTADOR II - FCEN
 ; ==============================================================================
 
-%define GDT_IDX_C0_DESC 18
-%define GDT_IDX_D0_DESC 20
-%define KERNEL_STACK_START_POS 0x27000
+%define GDT_IDX_C0_DESC 		18
+%define GDT_IDX_D0_DESC 		20
+%define KERNEL_STACK_START_POS 	0x27000
+
+
+%define C_FG_BLACK              0x0
+%define C_FG_BLUE               0x1
+%define C_FG_GREEN              0x2
+%define C_FG_CYAN               0x3
+%define C_FG_RED                0x4
+%define C_FG_MAGENTA            0x5
+%define C_FG_BROWN              0x6
+%define C_FG_LIGHT_GREY         0x7
+%define C_FG_DARK_GREY          0x8
+%define C_FG_LIGHT_BLUE         0x9
+%define C_FG_LIGHT_GREEN        0xA
+%define C_FG_LIGHT_CYAN         0xB
+%define C_FG_LIGHT_RED          0xC
+%define C_FG_LIGHT_MAGENTA      0xD
+%define C_FG_LIGHT_BROWN        0xE
+%define C_FG_WHITE              0xF
+
+%define C_BG_BLACK              0x0
+%define C_BG_BLUE               0x1
+%define C_BG_GREEN              0x2
+%define C_BG_CYAN               0x3
+%define C_BG_RED                0x4
+%define C_BG_MAGENTA            0x5
+%define C_BG_BROWN              0x6
+%define C_BG_LIGHT_GREY         0x7
 
 
 %include "imprimir.mac"
@@ -14,6 +41,9 @@ global start
 
 ;; Screen
 extern screen_limpiar
+extern screen_colorear
+extern screen_imprimir
+extern screen_blink_colors
 
 ;; GDT
 extern GDT_DESC
@@ -38,6 +68,12 @@ iniciando_mr_len equ    $ - iniciando_mr_msg
 
 iniciando_mp_msg db     'Iniciando kernel (Modo Protegido)...'
 iniciando_mp_len equ    $ - iniciando_mp_msg
+
+
+
+orga2_msg db 'Organizacion del Computador II', 0
+
+
 
 ;;
 ;; Seccion de código.
@@ -86,7 +122,33 @@ start:
 
     ; pintar pantalla, todos los colores, que bonito!
 
-    call screen_limpiar    
+    call screen_limpiar
+
+    ; mensaje de bienvenida
+
+    xchg bx, bx
+    call screen_blink_colors
+
+    xchg bx, bx
+    push C_BG_BLUE
+    push 12					; toY
+    push 70					; toX
+    push 0					; fromY
+    push 2 					; fromX
+    call screen_colorear
+
+    xchg bx, bx
+
+    push 1					; keepBGColor
+    push 1					; y
+    push 3					; x
+    push 0					; blink (igual lo ignora por el keepBGColor)
+    push 0					; bgcolor (igual lo ignora por el keepBGColor)
+    push C_FG_WHITE			; forecolor
+    push orga2_msg			; mensaje
+    call screen_imprimir
+
+
 
     ; inicializar el manejador de memoria
 

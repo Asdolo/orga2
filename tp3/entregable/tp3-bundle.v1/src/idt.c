@@ -9,11 +9,30 @@
 #include "idt.h"
 #include "defines.h"
 #include "screen.h"
+#include "colors.h"
 
 
 char* idt_mensajes_interrupciones[20] = {
 
-    [0] = "Division por cero papa!!!!"
+    [INT_DIVIDE_ERROR]                      = "Divide error",
+    [INT_NMI_INTERRUPT]                     = "NMI Interrupt",
+    [INT_BREAKPOINT]                        = "Breakpoint",
+    [INT_OVERFLOW]                          = "Overflow",
+    [INT_BOUND_RANGE_EXCEEDED]              = "BOUND Range Exceeded",
+    [INT_INVALID_OPCODE]                    = "Invalid Opcode (Undefined Opcode)",
+    [INT_DEVICE_NOT_AVAILABLE]              = "Device Not Available (No math Coprocessor)",
+    [INT_DOUBLE_FAULT]                      = "Double fault",
+    [INT_COMPRESSOR_SEGMENT_OVERRUN]        = "Compressor Segment Overrun (reserved)",
+    [INT_INVALID_TSS]                       = "Invalid TSS",
+    [INT_SEGMENT_NOT_PRESSENT]              = "Segment Not Present",
+    [INT_STACK_SEGMENT_FAULT]               = "Stack-Segment Fault",
+    [INT_GENERAL_PROTECTION]                = "General Protection",
+    [INT_PAGE_FAULT]                        = "Page Fault",
+    [INT_X87_FPU_FLOATING_POINT_ERROR]      = "x87 FPU Floating-Point Error (Math Fault)",
+    [INT_ALIGNMENT_CHECK]                   = "Alignment Check",
+    [INT_MACHINE_CHECK]                     = "Machine Check",
+    [INT_SIMD_FLOATING_POINT_EXCEPTION]     = "SIMD Floating-Point Exception"
+
 
 };
 
@@ -95,5 +114,9 @@ void idt_inicializar() {
 // preguntar la signatura
 void isr_atender_excepcion(int exception){
 
-    screen_imprimir(idt_mensajes_interrupciones[exception], 0x0B, 0x00, 0x00, 0x00, 0x00);
+    screen_colorear(0, 0, 79, 24, C_BG_RED);
+
+    screen_imprimir(idt_mensajes_interrupciones[exception], C_FG_WHITE, C_BG_GREEN, 0, 0, 0, 0);
+
+
 }
