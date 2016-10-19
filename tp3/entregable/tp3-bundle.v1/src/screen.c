@@ -7,6 +7,9 @@
 
 #include "screen.h"
 #include "colors.h"
+#include "idt.h"
+
+char* nombre_grupo = "Burj Al Arab - Tom Wright";
 
 
 /*
@@ -148,8 +151,8 @@ void screen_colorear(char fromX, char fromY, char toX, char toY, char bgcolor){
 			int actualX;
 			int actualY;
 
-			for (actualY = fromY; actualY < toY; actualY++){
-				for (actualX = fromX; actualX < toX; actualX++){
+			for (actualY = fromY; actualY <= toY; actualY++){
+				for (actualX = fromX; actualX <= toX; actualX++){
 					short* pos = (short*)(VIDEO_BUFFER_LOCATION + actualX*2 + actualY*80*2);
 					*pos = ((short) bgcolor) << 8;
 				}	
@@ -160,11 +163,13 @@ void screen_colorear(char fromX, char fromY, char toX, char toY, char bgcolor){
 }
 
 
-void screen_limpiar(){
+void screen_limpiar()
+{
 	screen_colorear(0, 0, 80, 25, C_BG_BLACK);
 }
 
-void screen_blink_colors(){
+void screen_blink_colors()
+{
 	screen_colorear(0, 0, 80, 25, C_BG_BLUE);
 	screen_colorear(0, 0, 80, 25, C_BG_GREEN);
 	screen_colorear(0, 0, 80, 25, C_BG_CYAN);
@@ -173,4 +178,179 @@ void screen_blink_colors(){
 	screen_colorear(0, 0, 80, 25, C_BG_BROWN);
 	screen_colorear(0, 0, 80, 25, C_BG_LIGHT_GREY);
 
+}
+
+
+void screen_print_grupo()
+{
+	screen_imprimir(nombre_grupo, C_FG_WHITE, C_BG_GREEN, 0, 1, 0, 1);
+
+}
+
+
+void screen_modo_estado()
+{
+	screen_limpiar();
+	screen_colorear(0, 0, 79, 1, C_BG_BLACK);
+	screen_colorear(0, 1, 79, 24, C_BG_LIGHT_GREY);
+
+	// Imprimo consola de registros
+	screen_colorear(50, 1, 77, 14, C_BG_BLACK);
+
+	// Imprimo el ultimo problema
+	screen_colorear(50, 1, 77, 1, C_BG_RED);
+	screen_imprimir(idt_ultimo_problema, C_FG_WHITE, C_BG_GREEN, 0, 50, 1, 1);
+	
+	char asd1[9];
+	char asd2[9];
+	int_to_string_hex8(0x6789ABCD, asd1);
+	string_hex8_to_byte_hex8_format(asd1, asd2);
+
+	screen_imprimir("EAX", C_FG_WHITE, C_BG_GREEN, 0, 51, 2, 1);
+	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 2, 1);
+
+	screen_imprimir("EBX", C_FG_WHITE, C_BG_GREEN, 0, 51, 3, 1);
+	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 3, 1);
+
+	screen_imprimir("ECX", C_FG_WHITE, C_BG_GREEN, 0, 51, 4, 1);
+	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 4, 1);
+
+	screen_imprimir("EDX", C_FG_WHITE, C_BG_GREEN, 0, 51, 5, 1);
+	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 5, 1);
+
+	screen_imprimir("ESI", C_FG_WHITE, C_BG_GREEN, 0, 51, 6, 1);
+	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 6, 1);
+
+	screen_imprimir("EDI", C_FG_WHITE, C_BG_GREEN, 0, 51, 7, 1);
+	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 7, 1);
+
+	screen_imprimir("EBP", C_FG_WHITE, C_BG_GREEN, 0, 51, 8, 1);
+	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 8, 1);
+
+	screen_imprimir("ESP", C_FG_WHITE, C_BG_GREEN, 0, 51, 9, 1);
+	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 9, 1);
+
+	screen_imprimir("EIP", C_FG_WHITE, C_BG_GREEN, 0, 51, 10, 1);
+	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 10, 1);
+
+	screen_imprimir("CR0", C_FG_WHITE, C_BG_GREEN, 0, 51, 11, 1);
+	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 11, 1);
+
+	screen_imprimir("CR2", C_FG_WHITE, C_BG_GREEN, 0, 51, 12, 1);
+	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 12, 1);
+
+	screen_imprimir("CR3", C_FG_WHITE, C_BG_GREEN, 0, 51, 13, 1);
+	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 13, 1);
+
+	screen_imprimir("CR4", C_FG_WHITE, C_BG_GREEN, 0, 51, 14, 1);
+	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 14, 1);
+
+
+	screen_imprimir("CS", C_FG_WHITE, C_BG_GREEN, 0, 66, 2, 1);
+	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 69, 2, 1);
+
+	screen_imprimir("DS", C_FG_WHITE, C_BG_GREEN, 0, 66, 3, 1);
+	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 69, 3, 1);
+
+	screen_imprimir("ES", C_FG_WHITE, C_BG_GREEN, 0, 66, 4, 1);
+	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 69, 4, 1);
+
+	screen_imprimir("FS", C_FG_WHITE, C_BG_GREEN, 0, 66, 5, 1);
+	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 69, 5, 1);
+
+	screen_imprimir("GS", C_FG_WHITE, C_BG_GREEN, 0, 66, 6, 1);
+	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 69, 6, 1);
+
+	screen_imprimir("SS", C_FG_WHITE, C_BG_GREEN, 0, 66, 7, 1);
+	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 69, 7, 1);
+
+	
+	screen_imprimir("EFLAGS", C_FG_WHITE, C_BG_GREEN, 0, 66, 9, 1);
+	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 69, 10, 1);
+
+	// Imprimo banderas
+	screen_imprimir("NAVIO 1", C_FG_BLACK, C_BG_GREEN, 0, 5, 2, 1);
+	screen_colorear(2, 3, 11, 7, C_BG_BLACK);
+	screen_imprimir("NAVIO 2", C_FG_BLACK, C_BG_GREEN, 0, 14+3, 3-1, 1);
+	screen_colorear(14, 3, 23, 7, C_BG_BLACK);
+	screen_imprimir("NAVIO 3", C_FG_BLACK, C_BG_GREEN, 0, 26+3, 3-1, 1);
+	screen_colorear(26, 3, 35, 7, C_BG_BLACK);
+	screen_imprimir("NAVIO 4", C_FG_BLACK, C_BG_GREEN, 0, 38+3, 3-1, 1);
+	screen_colorear(38, 3, 47, 7, C_BG_BLACK);
+
+	screen_imprimir("NAVIO 5", C_FG_BLACK, C_BG_GREEN, 0, 5, 9, 1);
+	screen_colorear(2, 10, 11, 14, C_BG_BLACK);
+	screen_imprimir("NAVIO 6", C_FG_BLACK, C_BG_GREEN, 0, 17, 9, 1);
+	screen_colorear(14, 10, 23, 14, C_BG_BLACK);
+	screen_imprimir("NAVIO 7", C_FG_BLACK, C_BG_GREEN, 0, 29, 9, 1);
+	screen_colorear(26, 10, 35, 14, C_BG_BLACK);
+	screen_imprimir("NAVIO 8", C_FG_BLACK, C_BG_GREEN, 0, 41, 9, 1);
+	screen_colorear(38, 10, 47, 14, C_BG_BLACK);
+
+	screen_colorear(2, 16, 78, 23, C_BG_BLUE);
+	screen_imprimir("1", C_FG_BLACK, C_BG_GREEN, 0, 1, 16, 1);
+	screen_imprimir("2", C_FG_BLACK, C_BG_GREEN, 0, 1, 17, 1);
+	screen_imprimir("3", C_FG_BLACK, C_BG_GREEN, 0, 1, 18, 1);
+	screen_imprimir("4", C_FG_BLACK, C_BG_GREEN, 0, 1, 19, 1);
+	screen_imprimir("5", C_FG_BLACK, C_BG_GREEN, 0, 1, 20, 1);
+	screen_imprimir("6", C_FG_BLACK, C_BG_GREEN, 0, 1, 21, 1);
+	screen_imprimir("7", C_FG_BLACK, C_BG_GREEN, 0, 1, 22, 1);
+	screen_imprimir("8", C_FG_BLACK, C_BG_GREEN, 0, 1, 23, 1);
+
+
+
+	// Imprimo el nombre del grupo
+	screen_print_grupo();
+}
+
+
+void screen_modo_mapa()
+{
+	screen_limpiar();
+	screen_colorear(0, 0, 79, 2, C_BG_GREEN);
+	screen_colorear(0, 3, 15, 3, C_BG_GREEN);
+
+	screen_colorear(16, 3, 79, 3, C_BG_BLUE);
+	screen_colorear(0, 4, 79, 23, C_BG_BLUE);
+
+}
+
+
+
+
+
+void int_to_string_hex8(int numero, char str[9])
+{
+    char letras[16] = "0123456789ABCDEF";
+    str[8] = 0; //null terminated
+    str[7] = letras[ ( numero & 0x0000000F ) >> 0  ];
+    str[6] = letras[ ( numero & 0x000000F0 ) >> 4  ];
+    str[5] = letras[ ( numero & 0x00000F00 ) >> 8  ];
+    str[4] = letras[ ( numero & 0x0000F000 ) >> 12 ];
+    str[3] = letras[ ( numero & 0x000F0000 ) >> 16 ];
+    str[2] = letras[ ( numero & 0x00F00000 ) >> 20 ];
+    str[1] = letras[ ( numero & 0x0F000000 ) >> 24 ];
+    str[0] = letras[ ( numero & 0xF0000000 ) >> 28 ];
+    
+    
+}
+
+
+// arreglar
+void string_hex8_to_byte_hex8_format(char input[9], char output[9])
+{
+    output[6] = input[0];
+    output[7] = input[1];
+    
+    output[4] = input[2];
+    output[5] = input[3];
+
+    output[2] = input[4];
+    output[3] = input[5];
+
+    output[0] = input[6];
+    output[1] = input[7];
+
+    output[8] = 0; //null terminated
+    
 }

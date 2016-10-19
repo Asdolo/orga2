@@ -36,6 +36,8 @@ char* idt_mensajes_interrupciones[20] = {
 
 };
 
+char* idt_ultimo_problema = "No hubo interrupciones";
+
 idt_entry idt[255] = { };
 
 idt_descriptor IDT_DESC = {
@@ -114,8 +116,8 @@ void idt_inicializar() {
 // preguntar la signatura
 void isr_atender_excepcion(int exception){
 
-    screen_colorear(0, 0, 79, 24, C_BG_RED);
-
+    //screen_colorear(0, 0, 79, 24, C_BG_RED);
+    idt_ultimo_problema = idt_mensajes_interrupciones[exception];
     screen_imprimir(idt_mensajes_interrupciones[exception], C_FG_WHITE, C_BG_GREEN, 0, 0, 0, 0);
 
 

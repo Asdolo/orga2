@@ -22,5 +22,12 @@ void screen_colorear(char fromX, char fromY, char toX, char toY, char bgcolor);
 void screen_limpiar();
 void screen_blink_colors();
 
+void screen_print_grupo();
+void screen_modo_estado();
+void screen_modo_mapa();
+
+
+void int_to_string_hex8(int numero, char* str);
+void string_hex8_to_byte_hex8_format(char input[9], char output[9]);
 
 #endif  /* !__SCREEN_H__ */

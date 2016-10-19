@@ -36,9 +36,16 @@
 
 /* Direcciones de memoria */
 /* -------------------------------------------------------------------------- */
-#define BOOTSECTOR              0x00001000 /* direccion fisica de comienzo del bootsector (copiado) */
-#define KERNEL                  0x00001200 /* direccion fisica de comienzo del kernel */
-#define VIDEO                   0x000B8000 /* direccion fisica del buffer de video */
+#define BOOTSECTOR              	0x00001000 /* direccion fisica de comienzo del bootsector (copiado) */
+#define KERNEL                  	0x00001200 /* direccion fisica de comienzo del kernel */
+#define VIDEO                   	0x000B8000 /* direccion fisica del buffer de video */
+#define DIRECTORIO_PAGINAS_KERNEL_POS	0x27000
+#define DIRECTORIO_TABLA1_POS			0x27000
+#define DIRECTORIO_TABLA2_POS			0x27004
+
+#define TABLA_PAGINAS_1_KERNEL_POS		0x28000
+#define TABLA_PAGINAS_2_KERNEL_POS		0x2A000
+
 
 /* Excepciones e interrupciones en Modo Protegido */
 /* -------------------------------------------------------------------------- */

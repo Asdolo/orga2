@@ -35,6 +35,15 @@
 %define C_BG_LIGHT_GREY         0x7
 
 
+%define DIRECTORIO_PAGINAS_KERNEL_POS	0x27000
+%define DIRECTORIO_TABLA1_POS			0x27000
+%define DIRECTORIO_TABLA2_POS			0x27004
+
+%define TABLA_PAGINAS_1_KERNEL_POS		0x28000
+%define TABLA_PAGINAS_2_KERNEL_POS		0x2A000
+
+
+
 %include "imprimir.mac"
 
 global start
@@ -44,6 +53,8 @@ extern screen_limpiar
 extern screen_colorear
 extern screen_imprimir
 extern screen_blink_colors
+extern screen_modo_estado
+extern screen_modo_mapa
 
 ;; GDT
 extern GDT_DESC
@@ -56,6 +67,8 @@ extern idt_inicializar
 extern resetear_pic
 extern habilitar_pic
 
+;; mmnu
+extern mmu_inicializar_dir_kernel
 
 ;; Saltear seccion de datos
 jmp start
@@ -72,8 +85,6 @@ iniciando_mp_len equ    $ - iniciando_mp_msg
 
 
 orga2_msg db 'Organizacion del Computador II', 0
-
-
 
 ;;
 ;; Seccion de código.
@@ -92,6 +103,8 @@ start:
     imprimir_texto_mr iniciando_mr_msg, iniciando_mr_len, 0x07, 0, 0
 
     ; habilitar A20
+    call habilitar_A20
+    call checkear_A20
 
     ; cargar la GDT
     lgdt [GDT_DESC]
@@ -126,10 +139,8 @@ start:
 
     ; mensaje de bienvenida
 
-    xchg bx, bx
     call screen_blink_colors
 
-    xchg bx, bx
     push C_BG_BLUE
     push 12					; toY
     push 70					; toX
@@ -137,7 +148,6 @@ start:
     push 2 					; fromX
     call screen_colorear
 
-    xchg bx, bx
 
     push 1					; keepBGColor
     push 1					; y
@@ -149,14 +159,23 @@ start:
     call screen_imprimir
 
 
-
     ; inicializar el manejador de memoria
+
+    call mmu_inicializar_dir_kernel
 
     ; inicializar el directorio de paginas
 
+    mov eax, DIRECTORIO_PAGINAS_KERNEL_POS
+    mov cr3, eax
+
+    
     ; inicializar memoria de tareas
 
     ; habilitar paginacion
+
+    mov eax, cr0
+    or eax, 0x80000000 ; bit de paginacion on
+    mov cr0, eax
 
     ; inicializar tarea idle
 
@@ -172,15 +191,27 @@ start:
 
     ; cargar la IDT
     lidt [IDT_DESC]
+
+
+
+
+
+
+
+    ; Pongo la pantalla en modo estado
+    call screen_modo_estado
     
-    xchg bx, bx
+    ; Pongo la pantalla en modo mapa
+    ; call screen_modo_mapa
+    
 
-    ; divido por cero par probar
-    mov ax, 56
-    mov bl, 0
-    div bl
+    ; divido por cero para probar
+    ; mov ax, 56
+    ; mov bl, 0
+    ; div bl
 
-    xchg bx, bx
+
+
 
     ; configurar controlador de interrupciones
 

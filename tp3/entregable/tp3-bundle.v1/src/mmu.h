@@ -10,3 +10,9 @@
 
 
 #endif	/* !__MMU_H__ */
+
+void mmu_inicializar_dir_kernel();
+
+/*
+void* proximaPaginaLibre();
+*/
