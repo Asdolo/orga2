@@ -59,6 +59,52 @@ void mmu_inicializar_dir_kernel()
 
 }
 
+
+int libre;
+
+initmmm
+ libre = 0x30000
+
+ damelibre
+  m = libre
+  inc libre
+  return m 
+
+void mmu_mapear_pagina(int* dp, int virtual, int fisica)
+{
+	int IPD = virtual;
+	IPD = IPD >> 22;
+
+	int IPT = virtual;
+	IPT = IPT >> 12;
+	IPT = IPT & 0x3FF;
+
+	int off = virtual & 0xFFF;
+
+	//dp[IPD]
+	int PDE = *(dp + IPD);
+
+	if (!(PDE & 1))
+	{
+		// No presente,
+
+
+	}
+
+	int PT = (PDE & 0xFFFFF000);
+
+	*(PT + IPT) = fisica | 0x3; // asumimos fisica es multiplo de 4kb
+
+
+
+
+}
+void mmu_unmapear_pagina()
+{
+
+}
+
+
 /*
 void* proximaPaginaLibre()
 {

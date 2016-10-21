@@ -202,71 +202,70 @@ void screen_modo_estado()
 	screen_imprimir(idt_ultimo_problema, C_FG_WHITE, C_BG_GREEN, 0, 50, 1, 1);
 	
 	char asd1[9];
-	char asd2[9];
+	
 	int_to_string_hex8(0x6789ABCD, asd1);
-	string_hex8_to_byte_hex8_format(asd1, asd2);
-
+	
 	screen_imprimir("EAX", C_FG_WHITE, C_BG_GREEN, 0, 51, 2, 1);
-	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 2, 1);
+	screen_imprimir(asd1, C_FG_WHITE, C_BG_GREEN, 0, 55, 2, 1);
 
 	screen_imprimir("EBX", C_FG_WHITE, C_BG_GREEN, 0, 51, 3, 1);
-	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 3, 1);
+	screen_imprimir(asd1, C_FG_WHITE, C_BG_GREEN, 0, 55, 3, 1);
 
 	screen_imprimir("ECX", C_FG_WHITE, C_BG_GREEN, 0, 51, 4, 1);
-	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 4, 1);
+	screen_imprimir(asd1, C_FG_WHITE, C_BG_GREEN, 0, 55, 4, 1);
 
 	screen_imprimir("EDX", C_FG_WHITE, C_BG_GREEN, 0, 51, 5, 1);
-	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 5, 1);
+	screen_imprimir(asd1, C_FG_WHITE, C_BG_GREEN, 0, 55, 5, 1);
 
 	screen_imprimir("ESI", C_FG_WHITE, C_BG_GREEN, 0, 51, 6, 1);
-	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 6, 1);
+	screen_imprimir(asd1, C_FG_WHITE, C_BG_GREEN, 0, 55, 6, 1);
 
 	screen_imprimir("EDI", C_FG_WHITE, C_BG_GREEN, 0, 51, 7, 1);
-	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 7, 1);
+	screen_imprimir(asd1, C_FG_WHITE, C_BG_GREEN, 0, 55, 7, 1);
 
 	screen_imprimir("EBP", C_FG_WHITE, C_BG_GREEN, 0, 51, 8, 1);
-	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 8, 1);
+	screen_imprimir(asd1, C_FG_WHITE, C_BG_GREEN, 0, 55, 8, 1);
 
 	screen_imprimir("ESP", C_FG_WHITE, C_BG_GREEN, 0, 51, 9, 1);
-	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 9, 1);
+	screen_imprimir(asd1, C_FG_WHITE, C_BG_GREEN, 0, 55, 9, 1);
 
 	screen_imprimir("EIP", C_FG_WHITE, C_BG_GREEN, 0, 51, 10, 1);
-	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 10, 1);
+	screen_imprimir(asd1, C_FG_WHITE, C_BG_GREEN, 0, 55, 10, 1);
 
 	screen_imprimir("CR0", C_FG_WHITE, C_BG_GREEN, 0, 51, 11, 1);
-	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 11, 1);
+	screen_imprimir(asd1, C_FG_WHITE, C_BG_GREEN, 0, 55, 11, 1);
 
 	screen_imprimir("CR2", C_FG_WHITE, C_BG_GREEN, 0, 51, 12, 1);
-	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 12, 1);
+	screen_imprimir(asd1, C_FG_WHITE, C_BG_GREEN, 0, 55, 12, 1);
 
 	screen_imprimir("CR3", C_FG_WHITE, C_BG_GREEN, 0, 51, 13, 1);
-	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 13, 1);
+	screen_imprimir(asd1, C_FG_WHITE, C_BG_GREEN, 0, 55, 13, 1);
 
 	screen_imprimir("CR4", C_FG_WHITE, C_BG_GREEN, 0, 51, 14, 1);
-	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 55, 14, 1);
+	screen_imprimir(asd1, C_FG_WHITE, C_BG_GREEN, 0, 55, 14, 1);
 
 
 	screen_imprimir("CS", C_FG_WHITE, C_BG_GREEN, 0, 66, 2, 1);
-	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 69, 2, 1);
+	screen_imprimir(asd1, C_FG_WHITE, C_BG_GREEN, 0, 69, 2, 1);
 
 	screen_imprimir("DS", C_FG_WHITE, C_BG_GREEN, 0, 66, 3, 1);
-	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 69, 3, 1);
+	screen_imprimir(asd1, C_FG_WHITE, C_BG_GREEN, 0, 69, 3, 1);
 
 	screen_imprimir("ES", C_FG_WHITE, C_BG_GREEN, 0, 66, 4, 1);
-	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 69, 4, 1);
+	screen_imprimir(asd1, C_FG_WHITE, C_BG_GREEN, 0, 69, 4, 1);
 
 	screen_imprimir("FS", C_FG_WHITE, C_BG_GREEN, 0, 66, 5, 1);
-	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 69, 5, 1);
+	screen_imprimir(asd1, C_FG_WHITE, C_BG_GREEN, 0, 69, 5, 1);
 
 	screen_imprimir("GS", C_FG_WHITE, C_BG_GREEN, 0, 66, 6, 1);
-	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 69, 6, 1);
+	screen_imprimir(asd1, C_FG_WHITE, C_BG_GREEN, 0, 69, 6, 1);
 
 	screen_imprimir("SS", C_FG_WHITE, C_BG_GREEN, 0, 66, 7, 1);
-	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 69, 7, 1);
+	screen_imprimir(asd1, C_FG_WHITE, C_BG_GREEN, 0, 69, 7, 1);
 
 	
 	screen_imprimir("EFLAGS", C_FG_WHITE, C_BG_GREEN, 0, 66, 9, 1);
-	screen_imprimir(asd2, C_FG_WHITE, C_BG_GREEN, 0, 69, 10, 1);
+	screen_imprimir(asd1, C_FG_WHITE, C_BG_GREEN, 0, 69, 10, 1);
 
 	// Imprimo banderas
 	screen_imprimir("NAVIO 1", C_FG_BLACK, C_BG_GREEN, 0, 5, 2, 1);
@@ -332,25 +331,5 @@ void int_to_string_hex8(int numero, char str[9])
     str[1] = letras[ ( numero & 0x0F000000 ) >> 24 ];
     str[0] = letras[ ( numero & 0xF0000000 ) >> 28 ];
     
-    
-}
-
-
-// arreglar
-void string_hex8_to_byte_hex8_format(char input[9], char output[9])
-{
-    output[6] = input[0];
-    output[7] = input[1];
-    
-    output[4] = input[2];
-    output[5] = input[3];
-
-    output[2] = input[4];
-    output[3] = input[5];
-
-    output[0] = input[6];
-    output[1] = input[7];
-
-    output[8] = 0; //null terminated
     
 }

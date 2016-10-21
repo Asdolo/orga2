@@ -137,6 +137,8 @@ start:
 
     call screen_limpiar
 
+    
+
     ; mensaje de bienvenida
 
     call screen_blink_colors
@@ -206,9 +208,9 @@ start:
     
 
     ; divido por cero para probar
-    ; mov ax, 56
-    ; mov bl, 0
-    ; div bl
+    mov ax, 56
+    mov bl, 0
+    div bl
 
 
 
