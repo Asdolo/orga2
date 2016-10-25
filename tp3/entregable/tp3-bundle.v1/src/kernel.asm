@@ -69,6 +69,7 @@ extern habilitar_pic
 
 ;; mmnu
 extern mmu_inicializar_dir_kernel
+extern mmu_mapear_pagina
 
 ;; Saltear seccion de datos
 jmp start
@@ -165,6 +166,8 @@ start:
 
     call mmu_inicializar_dir_kernel
 
+    
+
     ; inicializar el directorio de paginas
 
     mov eax, DIRECTORIO_PAGINAS_KERNEL_POS
@@ -178,6 +181,13 @@ start:
     mov eax, cr0
     or eax, 0x80000000 ; bit de paginacion on
     mov cr0, eax
+
+    xchg bx, bx
+    push 0x200000
+    push 0x781000
+    push 0x27000
+    call mmu_mapear_pagina 
+    xchg bx, bx
 
     ; inicializar tarea idle
 
