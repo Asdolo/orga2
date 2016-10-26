@@ -8,6 +8,7 @@
 #include "screen.h"
 #include "colors.h"
 #include "idt.h"
+#include "isr.h"
 
 char* nombre_grupo = "Burj Al Arab - Tom Wright";
 
@@ -332,4 +333,10 @@ void int_to_string_hex8(int numero, char str[9])
     str[0] = letras[ ( numero & 0xF0000000 ) >> 28 ];
     
     
+}
+
+
+void screen_proximo_reloj()
+{
+	proximo_reloj();
 }

@@ -182,12 +182,13 @@ start:
     or eax, 0x80000000 ; bit de paginacion on
     mov cr0, eax
 
-    xchg bx, bx
-    push 0x200000
-    push 0x781000
-    push 0x27000
-    call mmu_mapear_pagina 
-    xchg bx, bx
+    ; pagina de ejemplo
+    ; push 0x200000
+    ; push 0x781000
+    ; push 0x27000
+    ; call mmu_mapear_pagina 
+    
+    ; xchg bx, bx
 
     ; inicializar tarea idle
 
@@ -218,14 +219,18 @@ start:
     
 
     ; divido por cero para probar
-    mov ax, 56
-    mov bl, 0
-    div bl
+    ;mov ax, 56
+    ;mov bl, 0
+    ;div bl
 
 
-
+    
 
     ; configurar controlador de interrupciones
+
+    call resetear_pic
+    call habilitar_pic
+    sti
 
     ; cargar la tarea inicial
 

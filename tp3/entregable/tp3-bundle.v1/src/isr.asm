@@ -9,10 +9,24 @@
 BITS 32
 
 
+;; SCREEN
+extern screen_proximo_reloj
+
 ;; PIC
 extern fin_intr_pic1
+
+;; EXCEPCIONES
 extern isr_atender_excepcion
 
+
+;; INTERRUPCIONES
+extern atender_teclado
+
+global _isr32
+global _isr33
+global _isr80
+global _isr102
+global proximo_reloj
 
 ;;
 ;; Definición de MACROS
@@ -68,17 +82,45 @@ ISR 18
 ISR 19
 
 
+
 ;;
 ;; Rutina de atención del RELOJ
 ;; -------------------------------------------------------------------------- ;;
+_isr32:
+    pushad
+    call fin_intr_pic1
+
+    call screen_proximo_reloj
+
+    popad
+    iret
 
 ;;
 ;; Rutina de atención del TECLADO
 ;; -------------------------------------------------------------------------- ;;
+_isr33:
+    pushad
+    call fin_intr_pic1
+    
+    xor eax, eax
+    in al, 0x60
+    
+    push eax
+    call atender_teclado
+    pop eax
+
+    popad
+    iret
 
 ;;
 ;; Rutinas de atención de las SYSCALLS
 ;; -------------------------------------------------------------------------- ;;
+_isr80:
+    iret
+
+_isr102:
+    iret
+
 
 ;; Funciones Auxiliares
 ;; -------------------------------------------------------------------------- ;;
@@ -86,7 +128,7 @@ proximo_reloj:
     pushad
 
     inc DWORD [reloj_numero]
-    mov ebx, [reloj]
+    mov ebx, [reloj_numero]
     cmp ebx, 0x4
     jl .ok
         mov DWORD [reloj_numero], 0x0

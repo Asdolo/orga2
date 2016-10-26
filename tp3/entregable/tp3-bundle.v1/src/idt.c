@@ -10,8 +10,8 @@
 #include "defines.h"
 #include "screen.h"
 #include "colors.h"
-
-
+#include "i386.h"
+int random=0;
 char* idt_mensajes_interrupciones[20] = {
 
     [INT_DIVIDE_ERROR]                      = "Divide error",
@@ -33,6 +33,22 @@ char* idt_mensajes_interrupciones[20] = {
     [INT_MACHINE_CHECK]                     = "Machine Check",
     [INT_SIMD_FLOATING_POINT_EXCEPTION]     = "SIMD Floating-Point Exception"
 
+
+};
+
+
+
+char* scancode_to_char[12] = {
+    [2]                                  = "1",
+    [3]                                  = "2",
+    [4]                                  = "3",
+    [5]                                  = "4",
+    [6]                                  = "5",
+    [7]                                  = "6",
+    [8]                                  = "7",
+    [9]                                  = "8",
+    [10]                                 = "9",
+    [11]                                 = "0"
 
 };
 
@@ -110,6 +126,11 @@ void idt_inicializar() {
     // IDT_ENTRY(29); // Intel reserved. Do not use.
     // IDT_ENTRY(30); // Intel reserved. Do not use.
     // IDT_ENTRY(31); // Intel reserved. Do not use.
+    IDT_ENTRY(32);
+    IDT_ENTRY(33);
+
+    IDT_ENTRY(80);
+    IDT_ENTRY(102);
 }
 
 
@@ -119,6 +140,18 @@ void isr_atender_excepcion(int exception){
     //screen_colorear(0, 0, 79, 24, C_BG_RED);
     idt_ultimo_problema = idt_mensajes_interrupciones[exception];
     screen_imprimir(idt_mensajes_interrupciones[exception], C_FG_WHITE, C_BG_GREEN, 0, 0, 0, 0);
+
+
+}
+
+void atender_teclado(int scancode)
+{   
+    if (scancode >= 0x02 && scancode <= 0x0B)
+    {
+        screen_imprimir(scancode_to_char[scancode], (char) C_FG_WHITE, (char) random, 0, 79, 0, 0);
+    }
+    if(++random==16)random=0;
+
 
 
 }

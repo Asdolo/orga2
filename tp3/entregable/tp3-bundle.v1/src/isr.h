@@ -41,4 +41,12 @@ void _isr29();
 void _isr30();
 void _isr31();
 
+void _isr32();
+void _isr33();
+
+void _isr80();
+void _isr102();
+
+void proximo_reloj();
+
 #endif  /* !__ISR_H__ */

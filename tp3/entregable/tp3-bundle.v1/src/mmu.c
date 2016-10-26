@@ -13,6 +13,10 @@
 
 void* libre = (void*) 0x30000;
 
+void mmu_inicializar_dir_tarea()
+{
+
+}
 
 void mmu_inicializar_dir_kernel()
 {

@@ -29,6 +29,7 @@ extern idt_descriptor IDT_DESC;
 extern char* idt_ultimo_problema;
 
 void idt_inicializar();
+void atender_teclado(int scancode);
 
 
 #endif  /* !__IDT_H__ */
