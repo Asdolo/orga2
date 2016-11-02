@@ -55,6 +55,7 @@ extern screen_imprimir
 extern screen_blink_colors
 extern screen_modo_estado
 extern screen_modo_mapa
+extern actualizar_pantalla
 
 ;; GDT
 extern GDT_DESC
@@ -70,6 +71,8 @@ extern habilitar_pic
 ;; mmnu
 extern mmu_inicializar_dir_kernel
 extern mmu_mapear_pagina
+extern mnu_inicializar_memoria_tareas
+extern mmu_inicializar_dir_tarea
 
 ;; Saltear seccion de datos
 jmp start
@@ -141,31 +144,11 @@ start:
     
 
     ; mensaje de bienvenida
-
-    call screen_blink_colors
-
-    push C_BG_BLUE
-    push 12					; toY
-    push 70					; toX
-    push 0					; fromY
-    push 2 					; fromX
-    call screen_colorear
-
-
-    push 1					; keepBGColor
-    push 1					; y
-    push 3					; x
-    push 0					; blink (igual lo ignora por el keepBGColor)
-    push 0					; bgcolor (igual lo ignora por el keepBGColor)
-    push C_FG_WHITE			; forecolor
-    push orga2_msg			; mensaje
-    call screen_imprimir
-
+    
 
     ; inicializar el manejador de memoria
-
     call mmu_inicializar_dir_kernel
-
+    
     
 
     ; inicializar el directorio de paginas
@@ -173,8 +156,9 @@ start:
     mov eax, DIRECTORIO_PAGINAS_KERNEL_POS
     mov cr3, eax
 
-    
+    ; xchg bx, bx
     ; inicializar memoria de tareas
+    call mnu_inicializar_memoria_tareas
 
     ; habilitar paginacion
 
@@ -182,12 +166,7 @@ start:
     or eax, 0x80000000 ; bit de paginacion on
     mov cr0, eax
 
-    ; pagina de ejemplo
-    ; push 0x200000
-    ; push 0x781000
-    ; push 0x27000
-    ; call mmu_mapear_pagina 
-    
+   
     ; xchg bx, bx
 
     ; inicializar tarea idle
@@ -211,11 +190,14 @@ start:
 
 
 
-    ; Pongo la pantalla en modo estado
+    ; Pongo algo en el buffer de estado
     call screen_modo_estado
     
-    ; Pongo la pantalla en modo mapa
-    ; call screen_modo_mapa
+    ; Pongo algo en el buffer de mapa
+    call screen_modo_mapa
+
+    ; Como la variable global modo_pantalla (screen.h) arranca en 0, arranca en modo estado
+    call actualizar_pantalla
     
 
     ; divido por cero para probar

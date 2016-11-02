@@ -39,12 +39,20 @@
 #define BOOTSECTOR              	0x00001000 /* direccion fisica de comienzo del bootsector (copiado) */
 #define KERNEL                  	0x00001200 /* direccion fisica de comienzo del kernel */
 #define VIDEO                   	0x000B8000 /* direccion fisica del buffer de video */
+
+#define BUFFER_ESTADO				0x0002D000 /* direccion fisica del buffer de estado */
+#define BUFFER_MAPA				0x0002E000 /* direccion fisica del buffer de mapa */
+
+
+
 #define DIRECTORIO_PAGINAS_KERNEL_POS	0x27000
-#define DIRECTORIO_TABLA1_POS			0x27000
-#define DIRECTORIO_TABLA2_POS			0x27004
 
 #define TABLA_PAGINAS_1_KERNEL_POS		0x28000
 #define TABLA_PAGINAS_2_KERNEL_POS		0x2A000
+
+#define PAGINA1_VIRTUAL_TAREA			0x40000000
+#define PAGINA2_VIRTUAL_TAREA			0x40001000
+#define PAGINA_ANCLA_VIRTUAL_TAREA		0x40002000
 
 
 /* Excepciones e interrupciones en Modo Protegido */

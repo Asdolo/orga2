@@ -17,14 +17,18 @@
 #define VIDEO_BUFFER_LOCATION 0xB8000
 
 void screen_pintar_pantalla();
-void screen_imprimir(char* mensaje, char forecolor, char bgcolor, char blink, char x, char y, char keepBGColor);
-void screen_colorear(char fromX, char fromY, char toX, char toY, char bgcolor);
+void screen_imprimir(char* mensaje, char forecolor, char bgcolor, char blink, char x, char y, char keepBGColor, char buffer);
+void screen_colorear(char fromX, char fromY, char toX, char toY, char bgcolor, char buffer);
 void screen_limpiar();
 void screen_blink_colors();
 
 void screen_print_grupo();
 void screen_modo_estado();
 void screen_modo_mapa();
+
+void actualizar_pantalla();
+
+char modo_pantalla;
 
 
 void int_to_string_hex8(int numero, char* str);

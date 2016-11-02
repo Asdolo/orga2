@@ -11,6 +11,9 @@
 #include "screen.h"
 #include "colors.h"
 #include "i386.h"
+#include "mmu.h"
+
+
 int random=0;
 char* idt_mensajes_interrupciones[20] = {
 
@@ -139,19 +142,31 @@ void isr_atender_excepcion(int exception){
 
     //screen_colorear(0, 0, 79, 24, C_BG_RED);
     idt_ultimo_problema = idt_mensajes_interrupciones[exception];
-    screen_imprimir(idt_mensajes_interrupciones[exception], C_FG_WHITE, C_BG_GREEN, 0, 0, 0, 0);
+    screen_imprimir(idt_mensajes_interrupciones[exception], C_FG_WHITE, C_BG_GREEN, 0, 0, 0, 0, 0);
 
 
 }
 
 void atender_teclado(int scancode)
 {   
+    /*
     if (scancode >= 0x02 && scancode <= 0x0B)
     {
         screen_imprimir(scancode_to_char[scancode], (char) C_FG_WHITE, (char) random, 0, 79, 0, 0);
     }
     if(++random==16)random=0;
+    */
 
+    if (scancode == 0x32 && modo_pantalla == 0)
+    {
+        // quiero mapa
+        modo_pantalla = 1;
+        copiar((int*) BUFFER_MAPA, (int*) VIDEO, 4000);
 
-
+    }else if(scancode == 0x12 && modo_pantalla==1){
+        // quiero estado
+        modo_pantalla = 0;
+        copiar((int*) BUFFER_ESTADO, (int*) VIDEO, 4000);
+    }
+    return;
 }
