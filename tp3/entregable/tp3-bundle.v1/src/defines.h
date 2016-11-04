@@ -34,6 +34,28 @@
 #define GDT_IDX_D3_DESC				21 // segmento de datos nivel 3
 #define GDT_IDX_V_DESC				22 // segmento de memoria de video
 
+#define GDT_IDX_T_INIT_DESC			23 // tss de la tarea inicial
+#define GDT_IDX_T_IDLE_DESC			24 // tss de la tarea idle
+
+#define GDT_IDX_T1_DESC				25 // tss de la tarea 1
+#define GDT_IDX_T2_DESC				26 // tss de la tarea 2
+#define GDT_IDX_T3_DESC				27 // tss de la tarea 3
+#define GDT_IDX_T4_DESC				28 // tss de la tarea 4
+#define GDT_IDX_T5_DESC				29 // tss de la tarea 5
+#define GDT_IDX_T6_DESC				30 // tss de la tarea 6
+#define GDT_IDX_T7_DESC				31 // tss de la tarea 7
+#define GDT_IDX_T8_DESC				32 // tss de la tarea 8
+
+#define GDT_IDX_T1_FLAG_DESC		33 // tss de la bandera de la tarea 1
+#define GDT_IDX_T2_FLAG_DESC		34 // tss de la bandera de la tarea 2
+#define GDT_IDX_T3_FLAG_DESC		35 // tss de la bandera de la tarea 3
+#define GDT_IDX_T4_FLAG_DESC		36 // tss de la bandera de la tarea 4
+#define GDT_IDX_T5_FLAG_DESC		37 // tss de la bandera de la tarea 5
+#define GDT_IDX_T6_FLAG_DESC		38 // tss de la bandera de la tarea 6
+#define GDT_IDX_T7_FLAG_DESC		39 // tss de la bandera de la tarea 7
+#define GDT_IDX_T8_FLAG_DESC		40 // tss de la bandera de la tarea 8
+
+    
 /* Direcciones de memoria */
 /* -------------------------------------------------------------------------- */
 #define BOOTSECTOR              	0x00001000 /* direccion fisica de comienzo del bootsector (copiado) */

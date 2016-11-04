@@ -116,9 +116,17 @@ _isr33:
 ;; Rutinas de atención de las SYSCALLS
 ;; -------------------------------------------------------------------------- ;;
 _isr80:
+    mov eax, 0x42
+    pushad
+
+    popad
     iret
 
 _isr102:
+    mov eax, 0x42
+    pushad
+
+    popad
     iret
 
 

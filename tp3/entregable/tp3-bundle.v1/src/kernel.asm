@@ -119,7 +119,7 @@ start:
     mov cr0, eax
 
     ; pasar a modo protegido
-
+    ; saltamos al segmento de nivel 0
     jmp GDT_IDX_C0_DESC << 3:pm
 
  BITS 32
@@ -128,6 +128,11 @@ start:
     ; acomodar los segmentos
     xor eax, eax
     mov ax, GDT_IDX_D0_DESC << 3
+
+    ; el cs no se debe cargar porque si esta corriendo una tarea y si una tarea quiere cambiar de segmento (a uno mas privilegiado), el procesador no puede dejarlo hacer eso
+    ; la unica forma de cambiar el cs es haciendo un jmp far 
+    ; jmp nuevoCS:offset
+
     mov ds, ax
     mov ss, ax
     mov es, ax
@@ -229,3 +234,93 @@ start:
 ;; -------------------------------------------------------------------------- ;;
 
 %include "a20.asm"
+
+
+; (general protection fault y se corta la ejecución de la instrucción)
+; 1º: chequea el nivel de privilegios
+; 2º: chequeo de offset valido (entre 0 y limit de la gdt). tanto para código (cs) o dato (ds)
+; 3º: chequeo de tipo de segmento (no se puede hacer un jump far a un segmento de datos) (existen segmentos de datos, que todos permiten lectura. De los segmentos de código, se puede setear que permita la lectura)
+
+; todo esto lo hace el procesador en paralelo, no en serie
+
+; luego el procesador convierte la dirección lógica en dirección lineal, y se le siguen haciendo chequeos
+; (si paginación está activada en cr0)
+; 1º va al directorio
+; 2º busca la entrada de esa dirección
+; 3º se fija si está presente
+; 4º si fija si los privilegios de la página son accesibles
+
+
+; acceso a un segmento:
+; se puede especificar el segmento a acceder de forma explicita
+; ej: jmp 0x8:0
+; y accedo al segmento 1 (porque el índice es 1)
+
+; se puede acceder además de forma implícita a un segmento
+; ej: mov eax, [ebx]
+; porque está implícito que quiero acceder al segmento ds actual
+
+; ej: push eax
+; porque está implícito que quiero acceder al segmento ss actual
+
+; ej: jump pepe
+; porque está implícito que quiero acceder al segmento cs actual. en este caso sólo se chequea que no nos pasemos del límite del segmento, porque los privilegios ya están bien si llegué hasta acá, y el tipo de segmento también
+
+
+
+
+
+
+
+
+
+; como se hacen los chequeos:
+
+; chequeo de offset valido:
+
+; se fija si offset + tamaño del elemento > limite efectivo --> #General Protection
+
+; -----------------------------------------
+
+; chequeo de tipo: 
+
+; caso lectura: 
+; si el segmento que queremos acceder es de código se fija si es de ejecución+lectura. Si no es de ejecución+lectura --> #General Protection.
+; si queremos acceder a un segmento de dato, no hay que hacer nada: todos los segmentos de datos se pueden leer.
+
+; caso escritura:
+; si el segmento que queremos acceder es de código --> #General Protection.
+; si queremos acceder a un segmento de dato, se fija si es de escritura. Si no es de escritura --> #General Protection.
+
+; caso ejecución:
+; si el segmento que queremos acceder no es de código --> es de dato --> #General Protection.
+
+; -----------------------------------------
+
+; chequeo de privilegios:
+
+; caso dato:
+
+; calcula el EPL = max_numerico(CPL, RPL). El CPL está en el CS (últimos dos bits). El RPL está en el DS (últimos dos bits). 
+
+; Compara el EPL calculado con el DPL del segmento al que queremos acceder. El DPL está seteado en el descriptor de segmento en la gdt.
+; Si EPL > DPL --> #General Protection.
+
+; caso código:
+; sólo se puede acceder a un segmento de código del mismo nivel del actual
+; Si CPL != DPL --> Me fijo si el segmento es conforming. Si es conforming y CPL >= DPL --> OK. Sino --> #General Protection.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
