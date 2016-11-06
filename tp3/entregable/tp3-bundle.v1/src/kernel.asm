@@ -5,7 +5,7 @@
 
 %define GDT_IDX_C0_DESC 		18
 %define GDT_IDX_D0_DESC 		20
-%define KERNEL_STACK_START_POS 	0x27000
+%define KERNEL_STACK_START_POS 	0x27000-4   ; preguntar si va 0x27000 o 0x27000-4
 
 
 %define C_FG_BLACK              0x0
@@ -59,6 +59,7 @@ extern actualizar_pantalla
 
 ;; GDT
 extern GDT_DESC
+extern gdt_init_tss
 
 ;; IDT
 extern IDT_DESC
@@ -142,22 +143,15 @@ start:
     ; setear la pila
     mov esp, KERNEL_STACK_START_POS
 
-    ; pintar pantalla, todos los colores, que bonito!
-
+    ; limpiamos la pantalla
     call screen_limpiar
 
     
-
-    ; mensaje de bienvenida
-    
-
     ; inicializar el manejador de memoria
     call mmu_inicializar_dir_kernel
     
-    
 
     ; inicializar el directorio de paginas
-
     mov eax, DIRECTORIO_PAGINAS_KERNEL_POS
     mov cr3, eax
 
@@ -179,6 +173,7 @@ start:
     ; inicializar todas las tsss
 
     ; inicializar entradas de la gdt de las tsss
+    call gdt_init_tss
 
     ; inicializar el scheduler
 

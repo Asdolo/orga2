@@ -21,6 +21,8 @@ void mnu_inicializar_memoria_tareas()
 	{
 		mmu_inicializar_dir_tarea(i);
 	}
+
+	
 }
 
 void* mmu_inicializar_dir_tarea(int t)

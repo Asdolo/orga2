@@ -137,7 +137,6 @@ void idt_inicializar() {
 }
 
 
-// preguntar la signatura
 void isr_atender_excepcion(int exception){
 
     //screen_colorear(0, 0, 79, 24, C_BG_RED);

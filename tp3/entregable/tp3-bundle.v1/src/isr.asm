@@ -135,15 +135,16 @@ _isr102:
 proximo_reloj:
     pushad
 
-    inc DWORD [reloj_numero]
-    mov ebx, [reloj_numero]
-    cmp ebx, 0x4
-    jl .ok
-        mov DWORD [reloj_numero], 0x0
-        mov ebx, 0
-    .ok:
-        add ebx, reloj
-        imprimir_texto_mp ebx, 1, 0x0f, 24, 79
+
+    ; inc DWORD [reloj_numero]
+    ; mov ebx, [reloj_numero]
+    ; cmp ebx, 0x4
+    ; jl .ok
+    ;     mov DWORD [reloj_numero], 0x0
+    ;     mov ebx, 0
+    ; .ok:
+    ;     add ebx, reloj
+    ;     imprimir_texto_mp ebx, 1, 0x0f, 24, 79
 
     popad
     ret
