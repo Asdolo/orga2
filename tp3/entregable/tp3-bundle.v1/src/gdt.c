@@ -152,45 +152,47 @@ void gdt_init_tss()
         (unsigned char)     0x00,                       /* g byte          */
         (unsigned char)     (unsigned int)(&tarea_idle)>>24,                       /* base[31:24]  */
     };
-for (int i =GDT_IDX_T1_DESC ; i <GDT_IDX_T8_DESC+1 ; i++)
-{
-    
-    gdt[i] = (gdt_entry) {
-        (unsigned short)    0x67,                       /* limit[0:15]  */
-        (unsigned short)    (unsigned int)(&(tss_navios[i-GDT_IDX_T1_DESC])),           /* base[0:15]   */
-        (unsigned char)     (unsigned int)(&(tss_navios[i-GDT_IDX_T1_DESC]))>>16,       /* base[23:16]  */
-        (unsigned char)     0x09,                       /* type         = Read/Write */
-        (unsigned char)     0x00,                       /* s            */
-        (unsigned char)     0x00,                       /* dpl          */
-        (unsigned char)     0x01,                       /* p            */
-        (unsigned char)     0x00,                       /* limit[16:19] */
-        (unsigned char)     0x00,                       /* avl          */
-        (unsigned char)     0x00,                       /* l            */
-        (unsigned char)     0x00,                       /* db           */
-        (unsigned char)     0x00,                       /* g byte          */
-        (unsigned char)     (unsigned int)(&(tss_navios[i-GDT_IDX_T1_DESC]))>>24,                       /* base[31:24]  */
-    };
-}
+
+    int i;
+    for (i = GDT_IDX_T1_DESC; i < GDT_IDX_T8_DESC + 1; i++)
+    {
+        
+        gdt[i] = (gdt_entry) {
+            (unsigned short)    0x67,                       /* limit[0:15]  */
+            (unsigned short)    (unsigned int)(&(tss_navios[i-GDT_IDX_T1_DESC])),           /* base[0:15]   */
+            (unsigned char)     (unsigned int)(&(tss_navios[i-GDT_IDX_T1_DESC]))>>16,       /* base[23:16]  */
+            (unsigned char)     0x09,                       /* type         = Read/Write */
+            (unsigned char)     0x00,                       /* s            */
+            (unsigned char)     0x00,                       /* dpl          */
+            (unsigned char)     0x01,                       /* p            */
+            (unsigned char)     0x00,                       /* limit[16:19] */
+            (unsigned char)     0x00,                       /* avl          */
+            (unsigned char)     0x00,                       /* l            */
+            (unsigned char)     0x00,                       /* db           */
+            (unsigned char)     0x00,                       /* g byte          */
+            (unsigned char)     (unsigned int)(&(tss_navios[i-GDT_IDX_T1_DESC]))>>24,                       /* base[31:24]  */
+        };
+    }
 
 
-for (int i =GDT_IDX_T1_FLAG_DESC ; i <GDT_IDX_T8_FLAG_DESC+1 ; i++)
-{
-    
-    gdt[i] = (gdt_entry) {
-        (unsigned short)    0x67,                       /* limit[0:15]  */
-        (unsigned short)    (unsigned int)(&(tss_banderas[i-GDT_IDX_T1_FLAG_DESC])),           /* base[0:15]   */
-        (unsigned char)     (unsigned int)(&(tss_banderas[i-GDT_IDX_T1_FLAG_DESC]))>>16,       /* base[23:16]  */
-        (unsigned char)     0x09,                       /* type         = Read/Write */
-        (unsigned char)     0x00,                       /* s            */
-        (unsigned char)     0x00,                       /* dpl          */
-        (unsigned char)     0x01,                       /* p            */
-        (unsigned char)     0x00,                       /* limit[16:19] */
-        (unsigned char)     0x00,                       /* avl          */
-        (unsigned char)     0x00,                       /* l            */
-        (unsigned char)     0x00,                       /* db           */
-        (unsigned char)     0x00,                       /* g byte          */
-        (unsigned char)     (unsigned int)(&(tss_banderas[i-GDT_IDX_T1_FLAG_DESC]))>>24,                       /* base[31:24]  */
-    };
-}
+    for (i = GDT_IDX_T1_FLAG_DESC; i < GDT_IDX_T8_FLAG_DESC + 1; i++)
+    {
+        
+        gdt[i] = (gdt_entry) {
+            (unsigned short)    0x67,                       /* limit[0:15]  */
+            (unsigned short)    (unsigned int)(&(tss_banderas[i-GDT_IDX_T1_FLAG_DESC])),           /* base[0:15]   */
+            (unsigned char)     (unsigned int)(&(tss_banderas[i-GDT_IDX_T1_FLAG_DESC]))>>16,       /* base[23:16]  */
+            (unsigned char)     0x09,                       /* type         = Read/Write */
+            (unsigned char)     0x00,                       /* s            */
+            (unsigned char)     0x00,                       /* dpl          */
+            (unsigned char)     0x01,                       /* p            */
+            (unsigned char)     0x00,                       /* limit[16:19] */
+            (unsigned char)     0x00,                       /* avl          */
+            (unsigned char)     0x00,                       /* l            */
+            (unsigned char)     0x00,                       /* db           */
+            (unsigned char)     0x00,                       /* g byte          */
+            (unsigned char)     (unsigned int)(&(tss_banderas[i-GDT_IDX_T1_FLAG_DESC]))>>24,                       /* base[31:24]  */
+        };
+    }
 
 }

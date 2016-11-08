@@ -63,7 +63,7 @@
 #define VIDEO                   	0x000B8000 /* direccion fisica del buffer de video */
 
 #define BUFFER_ESTADO				0x0002D000 /* direccion fisica del buffer de estado */
-#define BUFFER_MAPA				0x0002E000 /* direccion fisica del buffer de mapa */
+#define BUFFER_MAPA					0x0002E000 /* direccion fisica del buffer de mapa */
 
 
 
@@ -74,6 +74,9 @@
 
 #define PAGINA1_VIRTUAL_TAREA			0x40000000
 #define PAGINA2_VIRTUAL_TAREA			0x40001000
+#define PILA_VIRTUAL_TAREA_NIVEL_3		0x40001C00
+#define PILA_VIRTUAL_BANDERA_NIVEL_3	0x40001FFC
+
 #define PAGINA_ANCLA_VIRTUAL_TAREA		0x40002000
 
 
@@ -105,7 +108,7 @@
 
 #define TASK_IDLE_CODE          0x40000000 /* direccion virtual del codigo de la tarea idle */
 #define TASK_IDLE_STACK         0x003D0000 /* direccion virtual de la pila de la tarea idle */
-#define TASK_IDLE_STACK_RING_0  0x0002B000 /* direccion fisica de la pila de la tarea idle */
+#define TASK_IDLE_STACK_RING_0  0x0002A000 /* direccion fisica de la pila de la tarea idle */
 
 #define TASK_ANCLA              0x40002000
 #define TASK_ANCLA_FIS          0x00000000

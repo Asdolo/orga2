@@ -5,7 +5,7 @@
 
 %define GDT_IDX_C0_DESC 		18
 %define GDT_IDX_D0_DESC 		20
-%define KERNEL_STACK_START_POS 	0x27000-4   ; preguntar si va 0x27000 o 0x27000-4
+%define KERNEL_STACK_START_POS 	0x27000
 
 
 %define C_FG_BLACK              0x0
@@ -149,7 +149,7 @@ start:
     
     ; inicializar el manejador de memoria
     call mmu_inicializar_dir_kernel
-    
+    ; xchg bx, bx
 
     ; inicializar el directorio de paginas
     mov eax, DIRECTORIO_PAGINAS_KERNEL_POS
@@ -166,7 +166,7 @@ start:
     mov cr0, eax
 
    
-    ; xchg bx, bx
+    xchg bx, bx
 
     ; inicializar tarea idle
 

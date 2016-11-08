@@ -14,6 +14,8 @@
 void* libre = (void*) 0x30000;
 void* libreMar = (void*) 0x100000;
 
+void* directorios_tareas[8];
+
 void mnu_inicializar_memoria_tareas()
 {	
 	int i;
@@ -27,7 +29,10 @@ void mnu_inicializar_memoria_tareas()
 
 void* mmu_inicializar_dir_tarea(int t)
 {
+
 	void* directorio = proximaPaginaLibre();
+	directorios_tareas[t] = directorio;
+
 	void* tabla1 = proximaPaginaLibre();
 	void* tabla2 = proximaPaginaLibre();
 
@@ -58,7 +63,12 @@ void* mmu_inicializar_dir_tarea(int t)
 
 void mmu_inicializar_dir_kernel()
 {
+	// Mapeamos con identity mapping desde 0x00000000 hasta la 0x0077ffff
 	identity_mapping(DIRECTORIO_PAGINAS_KERNEL_POS, TABLA_PAGINAS_1_KERNEL_POS, TABLA_PAGINAS_2_KERNEL_POS);
+
+	// Mapeamos desde las fisicas 0x20000 a 0x21fff hacia las virtuales 0x4000000 a 0x4001fff (para la tarea idle)
+	mmu_mapear_pagina((int*) DIRECTORIO_PAGINAS_KERNEL_POS, PAGINA1_VIRTUAL_TAREA, 0x20000);
+	mmu_mapear_pagina((int*) DIRECTORIO_PAGINAS_KERNEL_POS, PAGINA2_VIRTUAL_TAREA, 0x21000);
 
 }
 
