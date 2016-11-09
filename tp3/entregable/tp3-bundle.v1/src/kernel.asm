@@ -42,6 +42,9 @@
 %define TABLA_PAGINAS_1_KERNEL_POS		0x28000
 %define TABLA_PAGINAS_2_KERNEL_POS		0x2A000
 
+%define GDT_IDX_T_INIT_DESC         23
+%define GDT_IDX_T_IDLE_DESC         24
+
 
 
 %include "imprimir.mac"
@@ -74,6 +77,9 @@ extern mmu_inicializar_dir_kernel
 extern mmu_mapear_pagina
 extern mnu_inicializar_memoria_tareas
 extern mmu_inicializar_dir_tarea
+
+;; tss
+extern tss_inicializar
 
 ;; Saltear seccion de datos
 jmp start
@@ -166,11 +172,11 @@ start:
     mov cr0, eax
 
    
-    xchg bx, bx
 
     ; inicializar tarea idle
 
     ; inicializar todas las tsss
+    call tss_inicializar
 
     ; inicializar entradas de la gdt de las tsss
     call gdt_init_tss
@@ -215,8 +221,12 @@ start:
     sti
 
     ; cargar la tarea inicial
+    ; xchg bx, bx
+    mov ax, GDT_IDX_T_INIT_DESC<<3
+    ltr ax
 
     ; saltar a la primer tarea
+    jmp GDT_IDX_T_IDLE_DESC<<3:0246 ; preguntar si el RPL es 0
 
     ; Ciclar infinitamente (por si algo sale mal...)
     mov eax, 0xFFFF

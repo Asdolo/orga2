@@ -8,6 +8,7 @@
 #include "tss.h"
 #include "defines.h"
 #include "mmu.h"
+#include "i386.h"
 
 
 //declarar mas
@@ -28,7 +29,7 @@ void tss_inicializar() {
 	tarea_idle.ebp = TASK_IDLE_STACK_RING_0;
 	tarea_idle.esp = TASK_IDLE_STACK_RING_0;
 
-	tarea_idle.cs = (GDT_IDX_D0_DESC << 3); 
+	tarea_idle.cs = (GDT_IDX_C0_DESC << 3); 
 	tarea_idle.es = (GDT_IDX_D0_DESC << 3); 
 	tarea_idle.ss = (GDT_IDX_D0_DESC << 3); 
 	tarea_idle.ds = (GDT_IDX_D0_DESC << 3);	
@@ -82,7 +83,7 @@ void tss_inicializar() {
 		tss_navios[i].ebp = PILA_VIRTUAL_TAREA_NIVEL_3;
 		tss_navios[i].esp = PILA_VIRTUAL_TAREA_NIVEL_3;
 
-		tss_navios[i].cs = ((GDT_IDX_D3_DESC << 3) | 0X03); 
+		tss_navios[i].cs = ((GDT_IDX_C3_DESC << 3) | 0X03); 
 		tss_navios[i].es = ((GDT_IDX_D3_DESC << 3) | 0X03); 
 		tss_navios[i].ss = ((GDT_IDX_D3_DESC << 3) | 0X03); 
 		tss_navios[i].ds = ((GDT_IDX_D3_DESC << 3) | 0X03);	
@@ -110,7 +111,7 @@ void tss_inicializar() {
 		tss_banderas[i].ebp = PILA_VIRTUAL_BANDERA_NIVEL_3;
 		tss_banderas[i].esp = PILA_VIRTUAL_BANDERA_NIVEL_3;
 
-		tss_banderas[i].cs = ((GDT_IDX_D3_DESC << 3) | 0X03); 
+		tss_banderas[i].cs = ((GDT_IDX_C3_DESC << 3) | 0X03); 
 		tss_banderas[i].es = ((GDT_IDX_D3_DESC << 3) | 0X03); 
 		tss_banderas[i].ss = ((GDT_IDX_D3_DESC << 3) | 0X03); 
 		tss_banderas[i].ds = ((GDT_IDX_D3_DESC << 3) | 0X03);	
