@@ -11,6 +11,7 @@
 
 #endif	/* !__MMU_H__ */
 void* libre;
+void* libreMar;
 
 void* mmu_inicializar_dir_tarea(int t);
 void mmu_inicializar_dir_kernel();

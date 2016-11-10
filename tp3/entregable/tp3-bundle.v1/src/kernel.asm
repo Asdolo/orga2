@@ -81,6 +81,9 @@ extern mmu_inicializar_dir_tarea
 ;; tss
 extern tss_inicializar
 
+;; Scheduler
+extern sched_inicializar
+
 ;; Saltear seccion de datos
 jmp start
 
@@ -109,7 +112,7 @@ start:
 
     ; Imprimir mensaje de bienvenida
 
-	
+
 	; macro
     imprimir_texto_mr iniciando_mr_msg, iniciando_mr_len, 0x07, 0, 0
 
@@ -137,7 +140,7 @@ start:
     mov ax, GDT_IDX_D0_DESC << 3
 
     ; el cs no se debe cargar porque si esta corriendo una tarea y si una tarea quiere cambiar de segmento (a uno mas privilegiado), el procesador no puede dejarlo hacer eso
-    ; la unica forma de cambiar el cs es haciendo un jmp far 
+    ; la unica forma de cambiar el cs es haciendo un jmp far
     ; jmp nuevoCS:offset
 
     mov ds, ax
@@ -152,7 +155,7 @@ start:
     ; limpiamos la pantalla
     call screen_limpiar
 
-    
+
     ; inicializar el manejador de memoria
     call mmu_inicializar_dir_kernel
     ; xchg bx, bx
@@ -171,7 +174,7 @@ start:
     or eax, 0x80000000 ; bit de paginacion on
     mov cr0, eax
 
-   
+
 
     ; inicializar tarea idle
 
@@ -182,9 +185,9 @@ start:
     call gdt_init_tss
 
     ; inicializar el scheduler
+    call sched_inicializar
 
     ; inicializar la tabla IDT
-
     call idt_inicializar
 
     ; cargar la IDT
@@ -198,13 +201,13 @@ start:
 
     ; Pongo algo en el buffer de estado
     call screen_modo_estado
-    
+
     ; Pongo algo en el buffer de mapa
     call screen_modo_mapa
 
     ; Como la variable global modo_pantalla (screen.h) arranca en 0, arranca en modo estado
     call actualizar_pantalla
-    
+
 
     ; divido por cero para probar
     ;mov ax, 56
@@ -212,19 +215,19 @@ start:
     ;div bl
 
 
-    
+
 
     ; configurar controlador de interrupciones
 
     call resetear_pic
     call habilitar_pic
-    sti
+
 
     ; cargar la tarea inicial
     ; xchg bx, bx
     mov ax, GDT_IDX_T_INIT_DESC<<3
     ltr ax
-
+    sti ; las interrupciones recien se habilitan luego de ejecutar la siguiente instrucción
     ; saltar a la primer tarea
     jmp GDT_IDX_T_IDLE_DESC<<3:0246 ; preguntar si el RPL es 0
 
@@ -287,9 +290,9 @@ start:
 
 ; -----------------------------------------
 
-; chequeo de tipo: 
+; chequeo de tipo:
 
-; caso lectura: 
+; caso lectura:
 ; si el segmento que queremos acceder es de código se fija si es de ejecución+lectura. Si no es de ejecución+lectura --> #General Protection.
 ; si queremos acceder a un segmento de dato, no hay que hacer nada: todos los segmentos de datos se pueden leer.
 
@@ -306,7 +309,7 @@ start:
 
 ; caso dato:
 
-; calcula el EPL = max_numerico(CPL, RPL). El CPL está en el CS (últimos dos bits). El RPL está en el DS (últimos dos bits). 
+; calcula el EPL = max_numerico(CPL, RPL). El CPL está en el CS (últimos dos bits). El RPL está en el DS (últimos dos bits).
 
 ; Compara el EPL calculado con el DPL del segmento al que queremos acceder. El DPL está seteado en el descriptor de segmento en la gdt.
 ; Si EPL > DPL --> #General Protection.
@@ -314,18 +317,3 @@ start:
 ; caso código:
 ; sólo se puede acceder a un segmento de código del mismo nivel del actual
 ; Si CPL != DPL --> Me fijo si el segmento es conforming. Si es conforming y CPL >= DPL --> OK. Sino --> #General Protection.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

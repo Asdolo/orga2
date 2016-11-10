@@ -22,6 +22,9 @@ extern isr_atender_excepcion
 ;; INTERRUPCIONES
 extern atender_teclado
 
+;; sched
+extern sched_proximo_indice
+
 global _isr32
 global _isr33
 global _isr80
@@ -56,6 +59,13 @@ _isr%1:
 reloj_numero:           dd 0x00000000
 reloj:                  db '|/-\'
 
+offset:
+  dd 0x1234 ; basura posta
+
+selector:
+ dw 0x00 ; basura, total se va a sobreescribir
+
+
 
 ;;
 ;; Rutina de atención de las EXCEPCIONES
@@ -88,10 +98,23 @@ ISR 19
 ;; -------------------------------------------------------------------------- ;;
 _isr32:
     pushad
-    call fin_intr_pic1
+    ;call fin_intr_pic1
+    ;call screen_proximo_reloj
 
-    call screen_proximo_reloj
+    call sched_proximo_indice
 
+    cmp ax,0
+	je .noJump
+	mov [selector], ax
+	call fin_intr_pic1
+                        xchg bx, bx
+	jmp far [offset]
+	jmp .end
+
+
+.noJump:
+	call fin_intr_pic1
+.end:
     popad
     iret
 
@@ -101,10 +124,10 @@ _isr32:
 _isr33:
     pushad
     call fin_intr_pic1
-    
+
     xor eax, eax
     in al, 0x60
-    
+
     push eax
     call atender_teclado
     pop eax
@@ -116,6 +139,7 @@ _isr33:
 ;; Rutinas de atención de las SYSCALLS
 ;; -------------------------------------------------------------------------- ;;
 _isr80:
+
     mov eax, 0x42
     pushad
 

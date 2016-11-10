@@ -35,6 +35,7 @@ unsigned char *bandera();
 
 void task()
 {
+    
     /* Tarea 1 */
     unsigned int i = 0;
 

@@ -17,18 +17,19 @@ void* libreMar = (void*) 0x100000;
 void* directorios_tareas[8];
 
 void mnu_inicializar_memoria_tareas()
-{	
+{
 	int i;
 	for (i = 0; i < 8; i++)
 	{
 		mmu_inicializar_dir_tarea(i);
 	}
 
-	
+
 }
 
 void* mmu_inicializar_dir_tarea(int t)
 {
+
 
 	void* directorio = proximaPaginaLibre();
 	directorios_tareas[t] = directorio;
@@ -79,15 +80,15 @@ void identity_mapping(int directorio_pos, int tabla1_pos, int tabla2_pos)
 	int* dir = (int*) directorio_pos + 0x00;
 
 	// Seteamos la dirección de la primer tabla en la primer entrada del directorio y también los flags
-	*dir = (tabla1_pos | 0x3);
+	*dir = (tabla1_pos | 0x7);
 
 	dir = (int*) (directorio_pos + 0x04);
 
 	// Seteamos la dirección de la segunda tabla en la segunda entrada del directorio y también los flags
-	*dir = (tabla2_pos | 0x3);
+	*dir = (tabla2_pos | 0x7);
 
 	int i;
-	
+
 
 	// limpiamos el resto del directorio
 	for (i = 2; i < 1024; i++)
@@ -103,7 +104,7 @@ void identity_mapping(int directorio_pos, int tabla1_pos, int tabla2_pos)
 	{
 		dir = (int*) (tabla1_pos +  i*4);
 
-		*dir = (i << 12) | 0x3;
+		*dir = (i << 12) | 0x7;
 	}
 
 
@@ -113,7 +114,7 @@ void identity_mapping(int directorio_pos, int tabla1_pos, int tabla2_pos)
 	{
 		dir = (int*) (tabla2_pos +  ((i-1024)*4) );
 
-		*dir = (i << 12) | 0x3;
+		*dir = (i << 12) | 0x7;
 	}
 
 	// el resto de la tabla en 0
@@ -126,14 +127,14 @@ void identity_mapping(int directorio_pos, int tabla1_pos, int tabla2_pos)
 }
 
 
- 
+
 
 void mmu_mapear_pagina(int* dp, int virtual, int fisica)
-{	
-	
+{
+
 	int IPD = virtual;
 	IPD = IPD >> 22;
-	
+
 
 	int IPT = virtual;
 	IPT = IPT >> 12;
@@ -149,8 +150,8 @@ void mmu_mapear_pagina(int* dp, int virtual, int fisica)
 	{
 		// No presente,
 		PT = (int) proximaPaginaLibre();
-		
-		*(dp + IPD) = PT | 0x3;
+
+		*(dp + IPD) = PT | 0x7;
 
 		//limpiamos toda la tabla
 		int* dir;
@@ -165,12 +166,12 @@ void mmu_mapear_pagina(int* dp, int virtual, int fisica)
 	}
 	else
 	{
-		PT = (PDE & 0xFFFFF000);	
+		PT = (PDE & 0xFFFFF000);
 	}
-	
+
 
 	int* PTE = (int*) (PT + IPT*4);
-	PTE[0] = fisica | 0x3; // asumimos fisica es multiplo de 4kb
+	PTE[0] = fisica | 0x7; // asumimos fisica es multiplo de 4kb
 
 
 
@@ -181,7 +182,7 @@ void mmu_unmapear_pagina(int* dp, int virtual)
 
 	int IPD = virtual;
 	IPD = IPD >> 22;
-	
+
 
 	int IPT = virtual;
 	IPT = IPT >> 12;
@@ -200,11 +201,11 @@ void mmu_unmapear_pagina(int* dp, int virtual)
 
 	}
 	else
-	{	
+	{
 		// está presente
-		PT = (PDE & 0xFFFFF000);	
+		PT = (PDE & 0xFFFFF000);
 	}
-	
+
 
 	int* PTE = (int*) (PT + IPT*4);
 	PTE[0] = 0x00; // limpiamos la entrada de la tabla

@@ -85,6 +85,12 @@ idt_descriptor IDT_DESC = {
     idt[numero].offset_0_15 = (unsigned short) ((unsigned int)(&_isr ## numero) & (unsigned int) 0xFFFF); \
     idt[numero].segsel = (unsigned short) GDT_IDX_C0_DESC << 3;  \
     idt[numero].attr = (unsigned short) 0x8E00; \
+    if (numero == 80 || numero == 102) \
+    { \
+        idt[numero].attr = (unsigned short) 0xEE00; \
+    }else{ \
+        idt[numero].attr = (unsigned short) 0x8E00; \
+    } \
     idt[numero].offset_16_31 = (unsigned short) ((unsigned int)(&_isr ## numero) >> 16 & (unsigned int) 0xFFFF);
 
 
@@ -143,11 +149,11 @@ void isr_atender_excepcion(int exception){
     idt_ultimo_problema = idt_mensajes_interrupciones[exception];
     screen_imprimir(idt_mensajes_interrupciones[exception], C_FG_WHITE, C_BG_GREEN, 0, 0, 0, 0, 0);
 
-
+    copiar((int*) BUFFER_ESTADO, (int*) VIDEO, 4000);
 }
 
 void atender_teclado(int scancode)
-{   
+{
     /*
     if (scancode >= 0x02 && scancode <= 0x0B)
     {
