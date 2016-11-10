@@ -31,5 +31,9 @@ extern char* idt_ultimo_problema;
 void idt_inicializar();
 void atender_teclado(int scancode);
 
+void fondear_c(int* cr3, int fisica);
+void canonear_c(char* destino, int fuente);
+void navegar_c();
+
 
 #endif  /* !__IDT_H__ */

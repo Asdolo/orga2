@@ -22,8 +22,11 @@ void* proximaPaginaLibre();
 void* proximaPaginaLibreDelMar();
 void identity_mapping(int directorio_pos, int tabla1_pos, int tabla2_pos);
 void copiar(int* dest, int* source, int size);
+void copiar_bytes(char* dest, char* source, int size);
 
 void* directorios_tareas[8];
+void* direcciones_fisicas_tareas[8];
+
 /*
 void* proximaPaginaLibre();
 */

@@ -12,6 +12,7 @@
 #include "colors.h"
 #include "i386.h"
 #include "mmu.h"
+#include "sched.h"
 
 
 int random=0;
@@ -174,4 +175,25 @@ void atender_teclado(int scancode)
         copiar((int*) BUFFER_ESTADO, (int*) VIDEO, 4000);
     }
     return;
+}
+
+
+
+void fondear_c(int* cr3, int fisica)
+{
+    mmu_mapear_pagina(cr3, PAGINA_ANCLA_VIRTUAL_TAREA, fisica);
+}
+
+void canonear_c(char* destino, int fuente)
+{
+    breakpoint();
+    fuente = fuente-0x40000000;
+    char* hola = (char*) (fuente + direcciones_fisicas_tareas[tareaActual]);
+
+    copiar_bytes(destino, hola, 97);
+}
+
+void navegar_c()
+{
+
 }

@@ -175,9 +175,6 @@ start:
     mov cr0, eax
 
 
-
-    ; inicializar tarea idle
-
     ; inicializar todas las tsss
     call tss_inicializar
 
@@ -228,8 +225,9 @@ start:
     mov ax, GDT_IDX_T_INIT_DESC<<3
     ltr ax
     sti ; las interrupciones recien se habilitan luego de ejecutar la siguiente instrucción
-    ; saltar a la primer tarea
-    jmp GDT_IDX_T_IDLE_DESC<<3:0246 ; preguntar si el RPL es 0
+
+    ; saltar a la tarea idle
+    jmp GDT_IDX_T_IDLE_DESC<<3:1234
 
     ; Ciclar infinitamente (por si algo sale mal...)
     mov eax, 0xFFFF

@@ -25,11 +25,23 @@ extern atender_teclado
 ;; sched
 extern sched_proximo_indice
 
+;; syscalls
+extern fondear_c
+extern canonear_c
+extern navegar_c
+
 global _isr32
 global _isr33
 global _isr80
 global _isr102
 global proximo_reloj
+
+
+%define SYS_FONDEAR     0x923
+%define SYS_CANONEAR    0x83A
+%define SYS_NAVEGAR     0xAEF
+
+%define GDT_IDX_T_IDLE_DESC         24
 
 ;;
 ;; Definición de MACROS
@@ -139,11 +151,43 @@ _isr33:
 ;; Rutinas de atención de las SYSCALLS
 ;; -------------------------------------------------------------------------- ;;
 _isr80:
-
-    mov eax, 0x42
+    
     pushad
+    cmp eax, SYS_FONDEAR
+    jne ask_canonear
+    mov eax, cr3
+    push ebx
+    push eax
+    
+    call fondear_c
+    
+    pop eax
+    pop eax
+    jmp fin_isr80
 
+ask_canonear:
+    cmp eax, SYS_CANONEAR
+    jne ask_navegar
+    
+    push ecx
+    push ebx
+
+    xchg bx, bx
+    call canonear_c
+    xchg bx, bx
+    jmp fin_isr80
+
+ask_navegar:
+    cmp eax, SYS_NAVEGAR
+    jne fin_isr80
+
+    call navegar_c
+
+fin_isr80:
     popad
+
+    ; saltar a la tarea idle
+    jmp GDT_IDX_T_IDLE_DESC<<3:1234
     iret
 
 _isr102:
