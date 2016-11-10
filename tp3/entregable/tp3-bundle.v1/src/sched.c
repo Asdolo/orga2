@@ -82,7 +82,7 @@ unsigned short sched_proximo_indice() {
 				// Busco la siguiente bandera a ejecutar
 				return indicesBanderas[buscarIndiceSiguienteViva(1)]; // El 1 en indicesBanderas indica que busque en banderas
 			}
-
+		}
 	}
 	else
 	{
