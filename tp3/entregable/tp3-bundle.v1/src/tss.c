@@ -106,7 +106,7 @@ void tss_inicializar() {
 	for (i = 0; i < 8; i++)
 	{
 		tss_banderas[i].cr3 = (unsigned int) directorios_tareas[i]; //directorio 0 = directorio tarea 1
-		tss_banderas[i].eip = *((unsigned int*)(0x10000 + (i * 0x2000) + 0x1FCCC)); // leemos el eip original que está en el código en el kernel
+		tss_banderas[i].eip = *((unsigned int*)(0x10000 + (i * 0x2000) + 0x1FFC)) + 0x40000000; // leemos el eip original que está en el código en el kernel
 		tss_banderas[i].eflags = 0x202; //permite interrupciones
 		tss_banderas[i].ebp = PILA_VIRTUAL_BANDERA_NIVEL_3;
 		tss_banderas[i].esp = PILA_VIRTUAL_BANDERA_NIVEL_3;
@@ -126,7 +126,7 @@ void tss_inicializar() {
 		tss_banderas[i].eax = 0x00;
 
 		tss_banderas[i].ss0 = (GDT_IDX_D0_DESC << 3);
-		tss_navios[i].esp0 = (unsigned int) (proximaPaginaLibre()) + 0x1000;
+		tss_banderas[i].esp0 = (unsigned int) (proximaPaginaLibre()) + 0x1000;
 	}
 
 

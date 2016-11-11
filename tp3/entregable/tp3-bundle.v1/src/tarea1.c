@@ -8,6 +8,7 @@
 #include "defines.h"
 #include "game.h"
 #include "syscall.h"
+#include "i386.h"
 
 #define BANDERA_BUFFER  0x40001000
 

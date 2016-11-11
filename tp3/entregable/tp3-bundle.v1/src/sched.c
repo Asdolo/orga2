@@ -51,6 +51,7 @@ unsigned short sched_proximo_indice() {
 			// Me fijo si ya ejecuté 3 tareas
 			if(++contadorTareas==4)
 			{
+				breakpoint();
 				// Ya corrí 3 tareas
 				// Empiezo a correr banderas
 				corriendoBanderas=1;

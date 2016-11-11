@@ -15,7 +15,8 @@ void* libre = (void*) 0x30000;
 void* libreMar = (void*) 0x100000;
 
 void* directorios_tareas[8];
-void* direcciones_fisicas_tareas[8];
+void* direcciones_fisicas_tarea_pagina1[8];
+void* direcciones_fisicas_tarea_pagina2[8];
 
 void mnu_inicializar_memoria_tareas()
 {
@@ -44,7 +45,8 @@ void* mmu_inicializar_dir_tarea(int t)
 	void* p2_mar = proximaPaginaLibreDelMar();
 	void* p3_tierra = 0x00;
 
-	direcciones_fisicas_tareas[t] = p1_mar;
+	direcciones_fisicas_tarea_pagina1[t] = (void*) p1_mar;
+	direcciones_fisicas_tarea_pagina2[t] = (void*) p2_mar;
 
 	mmu_mapear_pagina((int*) directorio, PAGINA1_VIRTUAL_TAREA, (int) p1_mar);
 	mmu_mapear_pagina((int*) directorio, PAGINA2_VIRTUAL_TAREA, (int) p2_mar);

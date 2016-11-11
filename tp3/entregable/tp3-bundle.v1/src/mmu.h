@@ -25,7 +25,9 @@ void copiar(int* dest, int* source, int size);
 void copiar_bytes(char* dest, char* source, int size);
 
 void* directorios_tareas[8];
-void* direcciones_fisicas_tareas[8];
+
+void* direcciones_fisicas_tarea_pagina1[8];
+void* direcciones_fisicas_tarea_pagina2[8];
 
 /*
 void* proximaPaginaLibre();

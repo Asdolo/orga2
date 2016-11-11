@@ -119,7 +119,7 @@ _isr32:
 	je .noJump
 	mov [selector], ax
 	call fin_intr_pic1
-                        xchg bx, bx
+                        ; xchg bx, bx
 	jmp far [offset]
 	jmp .end
 
@@ -159,10 +159,9 @@ _isr80:
     push ebx
     push eax
     
-    call fondear_c
-    
-    pop eax
-    pop eax
+    call fondear_c    
+    add esp, 8
+
     jmp fin_isr80
 
 ask_canonear:
@@ -172,16 +171,22 @@ ask_canonear:
     push ecx
     push ebx
 
-    xchg bx, bx
+    
     call canonear_c
-    xchg bx, bx
+    add esp, 8
+
     jmp fin_isr80
 
 ask_navegar:
     cmp eax, SYS_NAVEGAR
     jne fin_isr80
 
+    push ecx ; nueva pagina 2 fisica
+    push ebx ; nueva pagina 1 fisica
+
     call navegar_c
+
+    add esp, 8
 
 fin_isr80:
     popad

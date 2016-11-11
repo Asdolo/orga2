@@ -186,14 +186,30 @@ void fondear_c(int* cr3, int fisica)
 
 void canonear_c(char* destino, int fuente)
 {
-    breakpoint();
-    fuente = fuente-0x40000000;
-    char* hola = (char*) (fuente + direcciones_fisicas_tareas[tareaActual]);
+    char* fuenteFisica;
+    fuente = fuente - 0x40000000;
 
-    copiar_bytes(destino, hola, 97);
+    if (fuente < 0x1000)
+    {
+        fuenteFisica = (char*) (fuente + direcciones_fisicas_tarea_pagina1[tareaActual]);
+    }
+    else
+    {
+        fuenteFisica = (char*) (fuente + direcciones_fisicas_tarea_pagina2[tareaActual]);
+    }
+
+    copiar_bytes(destino, fuenteFisica, 97);
 }
 
-void navegar_c()
+void navegar_c(int fisica1, int fisica2)
 {
+    mmu_mapear_pagina(directorios_tareas[tareaActual], PAGINA1_VIRTUAL_TAREA, fisica1);
+    mmu_mapear_pagina(directorios_tareas[tareaActual], PAGINA2_VIRTUAL_TAREA, fisica2);
+    
 
+    copiar((int*) (direcciones_fisicas_tarea_pagina1[tareaActual]), (int*) fisica1, 0x1000);
+    copiar((int*) (direcciones_fisicas_tarea_pagina2[tareaActual]), (int*) fisica2, 0x1000);
+
+    direcciones_fisicas_tarea_pagina1[tareaActual] = (void*) fisica1;
+    direcciones_fisicas_tarea_pagina2[tareaActual] = (void*) fisica2;
 }
