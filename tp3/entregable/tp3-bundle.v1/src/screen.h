@@ -34,6 +34,4 @@ char modo_pantalla;
 void int_to_string_hex8(int numero, char* str);
 void string_hex8_to_byte_hex8_format(char input[9], char output[9]);
 
-
-void screen_proximo_reloj();
 #endif  /* !__SCREEN_H__ */

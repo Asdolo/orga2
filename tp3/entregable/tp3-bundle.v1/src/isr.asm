@@ -10,8 +10,6 @@ BITS 32
 
 
 ;; SCREEN
-extern screen_proximo_reloj
-extern actualizar_buffer
 extern check_soy_bandera
 extern check_soy_tarea
 
@@ -40,7 +38,6 @@ global _isr32
 global _isr33
 global _isr80
 global _isr102
-global proximo_reloj
 
 
 %define SYS_FONDEAR     0x923
@@ -127,17 +124,11 @@ _isr32:
     str ax
     push ax
     call check_soy_tarea
-    add esp, 4
-
-
-
-    ;call fin_intr_pic1
-    ;call screen_proximo_reloj
+    pop ax
 
     call sched_proximo_indice
-
-    cmp ax,0
-    ;xchg bx, bx
+    cmp ax, 0
+    
   	je .noJump
   	mov [selector], ax
   	call fin_intr_pic1
@@ -175,12 +166,24 @@ _isr33:
 _isr80:
     pushad
 
+    ; me guardo los parametros de la syscall
+    push eax
+    push ebx
+    push ecx
+
     str ax
     push ax
     call check_soy_tarea
-    add esp, 4
     cmp al, 1
+    pop ax
+    
+    ; restauro los parametros de la syscall
+    pop ecx
+    pop ebx
+    pop eax
     je soy_tarea
+
+
 
     ; SOY UNA BANDERA, IMPRIMO ERROR Y SALTO A SALTAR IDLE
     push CODIGO_ERROR_BANDERA_LLAMA_SYSCALL_50 ; le paso como parametro a C el número de excepción
@@ -229,6 +232,7 @@ fin_isr80:
 
     ; saltar a la tarea idle
     jmp GDT_IDX_T_IDLE_DESC<<3:1234
+    
     iret
 
 
@@ -252,12 +256,12 @@ fin_isr80:
 
 
 _isr102:
+
     str ax
     push ax
     call check_soy_bandera
-    add esp, 4
-
     cmp al, 1
+    pop ax
     je do_actualizar_buffer
 
     ; SOY UNA TAREA, IMPRIMO ERROR Y SALTO A SALTAR IDLE
@@ -271,7 +275,7 @@ do_actualizar_buffer:
     str ax
     push ax
     call quitarBitBusy
-    add esp, 4
+    pop ax
 
 _isr102_saltar_a_idle:
     ; harcodeamos la tarea init para que el contexto se guarde ahi y no tener
@@ -283,22 +287,3 @@ _isr102_saltar_a_idle:
     jmp GDT_IDX_T_IDLE_DESC<<3:1234
     iret
 
-
-;; Funciones Auxiliares
-;; -------------------------------------------------------------------------- ;;
-proximo_reloj:
-    pushad
-
-
-    ; inc DWORD [reloj_numero]
-    ; mov ebx, [reloj_numero]
-    ; cmp ebx, 0x4
-    ; jl .ok
-    ;     mov DWORD [reloj_numero], 0x0
-    ;     mov ebx, 0
-    ; .ok:
-    ;     add ebx, reloj
-    ;     imprimir_texto_mp ebx, 1, 0x0f, 24, 79
-
-    popad
-    ret

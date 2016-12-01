@@ -379,9 +379,3 @@ void int_to_string_hex8(int numero, char str[9])
     
     
 }
-
-
-void screen_proximo_reloj()
-{
-	proximo_reloj();
-}

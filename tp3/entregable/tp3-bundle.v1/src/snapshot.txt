@@ -1,0 +1,25 @@
+Divide errorllama int 0x66Opcode)
+                                                  No hubo interrupciones
+     NAVIO 1     NAVIO 2     NAVIO 3     NAVIO 4   EAX 6789ABCD   CS 6789ABCD
+                                                   EBX 6789ABCD   DS 6789ABCD
+                                                   ECX 6789ABCD   ES 6789ABCD
+                                                   EDX 6789ABCD   FS 6789ABCD
+                                                   ESI 6789ABCD   GS 6789ABCD
+                                                   EDI 6789ABCD   SS 6789ABCD
+                                                   EBP 6789ABCD
+     NAVIO 5     NAVIO 6     NAVIO 7     NAVIO 8   ESP 6789ABCD   EFLAGS
+                                                   EIP 6789ABCD      6789ABCD
+                                                   CR0 6789ABCD
+                                                   CR2 6789ABCD
+                                                   CR3 6789ABCD
+                                                   CR4 6789ABCD
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+/

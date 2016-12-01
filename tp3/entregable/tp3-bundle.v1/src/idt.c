@@ -155,7 +155,7 @@ void isr_atender_excepcion(int exception){
     idt_ultimo_problema = idt_mensajes_interrupciones[exception];
     screen_imprimir(idt_mensajes_interrupciones[exception], C_FG_WHITE, C_BG_GREEN, 0, 0, 0, 0, 0);
 
-    copiar_int((int*) BUFFER_ESTADO, (int*) VIDEO, 4000);
+    actualizar_pantalla();
 }
 
 void atender_teclado(int scancode)

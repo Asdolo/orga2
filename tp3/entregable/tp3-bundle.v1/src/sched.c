@@ -102,6 +102,7 @@ unsigned char buscarIndiceSiguienteViva(char esBandera)
 		{
 			banderaActual = (banderaActual  + 1)%8;
 		}
+
 		return banderaActual;
 	}
 	else
