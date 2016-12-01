@@ -155,30 +155,22 @@ void isr_atender_excepcion(int exception){
     idt_ultimo_problema = idt_mensajes_interrupciones[exception];
     screen_imprimir(idt_mensajes_interrupciones[exception], C_FG_WHITE, C_BG_GREEN, 0, 0, 0, 0, 0);
 
-    copiar((int*) BUFFER_ESTADO, (int*) VIDEO, 4000);
+    copiar_int((int*) BUFFER_ESTADO, (int*) VIDEO, 4000);
 }
 
 void atender_teclado(int scancode)
 {
-    /*
-    if (scancode >= 0x02 && scancode <= 0x0B)
-    {
-        screen_imprimir(scancode_to_char[scancode], (char) C_FG_WHITE, (char) random, 0, 79, 0, 0);
-    }
-    if(++random==16)random=0;
-    */
-
     if (scancode == 0x32 && modo_pantalla == 0)
     {
-        // quiero mapa
+        // seteo la pantalla a modo mapa
         modo_pantalla = 1;
-        copiar((int*) BUFFER_MAPA, (int*) VIDEO, 4000);
 
     }else if(scancode == 0x12 && modo_pantalla==1){
-        // quiero estado
+        // seteo la pantalla a modo estado
         modo_pantalla = 0;
-        copiar((int*) BUFFER_ESTADO, (int*) VIDEO, 4000);
     }
+
+    actualizar_pantalla();
     return;
 }
 
@@ -212,23 +204,10 @@ void navegar_c(int fisica1, int fisica2)
     mmu_mapear_pagina(directorios_tareas[tareaActual], PAGINA2_VIRTUAL_TAREA, fisica2);
 
 
-    copiar((int*) (direcciones_fisicas_tarea_pagina1[tareaActual]), (int*) fisica1, 0x1000);
-    copiar((int*) (direcciones_fisicas_tarea_pagina2[tareaActual]), (int*) fisica2, 0x1000);
+    copiar_int((int*) fisica1, direcciones_fisicas_tarea_pagina1[tareaActual], 0x1000);
+    copiar_int((int*) fisica2, direcciones_fisicas_tarea_pagina2[tareaActual], 0x1000);
 
     direcciones_fisicas_tarea_pagina1[tareaActual] = (void*) fisica1;
     direcciones_fisicas_tarea_pagina2[tareaActual] = (void*) fisica2;
 }
 
-
-void actualizar_buffer()
-{
-  if (modo_pantalla == 1)
-  {
-      copiar((int*) BUFFER_MAPA, (int*) VIDEO, 4000);
-
-  }
-  else
-  {
-    copiar((int*) BUFFER_ESTADO, (int*) VIDEO, 4000);
-  }
-}

@@ -222,12 +222,12 @@ void actualizar_pantalla()
 	if (modo_pantalla == 0)
     {
         // quiero estado
-        copiar((int*) BUFFER_ESTADO, (int*) VIDEO, 4000);
+        copiar_int((int*) VIDEO, (int*) BUFFER_ESTADO, 4000);
     }
     else
     {
     	// quiero mapa
-        copiar((int*) BUFFER_MAPA, (int*) VIDEO, 4000);
+        copiar_int((int*) VIDEO, (int*) BUFFER_MAPA, 4000);
     }
     return;
 }

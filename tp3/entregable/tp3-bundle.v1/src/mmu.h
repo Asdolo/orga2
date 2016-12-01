@@ -21,7 +21,8 @@ void mnu_inicializar_memoria_tareas();
 void* proximaPaginaLibre();
 void* proximaPaginaLibreDelMar();
 void identity_mapping(int directorio_pos, int tabla1_pos, int tabla2_pos);
-void copiar(int* dest, int* source, int size);
+
+void copiar_int(int* dest, int* source, int size);
 void copiar_bytes(char* dest, char* source, int size);
 
 void* directorios_tareas[8];

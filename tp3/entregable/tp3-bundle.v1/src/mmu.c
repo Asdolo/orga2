@@ -61,8 +61,8 @@ void* mmu_inicializar_dir_tarea(int t)
 	// copiar(0x10000,z1)
 	// copiar(0x11000,z2)
 
-	copiar((int*) (0x10000+(t*0x2000)), (int*) p1_mar, 0x1000);
-	copiar((int*) (0x11000+(t*0x2000)), (int*) p2_mar, 0x1000);
+	copiar_int((int*) p1_mar, (int*) (0x10000 + (t * 0x2000)), 0x1000);
+	copiar_int((int*) p2_mar, (int*) (0x11000 + (t * 0x2000)), 0x1000);
 
 	return directorio;
 }
@@ -238,17 +238,15 @@ void* proximaPaginaLibreDelMar()
 
 
 
-void copiar(int* dest, int* source, int size)
+void copiar_int(int* dest, int* source, int size)
 {
 	int i;
 	size = size >> 2;
 	for (i = 0; i < size; i++)
 	{
-		(source)[i] = (dest)[i];
+		(dest)[i] = (source)[i];
 	}
-
-
-
+	
 }
 
 
