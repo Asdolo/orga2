@@ -34,6 +34,7 @@ void atender_teclado(int scancode);
 void fondear_c(int* cr3, int fisica);
 void canonear_c(char* destino, int fuente);
 void navegar_c(int fisica1, int fisica2);
+void actualizar_buffer();
 
 
 #endif  /* !__IDT_H__ */

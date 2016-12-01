@@ -11,6 +11,9 @@ BITS 32
 
 ;; SCREEN
 extern screen_proximo_reloj
+extern actualizar_buffer
+extern check_soy_bandera
+extern check_soy_tarea
 
 ;; PIC
 extern fin_intr_pic1
@@ -24,6 +27,9 @@ extern atender_teclado
 
 ;; sched
 extern sched_proximo_indice
+extern desalojarTareaActual
+extern isr_atender_excepcion
+extern quitarBitBusy
 
 ;; syscalls
 extern fondear_c
@@ -41,8 +47,11 @@ global proximo_reloj
 %define SYS_CANONEAR    0x83A
 %define SYS_NAVEGAR     0xAEF
 
+%define GDT_IDX_T_INIT_DESC         23
 %define GDT_IDX_T_IDLE_DESC         24
 
+%define CODIGO_ERROR_BANDERA_LLAMA_SYSCALL_50     50
+%define CODIGO_ERROR_TAREA_LLAMA_SYSCALL_66       66
 ;;
 ;; Definición de MACROS
 ;; -------------------------------------------------------------------------- ;;
@@ -52,9 +61,13 @@ global _isr%1
 
 _isr%1:
 .loopear:
+    call desalojarTareaActual
 
     push %1 ; le paso como parametro a C el número de excepción
     call isr_atender_excepcion
+
+    ; saltar a la tarea idle
+    jmp GDT_IDX_T_IDLE_DESC<<3:1234
 
     ; To Infinity And Beyond!!
     mov eax, 0xFFF2
@@ -110,18 +123,27 @@ ISR 19
 ;; -------------------------------------------------------------------------- ;;
 _isr32:
     pushad
+
+    str ax
+    push ax
+    call check_soy_tarea
+    add esp, 4
+
+
+
     ;call fin_intr_pic1
     ;call screen_proximo_reloj
 
     call sched_proximo_indice
 
     cmp ax,0
-	je .noJump
-	mov [selector], ax
-	call fin_intr_pic1
-                        ; xchg bx, bx
-	jmp far [offset]
-	jmp .end
+    ;xchg bx, bx
+  	je .noJump
+  	mov [selector], ax
+  	call fin_intr_pic1
+                          ; xchg bx, bx
+  	jmp far [offset]
+  	jmp .end
 
 
 .noJump:
@@ -151,15 +173,29 @@ _isr33:
 ;; Rutinas de atención de las SYSCALLS
 ;; -------------------------------------------------------------------------- ;;
 _isr80:
-    
     pushad
+
+    str ax
+    push ax
+    call check_soy_tarea
+    add esp, 4
+    cmp al, 1
+    je soy_tarea
+
+    ; SOY UNA BANDERA, IMPRIMO ERROR Y SALTO A SALTAR IDLE
+    push CODIGO_ERROR_BANDERA_LLAMA_SYSCALL_50 ; le paso como parametro a C el número de excepción
+    call isr_atender_excepcion
+    jmp fin_isr80
+
+
+soy_tarea:
     cmp eax, SYS_FONDEAR
     jne ask_canonear
     mov eax, cr3
     push ebx
     push eax
-    
-    call fondear_c    
+
+    call fondear_c
     add esp, 8
 
     jmp fin_isr80
@@ -167,11 +203,11 @@ _isr80:
 ask_canonear:
     cmp eax, SYS_CANONEAR
     jne ask_navegar
-    
+
     push ecx
     push ebx
 
-    
+
     call canonear_c
     add esp, 8
 
@@ -195,11 +231,56 @@ fin_isr80:
     jmp GDT_IDX_T_IDLE_DESC<<3:1234
     iret
 
-_isr102:
-    mov eax, 0x42
-    pushad
 
-    popad
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_isr102:
+    str ax
+    push ax
+    call check_soy_bandera
+    add esp, 4
+
+    cmp al, 1
+    je do_actualizar_buffer
+
+    ; SOY UNA TAREA, IMPRIMO ERROR Y SALTO A SALTAR IDLE
+    push CODIGO_ERROR_TAREA_LLAMA_SYSCALL_66 ; le paso como parametro a C el número de excepción
+    call isr_atender_excepcion
+    jmp _isr102_saltar_a_idle
+
+do_actualizar_buffer:
+    ; call actualizar_buffer si fue llamada por una bandera
+    ; sacamos el bit de busy
+    str ax
+    push ax
+    call quitarBitBusy
+    add esp, 4
+
+_isr102_saltar_a_idle:
+    ; harcodeamos la tarea init para que el contexto se guarde ahi y no tener
+    ; que restaurar la tss de la bandera
+    mov ax, GDT_IDX_T_INIT_DESC<<3
+    ltr ax
+
+    ; saltar a la tarea idle
+    jmp GDT_IDX_T_IDLE_DESC<<3:1234
     iret
 
 

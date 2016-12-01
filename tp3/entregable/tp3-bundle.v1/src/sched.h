@@ -21,8 +21,10 @@ unsigned int  banderaActual;
 char contadorTareas;
 char contadorBanderas;
 char cantTareasVivas;
-
-
+char check_soy_tarea(unsigned short tr);
+char check_soy_bandera(unsigned short tr);
+void desalojarTareaActual();
+void quitarBitBusy(unsigned short tr);
 
 
 int indicesTareas[8];

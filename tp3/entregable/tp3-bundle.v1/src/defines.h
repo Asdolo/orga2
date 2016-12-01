@@ -55,7 +55,7 @@
 #define GDT_IDX_T7_FLAG_DESC		39 // tss de la bandera de la tarea 7
 #define GDT_IDX_T8_FLAG_DESC		40 // tss de la bandera de la tarea 8
 
-    
+
 /* Direcciones de memoria */
 /* -------------------------------------------------------------------------- */
 #define BOOTSECTOR              	0x00001000 /* direccion fisica de comienzo del bootsector (copiado) */
@@ -100,6 +100,10 @@
 #define INT_ALIGNMENT_CHECK					17
 #define INT_MACHINE_CHECK					18
 #define INT_SIMD_FLOATING_POINT_EXCEPTION	19
+
+// Error especial cuando una tarea llama a la syscall 0x66
+#define CODIGO_ERROR_BANDERA_LLAMA_SYSCALL_50     50
+#define CODIGO_ERROR_TAREA_LLAMA_SYSCALL_66       66
 
 
 /* Direcciones virtuales de código, pila y datos */

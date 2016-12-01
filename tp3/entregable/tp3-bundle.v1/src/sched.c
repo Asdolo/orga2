@@ -8,6 +8,7 @@
 #include "sched.h"
 #include "defines.h"
 #include "i386.h"
+#include "gdt.h"
 
 char corriendoBanderas;
 unsigned int tareaActual;
@@ -25,6 +26,7 @@ void sched_inicializar() {
 	for(i=0;i<8;i++)
 	{
 		indicesTareas[i] = (GDT_IDX_T1_DESC+i)<<3;
+
 	}
 	for(i=0;i<8;i++)
 	{
@@ -34,7 +36,7 @@ void sched_inicializar() {
 	tareaActual = -1;
 	banderaActual = -1;
 	corriendoBanderas=0;
-	contadorTareas=0;
+	contadorTareas=-1;
 	contadorBanderas=0;
 	cantTareasVivas=8;
 }
@@ -47,11 +49,9 @@ unsigned short sched_proximo_indice() {
 
 		if(!corriendoBanderas)
 		{
-
 			// Me fijo si ya ejecuté 3 tareas
-			if(++contadorTareas==4)
+			if(++contadorTareas==3)
 			{
-				breakpoint();
 				// Ya corrí 3 tareas
 				// Empiezo a correr banderas
 				corriendoBanderas=1;
@@ -113,4 +113,61 @@ unsigned char buscarIndiceSiguienteViva(char esBandera)
 		}
 		return tareaActual;
 	}
+}
+
+
+
+void desalojarTareaActual()
+{
+	if (corriendoBanderas)
+	{
+		indicesTareas[banderaActual] = 0;
+		indicesBanderas[banderaActual] = 0;
+	}
+	else
+	{
+		indicesTareas[tareaActual] = 0;
+		indicesBanderas[tareaActual] = 0;
+	}
+
+	cantTareasVivas--;
+}
+
+
+char check_soy_tarea(unsigned short tr)
+{
+	tr = tr>>3;
+	if ((tr >= GDT_IDX_T1_FLAG_DESC && tr <= GDT_IDX_T8_FLAG_DESC) && tr != GDT_IDX_T_IDLE_DESC)
+	{
+		desalojarTareaActual();
+		return 0;
+	}
+
+	return 1;
+
+}
+
+
+char check_soy_bandera(unsigned short tr)
+{
+	tr = tr>>3;
+	if (tr >= GDT_IDX_T1_DESC && tr <= GDT_IDX_T8_DESC)
+	{
+		desalojarTareaActual();
+		return 0;
+	}
+
+	return 1;
+
+}
+
+
+
+
+
+
+void quitarBitBusy(unsigned short tr)
+{
+	tr = tr>>3;
+	gdt[tr].type = 0x9;
 }

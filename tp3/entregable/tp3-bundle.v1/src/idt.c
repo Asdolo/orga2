@@ -16,7 +16,7 @@
 
 
 int random=0;
-char* idt_mensajes_interrupciones[20] = {
+char* idt_mensajes_interrupciones[100] = {
 
     [INT_DIVIDE_ERROR]                      = "Divide error",
     [INT_NMI_INTERRUPT]                     = "NMI Interrupt",
@@ -35,8 +35,13 @@ char* idt_mensajes_interrupciones[20] = {
     [INT_X87_FPU_FLOATING_POINT_ERROR]      = "x87 FPU Floating-Point Error (Math Fault)",
     [INT_ALIGNMENT_CHECK]                   = "Alignment Check",
     [INT_MACHINE_CHECK]                     = "Machine Check",
-    [INT_SIMD_FLOATING_POINT_EXCEPTION]     = "SIMD Floating-Point Exception"
+    [INT_SIMD_FLOATING_POINT_EXCEPTION]     = "SIMD Floating-Point Exception",
 
+
+
+    // Errores de tareas, Sistema Operativo, etc (no del procesador)
+    [CODIGO_ERROR_TAREA_LLAMA_SYSCALL_66]   = "Error Tarea llama int 0x66",
+    [CODIGO_ERROR_BANDERA_LLAMA_SYSCALL_50] = "Error Bandera llama int 0x50"
 
 };
 
@@ -205,11 +210,25 @@ void navegar_c(int fisica1, int fisica2)
 {
     mmu_mapear_pagina(directorios_tareas[tareaActual], PAGINA1_VIRTUAL_TAREA, fisica1);
     mmu_mapear_pagina(directorios_tareas[tareaActual], PAGINA2_VIRTUAL_TAREA, fisica2);
-    
+
 
     copiar((int*) (direcciones_fisicas_tarea_pagina1[tareaActual]), (int*) fisica1, 0x1000);
     copiar((int*) (direcciones_fisicas_tarea_pagina2[tareaActual]), (int*) fisica2, 0x1000);
 
     direcciones_fisicas_tarea_pagina1[tareaActual] = (void*) fisica1;
     direcciones_fisicas_tarea_pagina2[tareaActual] = (void*) fisica2;
+}
+
+
+void actualizar_buffer()
+{
+  if (modo_pantalla == 1)
+  {
+      copiar((int*) BUFFER_MAPA, (int*) VIDEO, 4000);
+
+  }
+  else
+  {
+    copiar((int*) BUFFER_ESTADO, (int*) VIDEO, 4000);
+  }
 }
