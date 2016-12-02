@@ -29,6 +29,7 @@ void* directorios_tareas[8];
 
 void* direcciones_fisicas_tarea_pagina1[8];
 void* direcciones_fisicas_tarea_pagina2[8];
+void* direcciones_fisicas_tarea_ancla[8];
 
 /*
 void* proximaPaginaLibre();

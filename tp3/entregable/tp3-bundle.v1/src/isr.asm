@@ -12,6 +12,8 @@ BITS 32
 ;; SCREEN
 extern check_soy_bandera
 extern check_soy_tarea
+extern flamear_bandera
+extern screen_print_grupo
 
 ;; PIC
 extern fin_intr_pic1
@@ -19,6 +21,31 @@ extern fin_intr_pic1
 ;; EXCEPCIONES
 extern isr_atender_excepcion
 
+;; Variables
+ 
+extern eax_error
+extern ebx_error;
+extern ecx_error;
+extern edx_error;
+extern esi_error;
+extern edi_error;
+extern ebp_error;
+extern esp_error;
+extern eip_error;
+extern cr0_error;
+extern cr2_error;
+extern cr3_error;
+extern cr4_error;
+extern cs_error;
+extern ds_error;
+extern es_error;
+extern fs_error;
+extern gs_error;
+extern ss_error;
+extern eflags_error;
+ 
+ 
+extern imprimirRegistros
 
 ;; INTERRUPCIONES
 extern atender_teclado
@@ -58,6 +85,43 @@ global _isr%1
 
 _isr%1:
 .loopear:
+    mov [eax_error],eax
+    mov [ebx_error],ebx
+    mov [ecx_error],ecx
+    mov [edx_error],edx
+    mov [esi_error],esi
+    mov [edi_error],edi
+    mov [ebp_error],ebp
+    mov [esp_error],esp
+    mov eax,[esp+8]
+    mov [eip_error],eax
+   
+    mov eax,cr0
+    mov [cr0_error],eax
+    mov eax,cr2
+    mov [cr2_error],eax
+    mov eax,cr3
+    mov [cr3_error],eax
+    mov eax,cr4
+    mov [cr4_error],eax
+ 
+    mov ax,[esp+8];
+    mov [cs_error],ax
+    mov ax,ds
+    mov [ds_error],ax
+    mov ax,es
+    mov [es_error],ax
+    mov ax,fs
+    mov [fs_error],ax
+     mov ax,gs
+    mov [gs_error],ax
+    mov ax,ss
+    mov [ss_error],ax
+    mov eax,[esp+12]
+    mov [eflags_error],eax
+    call imprimirRegistros
+
+
     call desalojarTareaActual
 
     push %1 ; le paso como parametro a C el número de excepción
@@ -121,6 +185,8 @@ ISR 19
 _isr32:
     pushad
 
+    call screen_print_grupo
+
     str ax
     push ax
     call check_soy_tarea
@@ -128,8 +194,11 @@ _isr32:
 
     call sched_proximo_indice
     cmp ax, 0
-    
   	je .noJump
+    str bx
+    cmp ax,bx
+    je .noJump
+
   	mov [selector], ax
   	call fin_intr_pic1
                           ; xchg bx, bx
@@ -188,6 +257,14 @@ _isr80:
     ; SOY UNA BANDERA, IMPRIMO ERROR Y SALTO A SALTAR IDLE
     push CODIGO_ERROR_BANDERA_LLAMA_SYSCALL_50 ; le paso como parametro a C el número de excepción
     call isr_atender_excepcion
+
+
+
+
+
+
+
+
     jmp fin_isr80
 
 
@@ -271,6 +348,7 @@ _isr102:
 
 do_actualizar_buffer:
     ; call actualizar_buffer si fue llamada por una bandera
+    call flamear_bandera
     ; sacamos el bit de busy
     str ax
     push ax

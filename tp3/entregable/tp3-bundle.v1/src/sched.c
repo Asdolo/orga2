@@ -95,6 +95,7 @@ unsigned short sched_proximo_indice() {
 // Devuelve el índice en el arreglo de la siguiente tarea/bandera viva
 unsigned char buscarIndiceSiguienteViva(char esBandera)
 {
+
 	if (esBandera)
 	{
 		banderaActual = (banderaActual + 1)%8;

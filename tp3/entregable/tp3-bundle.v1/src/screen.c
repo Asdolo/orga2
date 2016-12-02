@@ -11,8 +11,10 @@
 #include "idt.h"
 #include "isr.h"
 #include "mmu.h"
+#include "sched.h"
+#include "i386.h"
 
-char* nombre_grupo = "Burj Al Arab - Tom Wright";
+char* nombre_grupo = "Burj Al Arab";
 
 char modo_pantalla = 0;
 // 0 = modo estado
@@ -212,7 +214,18 @@ void screen_limpiar()
 
 void screen_print_grupo()
 {
+	screen_colorear(0, 0, 79, 0, 0, 0);
 	screen_imprimir(nombre_grupo, C_FG_WHITE, C_BG_GREEN, 0, 1, 0, 1, 0);
+
+	int i;
+	for(i = 0; i < 11; i++)
+	{
+		char backup = nombre_grupo[i];
+		nombre_grupo[i] = nombre_grupo[i+1];
+		nombre_grupo[11-i] = backup;
+	}
+
+
 
 }
 
@@ -234,7 +247,7 @@ void actualizar_pantalla()
 
 
 
-void screen_modo_estado()
+void screen_preparar_modo_estado()
 {
 	screen_limpiar();
 	screen_colorear(0, 0, 79, 1, C_BG_BLACK, 0);
@@ -349,7 +362,7 @@ void screen_modo_estado()
 }
 
 
-void screen_modo_mapa()
+void screen_preparar_modo_mapa()
 {
 	screen_limpiar();
 	screen_colorear(0, 0, 79, 2, C_BG_GREEN, 1);
@@ -379,3 +392,44 @@ void int_to_string_hex8(int numero, char str[9])
     
     
 }
+
+
+
+void flamear_bandera()
+{
+
+	int i = 0;
+
+	if (banderaActual < 4)
+	{
+		for(i = 0; i < 5; i++)
+		{
+			copiar_bytes((char*) BUFFER_ESTADO + VIDEO_FLAG1_OFFSET + (banderaActual * 24) + (160*i), (char*) BANDERA_BUFFER + (i*20), 20);
+		}
+	}
+	else
+	{
+		for(i = 0; i < 5; i++)
+		{
+			copiar_bytes((char*) BUFFER_ESTADO + VIDEO_FLAG5_OFFSET + ((banderaActual-4) * 24) + (160*i), (char*) BANDERA_BUFFER + (i*20), 20);
+		}
+	}
+	
+
+	actualizar_pantalla();
+	
+}
+
+void screen_actualizar_paginacion_tarea(int pagina, int fisica)
+{
+	char direccion_formateada[9];	
+	int_to_string_hex8(fisica, direccion_formateada);
+
+	screen_imprimir(direccion_formateada, C_FG_BLACK, C_BG_BLUE, 0, 8 + (pagina*14), 16 + tareaActual, 0, 0);
+
+
+}
+
+
+
+

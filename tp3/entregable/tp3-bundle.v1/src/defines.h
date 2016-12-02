@@ -138,4 +138,8 @@
 
 #define TASK_IDLE_CODE_SRC_ADDR 0x00020000
 
+
+ #define BANDERA_BUFFER  0x40001000
+
+
 #endif  /* !__DEFINES_H__ */

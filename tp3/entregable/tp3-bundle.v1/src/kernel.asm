@@ -56,8 +56,8 @@ extern screen_limpiar
 extern screen_colorear
 extern screen_imprimir
 extern screen_blink_colors
-extern screen_modo_estado
-extern screen_modo_mapa
+extern screen_preparar_modo_estado
+extern screen_preparar_modo_mapa
 extern actualizar_pantalla
 
 ;; GDT
@@ -158,7 +158,6 @@ start:
 
     ; inicializar el manejador de memoria
     call mmu_inicializar_dir_kernel
-    ; xchg bx, bx
 
     ; inicializar el directorio de paginas
     mov eax, DIRECTORIO_PAGINAS_KERNEL_POS
@@ -197,21 +196,13 @@ start:
 
 
     ; Pongo algo en el buffer de estado
-    call screen_modo_estado
+    call screen_preparar_modo_estado
 
     ; Pongo algo en el buffer de mapa
-    call screen_modo_mapa
+    call screen_preparar_modo_mapa
 
     ; Como la variable global modo_pantalla (screen.h) arranca en 0, arranca en modo estado
     call actualizar_pantalla
-
-
-    ; divido por cero para probar
-    ;mov ax, 56
-    ;mov bl, 0
-    ;div bl
-
-
 
 
     ; configurar controlador de interrupciones
@@ -221,7 +212,6 @@ start:
 
 
     ; cargar la tarea inicial
-    ; xchg bx, bx
     mov ax, GDT_IDX_T_INIT_DESC<<3
     ltr ax
     sti ; las interrupciones recien se habilitan luego de ejecutar la siguiente instrucción

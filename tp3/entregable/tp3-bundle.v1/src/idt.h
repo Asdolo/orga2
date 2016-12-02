@@ -36,5 +36,28 @@ void canonear_c(char* destino, int fuente);
 void navegar_c(int fisica1, int fisica2);
 void actualizar_buffer();
 
+void marcar_en_mapa(int fisica, char c, char bgcolor);
+
+extern int eax_error;
+extern int ebx_error;
+extern int ecx_error;
+extern int edx_error;
+extern int esi_error;
+extern int edi_error;
+extern int ebp_error;
+extern int esp_error;
+extern int eip_error;
+extern int cr0_error;
+extern int cr2_error;
+extern int cr3_error;
+extern int cr4_error;
+extern short cs_error;
+extern short ds_error;
+extern short es_error;
+extern short fs_error;
+extern short gs_error;
+extern short ss_error;
+extern int eflags_error;
+void imprimirRegistros();
 
 #endif  /* !__IDT_H__ */
