@@ -46,11 +46,11 @@ void* mmu_inicializar_dir_tarea(int t)
 
 	void* p1_mar = proximaPaginaLibreDelMar();
 	void* p2_mar = proximaPaginaLibreDelMar();
-	void* p3_tierra = 0x00;
+	void* p3_tierra = (void*) (0x00);
 
 	direcciones_fisicas_tarea_pagina1[t] = (void*) p1_mar;
 	direcciones_fisicas_tarea_pagina2[t] = (void*) p2_mar;
-	direcciones_fisicas_tarea_ancla[t] = 0x00;
+	direcciones_fisicas_tarea_ancla[t] = p3_tierra;
 
 	mmu_mapear_pagina((int*) directorio, PAGINA1_VIRTUAL_TAREA, (int) p1_mar);
 	mmu_mapear_pagina((int*) directorio, PAGINA2_VIRTUAL_TAREA, (int) p2_mar);
@@ -250,7 +250,7 @@ void copiar_int(int* dest, int* source, int size)
 	{
 		(dest)[i] = (source)[i];
 	}
-	
+
 }
 
 

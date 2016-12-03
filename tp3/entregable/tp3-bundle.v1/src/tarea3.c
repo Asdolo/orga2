@@ -72,7 +72,7 @@ unsigned char *bandera()
             buffer[fil][col].c = 220;
 
             if (col < *b)
-                buffer[fil][col].a = C_BG_GREEN | C_FG_MAGENTA;
+                buffer[fil][col].a = (0x2 << 4) | C_FG_MAGENTA;
             else
                buffer[fil][col].a = C_BG_MAGENTA | C_FG_BLUE;
         }

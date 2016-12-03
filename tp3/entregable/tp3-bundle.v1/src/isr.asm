@@ -14,7 +14,7 @@ extern check_soy_bandera
 extern check_soy_tarea
 extern flamear_bandera
 extern screen_print_grupo
-
+extern girar_reloj
 ;; PIC
 extern fin_intr_pic1
 
@@ -22,7 +22,7 @@ extern fin_intr_pic1
 extern isr_atender_excepcion
 
 ;; Variables
- 
+
 extern eax_error
 extern ebx_error;
 extern ecx_error;
@@ -43,8 +43,8 @@ extern fs_error;
 extern gs_error;
 extern ss_error;
 extern eflags_error;
- 
- 
+
+
 extern imprimirRegistros
 
 ;; INTERRUPCIONES
@@ -95,7 +95,7 @@ _isr%1:
     mov [esp_error],esp
     mov eax,[esp+8]
     mov [eip_error],eax
-   
+
     mov eax,cr0
     mov [cr0_error],eax
     mov eax,cr2
@@ -104,7 +104,7 @@ _isr%1:
     mov [cr3_error],eax
     mov eax,cr4
     mov [cr4_error],eax
- 
+
     mov ax,[esp+8];
     mov [cs_error],ax
     mov ax,ds
@@ -152,6 +152,8 @@ selector:
  dw 0x00 ; basura, total se va a sobreescribir
 
 
+%define CANT_CLOCKS 1
+clock_granularity:  db CANT_CLOCKS;
 
 ;;
 ;; Rutina de atención de las EXCEPCIONES
@@ -185,6 +187,11 @@ ISR 19
 _isr32:
     pushad
 
+    dec byte [clock_granularity]
+    jnz .noJump
+
+    mov byte [clock_granularity], CANT_CLOCKS
+
     call screen_print_grupo
 
     str ax
@@ -195,13 +202,16 @@ _isr32:
     call sched_proximo_indice
     cmp ax, 0
   	je .noJump
+
     str bx
     cmp ax,bx
     je .noJump
 
   	mov [selector], ax
   	call fin_intr_pic1
-                          ; xchg bx, bx
+
+    call girar_reloj
+
   	jmp far [offset]
   	jmp .end
 
@@ -245,7 +255,7 @@ _isr80:
     call check_soy_tarea
     cmp al, 1
     pop ax
-    
+
     ; restauro los parametros de la syscall
     pop ecx
     pop ebx
@@ -309,7 +319,7 @@ fin_isr80:
 
     ; saltar a la tarea idle
     jmp GDT_IDX_T_IDLE_DESC<<3:1234
-    
+
     iret
 
 
@@ -364,4 +374,3 @@ _isr102_saltar_a_idle:
     ; saltar a la tarea idle
     jmp GDT_IDX_T_IDLE_DESC<<3:1234
     iret
-

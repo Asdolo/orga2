@@ -58,7 +58,7 @@ unsigned char *bandera()
     for (fil = 0; fil < 5; fil++) {
         for (col = 0; col < 10; col++) {
             buffer[fil][col].c = 176 + (*b);
-            buffer[fil][col].a = C_BG_BLACK | C_FG_LIGHT_CYAN;
+            buffer[fil][col].a = C_BG_BLACK | (0xB);
         }
     }
 

@@ -37,6 +37,7 @@ void navegar_c(int fisica1, int fisica2);
 void actualizar_buffer();
 
 void marcar_en_mapa(int fisica, char c, char bgcolor);
+char leer_del_mapa(int fisica);
 
 extern int eax_error;
 extern int ebx_error;

@@ -110,9 +110,6 @@ start:
     ; Deshabilitar interrupciones
     cli
 
-    ; Imprimir mensaje de bienvenida
-
-
 	; macro
     imprimir_texto_mr iniciando_mr_msg, iniciando_mr_len, 0x07, 0, 0
 
@@ -214,7 +211,9 @@ start:
     ; cargar la tarea inicial
     mov ax, GDT_IDX_T_INIT_DESC<<3
     ltr ax
-    sti ; las interrupciones recien se habilitan luego de ejecutar la siguiente instrucción
+
+
+    sti ; las interrupciones recien se habilitan luego de ejecutar la siguiente instrucción (gracias Intel!)
 
     ; saltar a la tarea idle
     jmp GDT_IDX_T_IDLE_DESC<<3:1234

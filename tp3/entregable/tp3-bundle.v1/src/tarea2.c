@@ -66,9 +66,9 @@ unsigned char *bandera()
             buffer[fil][col].c = ' ';
 
             if (col < *b)
-                buffer[fil][col].a = C_BG_GREEN | C_FG_GREEN;
+                buffer[fil][col].a = (0x2 << 4) | C_FG_GREEN;
             else
-                buffer[fil][col].a = C_BG_BLUE | C_FG_BLUE;
+                buffer[fil][col].a = (0x1 << 4) | C_FG_BLUE;
         }
     }
 

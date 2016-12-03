@@ -18,27 +18,27 @@
 int random=0;
 char* idt_mensajes_interrupciones[100] = {
 
-    [INT_DIVIDE_ERROR]                      = "Divide error              ",
-    [INT_NMI_INTERRUPT]                     = "NMI Interrupt             ",
-    [INT_BREAKPOINT]                        = "Breakpoint                ",
-    [INT_OVERFLOW]                          = "Overflow                  ",
-    [INT_BOUND_RANGE_EXCEEDED]              = "BOUND Range Exceeded      ",
-    [INT_INVALID_OPCODE]                    = "Invalid Opcode            ",
-    [INT_DEVICE_NOT_AVAILABLE]              = "Device Not Available      ",
-    [INT_DOUBLE_FAULT]                      = "Double fault              ",
-    [INT_COMPRESSOR_SEGMENT_OVERRUN]        = "Coprocessor Overrun       ",
-    [INT_INVALID_TSS]                       = "Invalid TSS               ",
-    [INT_SEGMENT_NOT_PRESSENT]              = "Segment Not Present       ",
-    [INT_STACK_SEGMENT_FAULT]               = "Stack-Segment Fault       ",
-    [INT_GENERAL_PROTECTION]                = "General Protection        ",
-    [INT_PAGE_FAULT]                        = "Page Fault                ",
-    [INT_X87_FPU_FLOATING_POINT_ERROR]      = "x87 FPU Floating-Point    ",
-    [INT_ALIGNMENT_CHECK]                   = "Alignment Check           ",
-    [INT_MACHINE_CHECK]                     = "Machine Check             ",
-    [INT_SIMD_FLOATING_POINT_EXCEPTION]     = "SIMD Floating-Point Error ",
+    [INT_DIVIDE_ERROR]                      = "Divide error             ",
+    [INT_NMI_INTERRUPT]                     = "NMI Interrupt            ",
+    [INT_BREAKPOINT]                        = "Breakpoint               ",
+    [INT_OVERFLOW]                          = "Overflow                 ",
+    [INT_BOUND_RANGE_EXCEEDED]              = "BOUND Range Exceeded     ",
+    [INT_INVALID_OPCODE]                    = "Invalid Opcode           ",
+    [INT_DEVICE_NOT_AVAILABLE]              = "Device Not Available     ",
+    [INT_DOUBLE_FAULT]                      = "Double fault             ",
+    [INT_COMPRESSOR_SEGMENT_OVERRUN]        = "Coprocessor Overrun      ",
+    [INT_INVALID_TSS]                       = "Invalid TSS              ",
+    [INT_SEGMENT_NOT_PRESSENT]              = "Segment Not Present      ",
+    [INT_STACK_SEGMENT_FAULT]               = "Stack-Segment Fault      ",
+    [INT_GENERAL_PROTECTION]                = "General Protection       ",
+    [INT_PAGE_FAULT]                        = "Page Fault               ",
+    [INT_X87_FPU_FLOATING_POINT_ERROR]      = "x87 FPU Floating-Point   ",
+    [INT_ALIGNMENT_CHECK]                   = "Alignment Check          ",
+    [INT_MACHINE_CHECK]                     = "Machine Check            ",
+    [INT_SIMD_FLOATING_POINT_EXCEPTION]     = "SIMD Floating-Point Error",
     // Errores de tareas, Sistema Operativo, etc (no del procesador)
-    [CODIGO_ERROR_TAREA_LLAMA_SYSCALL_66]   = "int 0x66 error            ",
-    [CODIGO_ERROR_BANDERA_LLAMA_SYSCALL_50] = "int 0x50 error            "
+    [CODIGO_ERROR_TAREA_LLAMA_SYSCALL_66]   = "int 0x66 error           ",
+    [CODIGO_ERROR_BANDERA_LLAMA_SYSCALL_50] = "int 0x50 error           "
 
 };
 
@@ -83,7 +83,7 @@ short gs_error;
 short ss_error;
 int eflags_error;
 
-
+void* ultimo_misil = (void*) (0xEFE000);
 
 
 
@@ -166,20 +166,42 @@ void isr_atender_excepcion(int exception){
     screen_imprimir(idt_mensajes_interrupciones[exception], C_FG_WHITE, C_BG_RED, 0, 50, 1, 0, 0);
 
     char tareaOBandera[3];
+    int laQueMurio;
 
     if (corriendoBanderas)
     {
+        laQueMurio = banderaActual;
         tareaOBandera[0] = 'B';
-        tareaOBandera[1] = banderaActual + 0x30;
+        tareaOBandera[1] = banderaActual + 0x30 + 1;
     }
     else
     {
+        laQueMurio = tareaActual;
         tareaOBandera[0] = 'T';
-        tareaOBandera[1] = tareaActual + 0x30;
-    } 
+        tareaOBandera[1] = tareaActual + 0x30 + 1;
+    }
     tareaOBandera[2] = 0;
 
     screen_imprimir((char*) tareaOBandera, C_FG_WHITE, C_BG_GREEN, 0, 76, 1, 1, 0);
+
+
+    char buffer[9];
+    screen_colorear(2, 16 + laQueMurio, 78, 16 + laQueMurio, C_BG_RED, 0);
+
+    screen_imprimir("P1:0x", C_FG_WHITE, C_BG_BLUE, 0, 3, 16+laQueMurio, 1, 0);
+  	screen_imprimir("P2:0x", C_FG_WHITE, C_BG_BLUE, 0, 17, 16+laQueMurio, 1, 0);
+  	screen_imprimir("P3:0x", C_FG_WHITE, C_BG_BLUE, 0, 31, 16+laQueMurio, 1, 0);
+
+    int_to_string_hex8((int) direcciones_fisicas_tarea_pagina1[laQueMurio], buffer);
+    screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_BLACK, 0, 8, 16+laQueMurio, 1, 0);
+
+		int_to_string_hex8((int) direcciones_fisicas_tarea_pagina2[laQueMurio], buffer);
+    screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_BLACK, 0, 22, 16+laQueMurio, 1, 0);
+
+		int_to_string_hex8((int) direcciones_fisicas_tarea_ancla[laQueMurio], buffer);
+    screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_BLACK, 0, 36, 16+laQueMurio, 1, 0);
+
+    screen_imprimir(idt_mensajes_interrupciones[exception], C_FG_WHITE, C_BG_RED, 0, 54, 16+laQueMurio, 1, 0);
 
 
     actualizar_pantalla();
@@ -217,17 +239,44 @@ void marcar_en_mapa(int fisica, char c, char bgcolor)
     screen_imprimir((char*) buffer, C_BG_LIGHT_GREY, bgcolor, 0, x, y, 0, 1);
 }
 
+char leer_del_mapa(int fisica)
+{
+  int numero_de_pagina = fisica >> 12;
+
+  char res;
+
+  res = *((char*) (BUFFER_MAPA + (numero_de_pagina*2)));
+
+  return res;
+}
+
 void fondear_c(int* cr3, int fisica)
 {
-    int ancla_vieja = (int) direcciones_fisicas_tarea_ancla[tareaActual];
+
     mmu_mapear_pagina(cr3, PAGINA_ANCLA_VIRTUAL_TAREA, fisica);
 
+
+    // Mostramos el ancla nueva en la pantalla de estado
+    char buffer[9];
+    int_to_string_hex8((int) fisica, buffer);
+    screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_BLACK, 0, 36, 16+tareaActual, 1, 0);
+
+
+    int ancla_vieja = (int) direcciones_fisicas_tarea_ancla[tareaActual];
     // Despintamos el ancla vieja
     marcar_en_mapa(ancla_vieja, ' ', C_FG_GREEN);
 
-    // Pintamos el ancla nueva
-    marcar_en_mapa(fisica, (char) (tareaActual + 0x30), C_FG_RED);
+    char letra = leer_del_mapa(fisica);
 
+    if (letra >= 0x31 && letra <= 0x38)
+    {
+      // Pintamos el ancla nueva con una X
+      marcar_en_mapa(fisica, 'X', C_FG_RED);
+    }
+    else
+    {
+      marcar_en_mapa(fisica, (char) (tareaActual + 0x30 + 1), C_FG_RED);
+    }
     actualizar_pantalla();
 
     direcciones_fisicas_tarea_ancla[tareaActual] = (void*) fisica;
@@ -248,6 +297,16 @@ void canonear_c(char* destino, int fuente)
     }
 
     copiar_bytes(destino, fuenteFisica, 97);
+
+
+    // Despintamos lel misil anterior
+    marcar_en_mapa((int) ultimo_misil, ' ', C_FG_BLUE);
+    // Pintamos el nuevo misil
+    marcar_en_mapa((int) destino, ' ', C_BG_MAGENTA);
+
+    actualizar_pantalla();
+
+    ultimo_misil = (void*) destino;
 }
 
 void navegar_c(int fisica1, int fisica2)
@@ -259,6 +318,52 @@ void navegar_c(int fisica1, int fisica2)
     copiar_int((int*) fisica1, direcciones_fisicas_tarea_pagina1[tareaActual], 0x1000);
     copiar_int((int*) fisica2, direcciones_fisicas_tarea_pagina2[tareaActual], 0x1000);
 
+
+
+
+    // Mostramos las nuevas paginas en la pantalla de estado
+
+    char buffer[9];
+    int_to_string_hex8((int) fisica1, buffer);
+    screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_BLACK, 0, 8, 16+tareaActual, 1, 0);
+
+    int_to_string_hex8((int) fisica2, buffer);
+    screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_BLACK, 0, 22, 16+tareaActual, 1, 0);
+
+
+
+    int p1_vieja = (int) direcciones_fisicas_tarea_pagina1[tareaActual];
+    int p2_vieja = (int) direcciones_fisicas_tarea_pagina2[tareaActual];
+
+
+    // Despintamos las paginas viejas
+    marcar_en_mapa(p1_vieja, ' ', C_FG_BLUE);
+    marcar_en_mapa(p2_vieja, ' ', C_FG_BLUE);
+
+    char letra1 = leer_del_mapa(fisica1);
+    char letra2 = leer_del_mapa(fisica2);
+
+    if (letra1 >= 0x31 && letra1 <= 0x38)
+    {
+      // Pintamos la pagina nueva nueva con una X
+      marcar_en_mapa(fisica1, 'X', C_FG_RED);
+    }
+    else
+    {
+      marcar_en_mapa(fisica1, (char) (tareaActual + 0x30 + 1), C_FG_RED);
+    }
+    if (letra2 >= 0x31 && letra2 <= 0x38)
+    {
+      // Pintamos la pagina nueva nueva con una X
+      marcar_en_mapa(fisica2, 'X', C_FG_RED);
+    }
+    else
+    {
+      marcar_en_mapa(fisica2, (char) (tareaActual + 0x30 + 1), C_FG_RED);
+    }
+    actualizar_pantalla();
+
+    // Actualizo las paginas nuevas en el arreglo
     direcciones_fisicas_tarea_pagina1[tareaActual] = (void*) fisica1;
     direcciones_fisicas_tarea_pagina2[tareaActual] = (void*) fisica2;
 }
@@ -274,69 +379,69 @@ void navegar_c(int fisica1, int fisica2)
 
 
 void imprimirRegistros(){
-   
+
     char buffer[9];
-   
+
     int_to_string_hex8(eax_error,buffer);
     screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_GREEN, 0, 55, 2, 1, 0);
- 
+
     int_to_string_hex8(ebx_error,buffer);
     screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_GREEN, 0, 55, 3, 1, 0);
- 
+
     int_to_string_hex8(ecx_error,buffer);
     screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_GREEN, 0, 55, 4, 1, 0);
- 
+
     int_to_string_hex8(edx_error,buffer);
     screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_GREEN, 0, 55, 5, 1, 0);
-   
+
     int_to_string_hex8(esi_error,buffer);
     screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_GREEN, 0, 55, 6, 1, 0);
- 
+
     int_to_string_hex8(edi_error,buffer);
     screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_GREEN, 0, 55, 7, 1, 0);
- 
+
     int_to_string_hex8(ebp_error,buffer);
     screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_GREEN, 0, 55, 8, 1, 0);
- 
+
     int_to_string_hex8(esp_error,buffer);
     screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_GREEN, 0, 55, 9, 1, 0);
- 
+
     int_to_string_hex8(eip_error,buffer);
     screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_GREEN, 0, 55, 10, 1, 0);
- 
+
     int_to_string_hex8(cr0_error,buffer);
     screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_GREEN, 0, 55, 11, 1, 0);
- 
+
     int_to_string_hex8(cr2_error,buffer);
     screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_GREEN, 0, 55, 12, 1, 0);
- 
+
     int_to_string_hex8(cr3_error,buffer);
     screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_GREEN, 0, 55, 13, 1, 0);
- 
+
     int_to_string_hex8(cr4_error,buffer);
     screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_GREEN, 0, 55, 14, 1, 0);
- 
+
     int_to_string_hex8((int)cs_error,buffer);
     screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_GREEN, 0, 69, 2, 1, 0);
- 
+
     int_to_string_hex8((int)ds_error,buffer);
     screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_GREEN, 0, 69, 3, 1, 0);
- 
+
     int_to_string_hex8((int)es_error,buffer);
     screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_GREEN, 0, 69, 4, 1, 0);
- 
+
     int_to_string_hex8((int)fs_error,buffer);
     screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_GREEN, 0, 69, 5, 1, 0);
- 
+
     int_to_string_hex8((int)gs_error,buffer);
     screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_GREEN, 0, 69, 6, 1, 0);
- 
+
     int_to_string_hex8((int)ss_error,buffer);
     screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_GREEN, 0, 69, 7, 1, 0);
- 
- 
+
+
     int_to_string_hex8((int)eflags_error,buffer);
     screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_GREEN, 0, 69, 10, 1, 0);
- 
- 
+
+
 }

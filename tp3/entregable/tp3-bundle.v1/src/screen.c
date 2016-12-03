@@ -17,6 +17,17 @@
 char* nombre_grupo = "Burj Al Arab";
 
 char modo_pantalla = 0;
+
+int indicador_clock_tareas[8];
+int indicador_clock_banderas[8];
+char* lineas[4] =
+{
+	[0] = "|",
+	[1] = "/",
+	[2] = "-",
+	[3] = "\\"
+};
+
 // 0 = modo estado
 // 1 = modo mapa
 
@@ -32,14 +43,14 @@ char forecolor: color del texto a imprimir, según esta tabla:
 
 forecolor table:
 Value 	Color
-0 		BLACK 	
-1 		BLUE 	
-2 		GREEN 	
-3 		CYAN 	
-4 		RED 	
-5 		MAGENTA 	
-6 		BROWN 	
-7 		LIGHT GREY 	
+0 		BLACK
+1 		BLUE
+2 		GREEN
+3 		CYAN
+4 		RED
+5 		MAGENTA
+6 		BROWN
+7 		LIGHT GREY
 8 		DARK GREY
 9 		LIGHT BLUE
 10 		LIGHT GREEN
@@ -85,7 +96,7 @@ void screen_imprimir(char* mensaje, char forecolor, char bgcolor, char blink, ch
 	// El mensaje tiene que terminar en null
 	// C ya hace eso con los strings entre comillas
 
-	if (x >= 0 && x <= VIDEO_COLS){		
+	if (x >= 0 && x <= VIDEO_COLS){
 		if (y >= 0 && y <= VIDEO_FILS){
 			// posicion valida
 
@@ -93,7 +104,7 @@ void screen_imprimir(char* mensaje, char forecolor, char bgcolor, char blink, ch
 
 
 			char attr;
-			
+
 			// limpio la partes altas de forecolor
 			forecolor = forecolor & 0x0F;
 
@@ -109,7 +120,7 @@ void screen_imprimir(char* mensaje, char forecolor, char bgcolor, char blink, ch
 
 				attr = forecolor + bgcolor + blink;
 			}
-			
+
 
 			char charActual = *(mensaje);
 			short elemento;
@@ -143,13 +154,13 @@ void screen_imprimir(char* mensaje, char forecolor, char bgcolor, char blink, ch
 
 					// calculo dónde escribir el short correspondiente al char actual del mensaje
 					short* pos = (short*)(bufferActual + x*2 + y*80*2 + i*2);
-	
+
 					// Lo escribo en memoria
 					*pos = elemento;
 				}
 
-				
-				
+
+
 
 				// Incremento el contador
 				i++;
@@ -163,7 +174,7 @@ void screen_imprimir(char* mensaje, char forecolor, char bgcolor, char blink, ch
 
 void screen_colorear(char fromX, char fromY, char toX, char toY, char bgcolor, char buffer)
 {
-	
+
 	int bufferActual;
 	switch (buffer)
 	{
@@ -182,7 +193,7 @@ void screen_colorear(char fromX, char fromY, char toX, char toY, char bgcolor, c
 	if (toX > VIDEO_COLS) return;
 	if (toY > VIDEO_FILS) return;
 
-	if (fromX >= 0 && fromX <= toX){		
+	if (fromX >= 0 && fromX <= toX){
 		if (fromY >= 0 && fromY <= toY){
 
 			// limpio las partes altas
@@ -198,9 +209,9 @@ void screen_colorear(char fromX, char fromY, char toX, char toY, char bgcolor, c
 				for (actualX = fromX; actualX <= toX; actualX++){
 					short* pos = (short*)(bufferActual + actualX*2 + actualY*80*2);
 					*pos = ((short) bgcolor) << 8;
-				}	
+				}
 			}
-			
+
 		}
 	}
 }
@@ -259,11 +270,11 @@ void screen_preparar_modo_estado()
 	// Imprimo el ultimo problema
 	screen_colorear(50, 1, 77, 1, C_BG_RED, 0);
 	screen_imprimir(idt_ultimo_problema, C_FG_WHITE, C_BG_GREEN, 0, 50, 1, 1, 0);
-	
+
 	char asd1[9];
-	
+
 	int_to_string_hex8(0x6789ABCD, asd1);
-	
+
 	screen_imprimir("EAX", C_FG_WHITE, C_BG_GREEN, 0, 51, 2, 1, 0);
 	screen_imprimir(asd1, C_FG_WHITE, C_BG_GREEN, 0, 55, 2, 1, 0);
 
@@ -322,7 +333,7 @@ void screen_preparar_modo_estado()
 	screen_imprimir("SS", C_FG_WHITE, C_BG_GREEN, 0, 66, 7, 1, 0);
 	screen_imprimir(asd1, C_FG_WHITE, C_BG_GREEN, 0, 69, 7, 1, 0);
 
-	
+
 	screen_imprimir("EFLAGS", C_FG_WHITE, C_BG_GREEN, 0, 66, 9, 1, 0);
 	screen_imprimir(asd1, C_FG_WHITE, C_BG_GREEN, 0, 69, 10, 1, 0);
 
@@ -345,20 +356,95 @@ void screen_preparar_modo_estado()
 	screen_imprimir("NAVIO 8", C_FG_BLACK, C_BG_GREEN, 0, 41, 9, 1, 0);
 	screen_colorear(38, 10, 47, 14, C_BG_BLACK, 0);
 
+
+
+
+
 	screen_colorear(2, 16, 78, 23, C_BG_BLUE, 0);
+
+
 	screen_imprimir("1", C_FG_BLACK, C_BG_GREEN, 0, 1, 16, 1, 0);
+	screen_imprimir("P1:0x", C_FG_WHITE, C_BG_BLUE, 0, 3, 16, 1, 0);
+	screen_imprimir("P2:0x", C_FG_WHITE, C_BG_BLUE, 0, 17, 16, 1, 0);
+	screen_imprimir("P3:0x", C_FG_WHITE, C_BG_BLUE, 0, 31, 16, 1, 0);
+
 	screen_imprimir("2", C_FG_BLACK, C_BG_GREEN, 0, 1, 17, 1, 0);
+	screen_imprimir("P1:0x", C_FG_WHITE, C_BG_BLUE, 0, 3, 17, 1, 0);
+	screen_imprimir("P2:0x", C_FG_WHITE, C_BG_BLUE, 0, 17, 17, 1, 0);
+	screen_imprimir("P3:0x", C_FG_WHITE, C_BG_BLUE, 0, 31, 17, 1, 0);
+
 	screen_imprimir("3", C_FG_BLACK, C_BG_GREEN, 0, 1, 18, 1, 0);
+	screen_imprimir("P1:0x", C_FG_WHITE, C_BG_BLUE, 0, 3, 18, 1, 0);
+	screen_imprimir("P2:0x", C_FG_WHITE, C_BG_BLUE, 0, 17, 18, 1, 0);
+	screen_imprimir("P3:0x", C_FG_WHITE, C_BG_BLUE, 0, 31, 18, 1, 0);
+
 	screen_imprimir("4", C_FG_BLACK, C_BG_GREEN, 0, 1, 19, 1, 0);
+	screen_imprimir("P1:0x", C_FG_WHITE, C_BG_BLUE, 0, 3, 19, 1, 0);
+	screen_imprimir("P2:0x", C_FG_WHITE, C_BG_BLUE, 0, 17, 19, 1, 0);
+	screen_imprimir("P3:0x", C_FG_WHITE, C_BG_BLUE, 0, 31, 19, 1, 0);
+
 	screen_imprimir("5", C_FG_BLACK, C_BG_GREEN, 0, 1, 20, 1, 0);
+	screen_imprimir("P1:0x", C_FG_WHITE, C_BG_BLUE, 0, 3, 20, 1, 0);
+	screen_imprimir("P2:0x", C_FG_WHITE, C_BG_BLUE, 0, 17, 20, 1, 0);
+	screen_imprimir("P3:0x", C_FG_WHITE, C_BG_BLUE, 0, 31, 20, 1, 0);
+
 	screen_imprimir("6", C_FG_BLACK, C_BG_GREEN, 0, 1, 21, 1, 0);
+	screen_imprimir("P1:0x", C_FG_WHITE, C_BG_BLUE, 0, 3, 21, 1, 0);
+	screen_imprimir("P2:0x", C_FG_WHITE, C_BG_BLUE, 0, 17, 21, 1, 0);
+	screen_imprimir("P3:0x", C_FG_WHITE, C_BG_BLUE, 0, 31, 21, 1, 0);
+
 	screen_imprimir("7", C_FG_BLACK, C_BG_GREEN, 0, 1, 22, 1, 0);
+	screen_imprimir("P1:0x", C_FG_WHITE, C_BG_BLUE, 0, 3, 22, 1, 0);
+	screen_imprimir("P2:0x", C_FG_WHITE, C_BG_BLUE, 0, 17, 22, 1, 0);
+	screen_imprimir("P3:0x", C_FG_WHITE, C_BG_BLUE, 0, 31, 22, 1, 0);
+
 	screen_imprimir("8", C_FG_BLACK, C_BG_GREEN, 0, 1, 23, 1, 0);
+	screen_imprimir("P1:0x", C_FG_WHITE, C_BG_BLUE, 0, 3, 23, 1, 0);
+	screen_imprimir("P2:0x", C_FG_WHITE, C_BG_BLUE, 0, 17, 23, 1, 0);
+	screen_imprimir("P3:0x", C_FG_WHITE, C_BG_BLUE, 0, 31, 23, 1, 0);
 
 
 
 	// Imprimo el nombre del grupo
 	screen_print_grupo();
+
+  screen_imprimir("1", C_FG_WHITE, C_BG_BLACK, 0, 4, 24, 1, 0);
+	screen_imprimir("2", C_FG_WHITE, C_BG_BLACK, 0, 7, 24, 1, 0);
+	screen_imprimir("3", C_FG_WHITE, C_BG_BLACK, 0, 10, 24, 1, 0);
+	screen_imprimir("4", C_FG_WHITE, C_BG_BLACK, 0, 13, 24, 1, 0);
+	screen_imprimir("5", C_FG_WHITE, C_BG_BLACK, 0, 16, 24, 1, 0);
+	screen_imprimir("6", C_FG_WHITE, C_BG_BLACK, 0, 19, 24, 1, 0);
+	screen_imprimir("7", C_FG_WHITE, C_BG_BLACK, 0, 22, 24, 1, 0);
+	screen_imprimir("8", C_FG_WHITE, C_BG_BLACK, 0, 25, 24, 1, 0);
+
+	screen_imprimir("1", C_FG_WHITE, C_BG_BLACK, 0, 32, 24, 1, 0);
+	screen_imprimir("2", C_FG_WHITE, C_BG_BLACK, 0, 35, 24, 1, 0);
+	screen_imprimir("3", C_FG_WHITE, C_BG_BLACK, 0, 38, 24, 1, 0);
+	screen_imprimir("4", C_FG_WHITE, C_BG_BLACK, 0, 41, 24, 1, 0);
+	screen_imprimir("5", C_FG_WHITE, C_BG_BLACK, 0, 44, 24, 1, 0);
+	screen_imprimir("6", C_FG_WHITE, C_BG_BLACK, 0, 47, 24, 1, 0);
+	screen_imprimir("7", C_FG_WHITE, C_BG_BLACK, 0, 50, 24, 1, 0);
+	screen_imprimir("8", C_FG_WHITE, C_BG_BLACK, 0, 53, 24, 1, 0);
+
+
+	// Indicamos las tres paginas de cada tarea en la ventana de estados
+	int i;
+	char buffer[9];
+
+
+
+	for (i = 0; i < 8; i++)
+	{
+		int_to_string_hex8((int) direcciones_fisicas_tarea_pagina1[i], buffer);
+    screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_BLACK, 0, 8, 16+i, 1, 0);
+
+		int_to_string_hex8((int) direcciones_fisicas_tarea_pagina2[i], buffer);
+    screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_BLACK, 0, 22, 16+i, 1, 0);
+
+		int_to_string_hex8((int) direcciones_fisicas_tarea_ancla[i], buffer);
+    screen_imprimir((char*) buffer, C_FG_WHITE, C_BG_BLACK, 0, 36, 16+i, 1, 0);
+	}
+
 }
 
 
@@ -370,6 +456,36 @@ void screen_preparar_modo_mapa()
 
 	screen_colorear(16, 3, 79, 3, C_BG_BLUE, 1);
 	screen_colorear(0, 4, 79, 23, C_BG_BLUE, 1);
+
+
+
+	// Pintamos las paginas y anclas de cada tarea
+	int i;
+	for (i = 0; i < 8; i++)
+	{
+    marcar_en_mapa((int) direcciones_fisicas_tarea_ancla[i], (char) (i + 0x30), C_FG_RED);
+
+		marcar_en_mapa((int) direcciones_fisicas_tarea_pagina1[i], (char) (i + 0x30), C_FG_RED);
+		marcar_en_mapa((int) direcciones_fisicas_tarea_pagina2[i], (char) (i + 0x30), C_FG_RED);
+	}
+
+	screen_imprimir("1", C_FG_WHITE, C_BG_BLACK, 0, 4, 24, 1, 1);
+	screen_imprimir("2", C_FG_WHITE, C_BG_BLACK, 0, 7, 24, 1, 1);
+	screen_imprimir("3", C_FG_WHITE, C_BG_BLACK, 0, 10, 24, 1, 1);
+	screen_imprimir("4", C_FG_WHITE, C_BG_BLACK, 0, 13, 24, 1, 1);
+	screen_imprimir("5", C_FG_WHITE, C_BG_BLACK, 0, 16, 24, 1, 1);
+	screen_imprimir("6", C_FG_WHITE, C_BG_BLACK, 0, 19, 24, 1, 1);
+	screen_imprimir("7", C_FG_WHITE, C_BG_BLACK, 0, 22, 24, 1, 1);
+	screen_imprimir("8", C_FG_WHITE, C_BG_BLACK, 0, 25, 24, 1, 1);
+
+	screen_imprimir("1", C_FG_WHITE, C_BG_BLACK, 0, 32, 24, 1, 1);
+	screen_imprimir("2", C_FG_WHITE, C_BG_BLACK, 0, 35, 24, 1, 1);
+	screen_imprimir("3", C_FG_WHITE, C_BG_BLACK, 0, 38, 24, 1, 1);
+	screen_imprimir("4", C_FG_WHITE, C_BG_BLACK, 0, 41, 24, 1, 1);
+	screen_imprimir("5", C_FG_WHITE, C_BG_BLACK, 0, 44, 24, 1, 1);
+	screen_imprimir("6", C_FG_WHITE, C_BG_BLACK, 0, 47, 24, 1, 1);
+	screen_imprimir("7", C_FG_WHITE, C_BG_BLACK, 0, 50, 24, 1, 1);
+	screen_imprimir("8", C_FG_WHITE, C_BG_BLACK, 0, 53, 24, 1, 1);
 
 }
 
@@ -389,8 +505,8 @@ void int_to_string_hex8(int numero, char str[9])
     str[2] = letras[ ( numero & 0x00F00000 ) >> 20 ];
     str[1] = letras[ ( numero & 0x0F000000 ) >> 24 ];
     str[0] = letras[ ( numero & 0xF0000000 ) >> 28 ];
-    
-    
+
+
 }
 
 
@@ -414,15 +530,15 @@ void flamear_bandera()
 			copiar_bytes((char*) BUFFER_ESTADO + VIDEO_FLAG5_OFFSET + ((banderaActual-4) * 24) + (160*i), (char*) BANDERA_BUFFER + (i*20), 20);
 		}
 	}
-	
+
 
 	actualizar_pantalla();
-	
+
 }
 
 void screen_actualizar_paginacion_tarea(int pagina, int fisica)
 {
-	char direccion_formateada[9];	
+	char direccion_formateada[9];
 	int_to_string_hex8(fisica, direccion_formateada);
 
 	screen_imprimir(direccion_formateada, C_FG_BLACK, C_BG_BLUE, 0, 8 + (pagina*14), 16 + tareaActual, 0, 0);
@@ -431,5 +547,23 @@ void screen_actualizar_paginacion_tarea(int pagina, int fisica)
 }
 
 
+void girar_reloj()
+{
+	if (corriendoBanderas)
+	{
+		screen_imprimir((char*) (lineas[indicador_clock_banderas[banderaActual]]), C_FG_WHITE, C_BG_BLACK, 0, 33 + (3 * banderaActual), 24, 1, 0);
+		screen_imprimir((char*) (lineas[indicador_clock_banderas[banderaActual]]), C_FG_WHITE, C_BG_BLACK, 0, 33 + (3 * banderaActual), 24, 1, 1);
+		indicador_clock_banderas[banderaActual] = (indicador_clock_banderas[banderaActual] + 1) % 4;
+	}
+	else
+	{
+		screen_imprimir((char*) (lineas[indicador_clock_tareas[tareaActual]]), C_FG_WHITE, C_BG_BLACK, 0, 5 + (3 * tareaActual), 24, 1, 0);
+		screen_imprimir((char*) (lineas[indicador_clock_tareas[tareaActual]]), C_FG_WHITE, C_BG_BLACK, 0, 5 + (3 * tareaActual), 24, 1, 1);
+		indicador_clock_tareas[tareaActual] = (indicador_clock_tareas[tareaActual] + 1) % 4;
+	}
 
 
+
+
+
+}

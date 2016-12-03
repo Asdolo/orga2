@@ -59,10 +59,10 @@ unsigned char *bandera()
         for (col = 0; col < 10; col++) {
             if (fil * 10 + col > *b) {
                 buffer[fil][col].c = 175;
-                buffer[fil][col].a = C_BG_BROWN | C_FG_LIGHT_BROWN;
+                buffer[fil][col].a = (0x6 << 4) | (0xE);
             } else {
                 buffer[fil][col].c = 174;
-                buffer[fil][col].a = C_BG_MAGENTA | C_FG_LIGHT_MAGENTA;
+                buffer[fil][col].a = (0x5 << 4) | (0xD);
             }
         }
     }

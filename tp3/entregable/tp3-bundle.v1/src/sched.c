@@ -9,6 +9,9 @@
 #include "defines.h"
 #include "i386.h"
 #include "gdt.h"
+#include "screen.h"
+#include "colors.h"
+
 
 char corriendoBanderas;
 unsigned int tareaActual;
@@ -37,7 +40,7 @@ void sched_inicializar() {
 	banderaActual = -1;
 	corriendoBanderas=0;
 	contadorTareas=-1;
-	contadorBanderas=0;
+	contadorBanderas=-1;
 	cantTareasVivas=8;
 }
 
@@ -56,7 +59,6 @@ unsigned short sched_proximo_indice() {
 				// Empiezo a correr banderas
 				corriendoBanderas=1;
 				contadorTareas = 0;
-
 				return indicesBanderas[buscarIndiceSiguienteViva(1)]; // El 1 en indicesBanderas indica que busque en banderas
 			}
 			else
@@ -121,18 +123,47 @@ unsigned char buscarIndiceSiguienteViva(char esBandera)
 
 void desalojarTareaActual()
 {
+	int laQueMurio;
+
 	if (corriendoBanderas)
 	{
 		indicesTareas[banderaActual] = 0;
 		indicesBanderas[banderaActual] = 0;
+
+		laQueMurio = banderaActual;
+
+		if (contadorBanderas+1 == cantTareasVivas-1)
+		{
+			contadorBanderas--;
+		}
+
 	}
 	else
 	{
 		indicesTareas[tareaActual] = 0;
 		indicesBanderas[tareaActual] = 0;
+
+		laQueMurio = tareaActual;
 	}
 
+	screen_colorear(2 + (12*(laQueMurio%4)), 3 + (7 * (laQueMurio/4)), 2 + (12*(laQueMurio%4)) + 9, 3 + (7 * (laQueMurio/4)) + 4, C_BG_RED, 0);
+
+	char charTarea[2];
+	charTarea[0] = laQueMurio + 0x30 + 1;
+	charTarea[1] = 0x00;
+
+	screen_imprimir((char*) charTarea, C_FG_WHITE, C_BG_RED, 0, 4 + (3 * laQueMurio), 24, 0, 0);
+	screen_imprimir((char*) charTarea, C_FG_WHITE, C_BG_RED, 0, 32 + (3 * laQueMurio), 24, 0, 0);
+	screen_imprimir(" ", C_FG_WHITE, C_BG_RED, 0, 4 + (3 * laQueMurio) + 1, 24, 0, 0);
+	screen_imprimir(" ", C_FG_WHITE, C_BG_RED, 0, 32 + (3 * laQueMurio) + 1, 24, 0, 0);
+
+	screen_imprimir((char*) charTarea, C_FG_WHITE, C_BG_RED, 0, 4 + (3 * laQueMurio), 24, 0, 1);
+	screen_imprimir((char*) charTarea, C_FG_WHITE, C_BG_RED, 0, 32 + (3 * laQueMurio), 24, 0, 1);
+	screen_imprimir(" ", C_FG_WHITE, C_BG_RED, 0, 4 + (3 * laQueMurio) + 1, 24, 0, 1);
+	screen_imprimir(" ", C_FG_WHITE, C_BG_RED, 0, 32 + (3 * laQueMurio) + 1, 24, 0, 1);
+
 	cantTareasVivas--;
+	actualizar_pantalla();
 }
 
 

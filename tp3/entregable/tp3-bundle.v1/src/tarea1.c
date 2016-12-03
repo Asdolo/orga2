@@ -36,12 +36,12 @@ unsigned char *bandera();
 
 void task()
 {
-    
+
     /* Tarea 1 */
     unsigned int i = 0;
 
     while (1) {
-        
+
         for (i = 0; i < 0x000FF000; i = i + 0x1000) {
             syscall_fondear(i);
         }
@@ -64,7 +64,7 @@ unsigned char *bandera()
     for (fil = 0; fil < 5; fil++) {
         for (col = 0; col < 10; col++) {
             buffer[fil][col].c = 219 + (*b);
-            buffer[fil][col].a = C_BG_BROWN | C_FG_LIGHT_BROWN;
+            buffer[fil][col].a = (0x6 << 4) | 0xE;
         }
     }
 
